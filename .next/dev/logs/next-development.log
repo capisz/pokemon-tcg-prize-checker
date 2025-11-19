@@ -1,0 +1,6 @@
+[00:00:01.505] Server  LOG      ✓ Ready in 1320ms
+[00:00:03.922] Server  ERROR    ⨯ ReferenceError: Analytics is not defined
+[00:00:03.978] Server  ERROR    ⨯ ReferenceError: Analytics is not defined
+[00:00:04.079] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:04.079] Browser ERROR   uncaughtError: ReferenceError: Analytics is not defined
+[00:00:21.563] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
