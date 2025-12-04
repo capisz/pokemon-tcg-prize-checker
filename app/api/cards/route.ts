@@ -22,7 +22,7 @@ type SetEntry = {
 
 const CARDS_BASE_PATH = path.join(
   process.cwd(),
-  "TCGdata",
+  "TCGData",
   "pokemon-tcg-data-master",
   "cards",
   "en"
@@ -30,7 +30,7 @@ const CARDS_BASE_PATH = path.join(
 
 const SETS_FILE_PATH = path.join(
   process.cwd(),
-  "TCGdata",
+  "TCGData",
   "pokemon-tcg-data-master",
   "sets",
   "en.json"
