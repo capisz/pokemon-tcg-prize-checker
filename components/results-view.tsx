@@ -1,126 +1,511 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Trophy, CheckCircle2, XCircle, RotateCcw } from "lucide-react"
+import { Trophy, CheckCircle2, XCircle, RotateCcw, Timer } from "lucide-react"
 import type { PokemonCard } from "@/lib/types"
 import { cn } from "@/lib/utils"
+
+import type { RankState } from "@/lib/rank"
+import { initialRankState, updateRank } from "@/lib/rank"
+import { RankDisplay } from "@/components/rank-display"
 
 interface ResultsViewProps {
   allCards: PokemonCard[]
   prizeCards: PokemonCard[]
   onRestart: () => void
+  timeLeft: number | null
+  totalTime: number
 }
 
-export function ResultsView({ allCards, prizeCards, onRestart }: ResultsViewProps) {
+type Status =
+  | "selected"
+  | "unselected"
+  | "correct"
+  | "incorrect"
+  | "missed"
+  | "normal"
+
+/* ---------- Rank progress helpers ---------- */
+
+const RANK_TIER_ORDER: RankState["tier"][] = [
+  "pokeball",
+  "greatball",
+  "ultraball",
+  "masterball",
+]
+
+const RANK_BAR_COLOR: Record<RankState["tier"], string> = {
+  pokeball: "bg-rose-400",
+  greatball: "bg-sky-400",
+  ultraball: "bg-amber-300",
+  masterball: "bg-violet-400",
+}
+
+function computeProgressDelta(
+  previous: RankState | null,
+  current: RankState | null,
+): number | null {
+  if (!previous || !current) return null
+  if (current.tier === "masterball") return null
+
+  const prevIndex = RANK_TIER_ORDER.indexOf(previous.tier)
+  const currIndex = RANK_TIER_ORDER.indexOf(current.tier)
+  if (prevIndex === -1 || currIndex === -1) return null
+
+  const currentProgress = current.progress ?? 0
+
+  // Promotion: 0 → current.progress
+  if (currIndex > prevIndex) {
+    return currentProgress
+  }
+
+  // Demotion: compare to 100 of previous tier
+  if (currIndex < prevIndex) {
+    return currentProgress - 100
+  }
+
+  // Same tier: diff from previous.progress
+  return currentProgress - (previous.progress ?? 0)
+}
+
+/* ---------- Component ---------- */
+
+export function ResultsView({
+  allCards,
+  prizeCards,
+  onRestart,
+  timeLeft,
+  totalTime,
+}: ResultsViewProps) {
   const [selectedCards, setSelectedCards] = useState<Set<string>>(new Set())
   const [showResults, setShowResults] = useState(false)
+  const [personalBest, setPersonalBest] = useState<number | null>(null)
 
-  const prizeCardIds = new Set(prizeCards.map((c) => c.id))
+  // Rank state
+  const [rank, setRank] = useState<RankState | null>(null)
+  const [previousRank, setPreviousRank] = useState<RankState | null>(null)
+
+  const totalPrizes = prizeCards.length || 6
+
+  // Load personal best once
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const stored = window.localStorage.getItem("prizeCheckerPersonalBest")
+    if (stored) {
+      const value = Number(stored)
+      if (!Number.isNaN(value)) setPersonalBest(value)
+    }
+  }, [])
+
+  // Load rank once
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const stored = window.localStorage.getItem("prizeCheckerRankState")
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as RankState
+        setRank(parsed)
+      } catch {
+        setRank(initialRankState)
+      }
+    } else {
+      setRank(initialRankState)
+    }
+  }, [])
+
+  // Expand meta & sort so duplicates are grouped together
+  const cardsWithMeta = useMemo(
+    () =>
+      allCards
+        .map((card) => ({
+          ...card,
+          instanceId: card.id,
+          baseId: card.id.split("#")[0],
+        }))
+        .sort((a, b) => {
+          if (a.baseId === b.baseId) {
+            return a.instanceId.localeCompare(b.instanceId)
+          }
+          return a.baseId.localeCompare(b.baseId)
+        }),
+    [allCards],
+  )
+
+  // prize counts per base card (handles duplicates)
+  const prizeCountByBase = useMemo(() => {
+    const map = new Map<string, number>()
+    for (const c of prizeCards) {
+      const baseId = c.id.split("#")[0]
+      map.set(baseId, (map.get(baseId) || 0) + 1)
+    }
+    return map
+  }, [prizeCards])
 
   const toggleCard = (cardId: string) => {
-    if (showResults) return // Can't change selection after revealing
+    if (showResults) return
 
-    const newSelected = new Set(selectedCards)
-    if (newSelected.has(cardId)) {
-      newSelected.delete(cardId)
-    } else {
-      if (newSelected.size < 6) {
-        newSelected.add(cardId)
+    const next = new Set(selectedCards)
+    if (next.has(cardId)) {
+      next.delete(cardId)
+    } else if (next.size < 6) {
+      next.add(cardId)
+    }
+    setSelectedCards(next)
+  }
+
+  const [statusMap, correctGuesses, incorrectGuesses, missedPrizes] = useMemo(() => {
+    if (!showResults) return [new Map<string, Status>(), 0, 0, 0] as const
+
+    const status = new Map<string, Status>()
+
+    // group instances by baseId
+    const cardsByBase = new Map<string, string[]>()
+    for (const c of cardsWithMeta) {
+      const ids = cardsByBase.get(c.baseId) || []
+      ids.push(c.instanceId)
+      cardsByBase.set(c.baseId, ids)
+    }
+
+    let correct = 0
+    let incorrect = 0
+    let missed = 0
+
+    for (const [baseId, instanceIds] of cardsByBase.entries()) {
+      const prizeCount = prizeCountByBase.get(baseId) || 0
+      if (prizeCount === 0) {
+        // nothing prized for this card: only mark selected as incorrect
+        for (const id of instanceIds) {
+          if (selectedCards.has(id)) {
+            status.set(id, "incorrect")
+            incorrect++
+          }
+        }
+        continue
+      }
+
+      const selectedIds = instanceIds.filter((id) => selectedCards.has(id))
+      const correctCount = Math.min(prizeCount, selectedIds.length)
+
+      // mark correct selected
+      for (let i = 0; i < correctCount; i++) {
+        const id = selectedIds[i]
+        status.set(id, "correct")
+        correct++
+      }
+
+      // extra selected -> incorrect
+      for (let i = correctCount; i < selectedIds.length; i++) {
+        const id = selectedIds[i]
+        status.set(id, "incorrect")
+        incorrect++
+      }
+
+      // remaining prized copies that were never selected -> missed
+      const remainingPrizes = prizeCount - correctCount
+      if (remainingPrizes > 0) {
+        const unselectedIds = instanceIds.filter((id) => !selectedCards.has(id))
+        for (let i = 0; i < Math.min(remainingPrizes, unselectedIds.length); i++) {
+          const id = unselectedIds[i]
+          status.set(id, "missed")
+          missed++
+        }
       }
     }
-    setSelectedCards(newSelected)
-  }
+
+    return [status, correct, incorrect, missed] as const
+  }, [showResults, cardsWithMeta, prizeCountByBase, selectedCards])
 
   const handleSubmit = () => {
     setShowResults(true)
   }
 
-  // Calculate accuracy
-  const correctGuesses = Array.from(selectedCards).filter((id) => prizeCardIds.has(id)).length
-  const incorrectGuesses = selectedCards.size - correctGuesses
-  const missedPrizes = 6 - correctGuesses
-  const accuracy = Math.round((correctGuesses / 6) * 100)
+  const accuracy =
+    totalPrizes > 0 ? Math.round((correctGuesses / totalPrizes) * 100) : 0
 
-  const getCardStatus = (cardId: string) => {
-    const isSelected = selectedCards.has(cardId)
-    const isPrize = prizeCardIds.has(cardId)
+  // If timeLeft is null, assume 0 seconds used (fastest case)
+  const usedTime =
+    timeLeft == null ? 0 : Math.max(0, totalTime - timeLeft)
 
+  const timePercent =
+    totalTime === 0
+      ? 0
+      : Math.max(0, Math.min(1, (totalTime - usedTime) / totalTime)) // more left = better
+
+  // scoring: 70% accuracy, 30% speed, scaled to 0–1000
+  const score = (() => {
+    const accScore = accuracy / 100
+    const raw = accScore * 0.7 + timePercent * 0.3
+    return Math.round(raw * 1000)
+  })()
+
+  // PB update
+  useEffect(() => {
+    if (!showResults) return
+    if (typeof window === "undefined") return
+
+    setPersonalBest((prev) => {
+      const currentBest =
+        prev ??
+        (() => {
+          const stored = window.localStorage.getItem("prizeCheckerPersonalBest")
+          const n = stored ? Number(stored) : 0
+          return Number.isNaN(n) ? 0 : n
+        })()
+
+      const newBest = score > currentBest ? score : currentBest
+      if (newBest !== currentBest) {
+        window.localStorage.setItem("prizeCheckerPersonalBest", String(newBest))
+      }
+      return newBest
+    })
+  }, [showResults, score])
+
+  // rank update when results show
+  useEffect(() => {
+    if (!showResults) return
+    if (typeof window === "undefined") return
+
+    setRank((current) => {
+      const currentRank = current ?? initialRankState
+      const nextRank = updateRank(currentRank, score, 1000)
+      setPreviousRank(currentRank)
+      window.localStorage.setItem(
+        "prizeCheckerRankState",
+        JSON.stringify(nextRank),
+      )
+      return nextRank
+    })
+  }, [showResults, score])
+
+  const isNewPB =
+    showResults && (personalBest === null || score >= personalBest)
+
+  const scoreColor = (() => {
+    if (score >= 800) return "text-emerald-400"
+    if (score >= 600) return "text-lime-400"
+    if (score >= 400) return "text-amber-400"
+    return "text-rose-400"
+  })()
+
+  const scoreBadgeBg = (() => {
+    if (score >= 800) return "bg-emerald-500/15 border-emerald-500/50"
+    if (score >= 600) return "bg-lime-500/10 border-lime-500/40"
+    if (score >= 400) return "bg-amber-500/10 border-amber-500/40"
+    return "bg-rose-500/10 border-rose-500/40"
+  })()
+
+  const getCardStatus = (cardId: string): Status => {
     if (!showResults) {
-      return isSelected ? "selected" : "unselected"
+      return selectedCards.has(cardId) ? "selected" : "unselected"
     }
+    return statusMap.get(cardId) ?? "normal"
+  }
 
-    if (isSelected && isPrize) return "correct"
-    if (isSelected && !isPrize) return "incorrect"
-    if (!isSelected && isPrize) return "missed"
-    return "normal"
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, "0")}`
   }
 
   return (
-    <div className="container mx-auto max-w-7xl p-6 space-y-6">
+    <div className="container mx-auto max-w-7xl p-6 space-y-6 text-slate-50">
       {/* Header */}
-      <div className="text-center space-y-3">
-        <h1 className="text-4xl font-bold text-balance">{showResults ? "Results" : "Identify the Prize Cards"}</h1>
-        <p className="text-muted-foreground text-lg">
-          {showResults ? "Here are your results!" : "Select the 6 cards you believe were prizes"}
+      <div className="text-center space-y-2">
+        <h1 className="text-4xl font-bold text-balance">
+          Select The Prize Cards
+        </h1>
+        <p className="text-slate-400 text-sm sm:text-base">
+          {showResults
+            ? "Here are your results."
+            : "Select the 6 cards you believe were prizes."}
         </p>
       </div>
 
-      {/* Score card */}
+      {/* Score + rank + stats + legend + bar */}
       {showResults && (
-        <Card className="p-6 bg-gradient-to-br from-primary/10 to-secondary/10 border-2">
-          <div className="flex items-center justify-center gap-8 flex-wrap">
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Trophy className="h-8 w-8 text-accent" />
-                <div className="text-5xl font-bold">{accuracy}%</div>
+        <Card className="p-4 sm:p-4 bg-slate-900/90 border border-slate-700 text-slate-50 space-y-2">
+          {/* Top row: Score + Rank + Stats */}
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            {/* Left: Score + PB */}
+            <div className="flex items-center gap-4">
+              <div
+                className={cn(
+                  "flex items-center gap-3 rounded-xl px-4 py-2 border",
+                  scoreBadgeBg,
+                )}
+              >
+                <Trophy className="h-6 w-6 text-amber-300" />
+                <div className="flex flex-col items-start">
+                  <span
+                    className={cn(
+                      "text-2xl sm:text-3xl font-semibold",
+                      scoreColor,
+                    )}
+                  >
+                    {score}
+                  </span>
+                  <span className="text-[11px] uppercase tracking-wide text-slate-400">
+                    Overall score
+                  </span>
+                </div>
               </div>
-              <div className="text-sm text-muted-foreground">Accuracy</div>
+
+              <div className="flex flex-col gap-1 text-xs sm:text-sm text-slate-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-400">Personal Best:</span>
+                  <span className="font-semibold">
+                    {personalBest ?? "—"}
+                  </span>
+                  {isNewPB && (
+                    <Badge className="bg-emerald-500 text-white text-[10px] uppercase tracking-wide">
+                      New PB
+                    </Badge>
+                  )}
+                </div>
+              </div>
             </div>
 
-            <div className="h-16 w-px bg-border hidden sm:block" />
-
-            <div className="flex gap-8">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
-                  <div className="text-3xl font-bold">{correctGuesses}</div>
+            {/* Center: Rank (bigger & slightly lower) */}
+            {rank && previousRank && (
+              <div className="flex justify-center flex-1 mt-4">
+                <div className="scale-150">
+                  <RankDisplay
+                    previous={previousRank}
+                    current={rank}
+                    maxScore={1000}
+                    lastScore={score}
+                  />
                 </div>
-                <div className="text-xs text-muted-foreground">Correct</div>
+              </div>
+            )}
+
+            {/* Right: Stats */}
+            <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-slate-300 justify-end">
+              <div className="flex flex-col items-start">
+                <span className="font-semibold flex items-center gap-1">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  {correctGuesses} / {totalPrizes}
+                </span>
+                <span className="text-slate-400">Correct ({accuracy}%)</span>
               </div>
 
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <XCircle className="h-5 w-5 text-destructive" />
-                  <div className="text-3xl font-bold">{incorrectGuesses}</div>
-                </div>
-                <div className="text-xs text-muted-foreground">Wrong</div>
+              <div className="flex flex-col items-start">
+                <span className="font-semibold flex items-center gap-1">
+                  <XCircle className="h-4 w-4 text-rose-400" />
+                  {incorrectGuesses}
+                </span>
+                <span className="text-slate-400">Wrong</span>
               </div>
 
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <XCircle className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                  <div className="text-3xl font-bold">{missedPrizes}</div>
-                </div>
-                <div className="text-xs text-muted-foreground">Missed</div>
+              <div className="flex flex-col items-start">
+                <span className="font-semibold flex items-center gap-1">
+                  <XCircle className="h-4 w-4 text-orange-400" />
+                  {missedPrizes}
+                </span>
+                <span className="text-slate-400">Missed</span>
+              </div>
+
+              <div className="flex flex-col items-start">
+                <span className="font-semibold flex items-center gap-1">
+                  <Timer className="h-4 w-4 text-sky-400" />
+                  {formatTime(usedTime)}
+                </span>
+                <span className="text-slate-400">
+                  of {formatTime(totalTime)} used
+                </span>
               </div>
             </div>
+          </div>
+
+          {/* Legend + Play Again + bottom progress bar (all aligned) */}
+          <div className="pt-3 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded border-4 border-emerald-400" />
+                  <span>Correct guess</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded border-4 border-rose-500" />
+                  <span>Wrong guess</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded border-4 border-orange-400" />
+                  <span>Missed prize</span>
+                </div>
+              </div>
+
+              <Button
+                onClick={onRestart}
+                size="sm"
+                className="rounded-full bg-transparent border border-slate-600 text-slate-100 hover:bg-slate-800"
+                variant="outline"
+              >
+                <RotateCcw className="mr-2 h-4 w-4" />
+                Play Again
+              </Button>
+            </div>
+
+            {/* Full-width bottom bar */}
+            {rank && rank.tier !== "masterball" && (
+              <div className="w-full">
+                {(() => {
+                  const clamped = Math.max(
+                    0,
+                    Math.min(100, rank.progress ?? 0),
+                  )
+                  const toNext = Math.max(0, 100 - clamped)
+                  const delta = computeProgressDelta(previousRank, rank)
+
+                  return (
+                    <>
+                      <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
+                        <div
+                          className={cn(
+                            "h-full transition-all duration-800",
+                            RANK_BAR_COLOR[rank.tier],
+                          )}
+                          style={{ width: `${clamped}%` }}
+                        />
+                      </div>
+                      <div className="mt-1 text-center text-[11px] text-slate-400">
+                        {toNext}% to next rank
+                        {delta !== null && delta !== 0 && (
+                          <span
+                            className={cn(
+                              "ml-1",
+                              delta > 0 ? "text-emerald-400" : "text-rose-400",
+                            )}
+                          >
+                            ({delta > 0 ? "+" : ""}
+                            {Math.round(delta)})
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  )
+                })()}
+              </div>
+            )}
           </div>
         </Card>
       )}
 
-      {/* Selection counter */}
+      {/* Selection bar before submit */}
       {!showResults && (
-        <Card className="p-4">
+        <Card className="p-4 bg-slate-900/90 border border-slate-700">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">Selected {selectedCards.size} of 6 cards</div>
+            <div className="text-sm text-slate-300">
+              Selected {selectedCards.size} of {totalPrizes} cards
+            </div>
             <Button
               onClick={handleSubmit}
-              disabled={selectedCards.size !== 6}
-              size="lg"
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              disabled={selectedCards.size !== totalPrizes}
+              size="sm"
+              className="bg-rose-500 hover:bg-rose-500/90 text-white rounded-full px-5"
             >
               Submit Guesses
             </Button>
@@ -129,32 +514,39 @@ export function ResultsView({ allCards, prizeCards, onRestart }: ResultsViewProp
       )}
 
       {/* Card grid */}
-      <Card className="p-6">
+      <Card className="p-5 bg-slate-900/80 border border-slate-700">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-          {allCards.map((card, index) => {
-            const status = getCardStatus(card.id)
+          {cardsWithMeta.map((card, index) => {
+            const status = getCardStatus(card.instanceId)
             const isClickable = !showResults
 
             return (
               <div
-                key={`${card.id}-${index}`}
-                onClick={() => isClickable && toggleCard(card.id)}
+                key={`${card.instanceId}-${index}`}
+                onClick={() => isClickable && toggleCard(card.instanceId)}
                 className={cn(
-                  "group relative aspect-[2.5/3.5] rounded-lg overflow-hidden transition-all",
+                  "group relative aspect-[2.5/3.5] rounded-xl overflow-hidden transition-all",
                   isClickable && "cursor-pointer",
-                  status === "selected" && "ring-4 ring-primary scale-95",
-                  status === "correct" && "ring-4 ring-green-600 dark:ring-green-400",
-                  status === "incorrect" && "ring-4 ring-destructive",
-                  status === "missed" && "ring-4 ring-orange-600 dark:ring-orange-400 opacity-75",
+                  status === "selected" && "ring-3 ring-sky-400 scale-95",
+                  status === "correct" && "ring-3 ring-emerald-400",
+                  status === "incorrect" && "ring-3 ring-rose-500",
+                  status === "missed" && "ring-3 ring-orange-400 opacity-85",
                   status === "normal" && showResults && "opacity-40",
                   !showResults && "hover:scale-105",
                 )}
               >
                 {card.image ? (
-                  <img src={card.image || "/placeholder.svg"} alt={card.name} className="w-full h-full object-cover" />
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={card.image || "/placeholder.svg"}
+                    alt={card.name}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
-                  <div className="w-full h-full bg-muted flex items-center justify-center p-2">
-                    <p className="text-xs text-center text-foreground font-medium">{card.name}</p>
+                  <div className="w-full h-full bg-slate-800 flex items-center justify-center p-2">
+                    <p className="text-xs text-center text-slate-50 font-medium">
+                      {card.name}
+                    </p>
                   </div>
                 )}
 
@@ -162,32 +554,47 @@ export function ResultsView({ allCards, prizeCards, onRestart }: ResultsViewProp
                 {showResults && status !== "normal" && (
                   <div className="absolute top-2 right-2">
                     {status === "correct" && (
-                      <Badge className="bg-green-600 dark:bg-green-400 text-white">
+                      <Badge className="bg-emerald-500 text-white">
                         <CheckCircle2 className="h-3 w-3" />
                       </Badge>
                     )}
                     {status === "incorrect" && (
-                      <Badge variant="destructive">
+                      <Badge className="bg-rose-500 text-white">
                         <XCircle className="h-3 w-3" />
                       </Badge>
                     )}
                     {status === "missed" && (
-                      <Badge className="bg-orange-600 dark:bg-orange-400 text-white">Prize</Badge>
+                      <Badge className="bg-orange-500 text-white">
+                        Prize
+                      </Badge>
                     )}
                   </div>
                 )}
 
-                {/* Hover overlay */}
+                {/* Hover / selection overlay before submit */}
                 {!showResults && (
                   <div
                     className={cn(
                       "absolute inset-0 transition-opacity flex items-center justify-center p-2",
                       status === "selected"
-                        ? "bg-primary/20 opacity-100"
+                        ? "bg-sky-500/25 backdrop-blur-sm opacity-100"
                         : "bg-black/70 opacity-0 group-hover:opacity-100",
                     )}
                   >
-                    <p className="text-xs text-white text-center font-medium">{card.name}</p>
+                    {status === "selected" ? (
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-2xl sm:text-3xl font-extrabold tracking-[0.18em] text-emerald-200/90 drop-shadow-[0_0_14px_rgba(45,212,191,0.85)]">
+                          {selectedCards.size}/{totalPrizes}
+                        </span>
+                        <span className="text-[10px] sm:text-xs uppercase tracking-[0.22em] text-sky-100/80">
+                          Selected
+                        </span>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-white text-center font-medium">
+                        {card.name}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -195,34 +602,6 @@ export function ResultsView({ allCards, prizeCards, onRestart }: ResultsViewProp
           })}
         </div>
       </Card>
-
-      {/* Legend */}
-      {showResults && (
-        <Card className="p-4">
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border-4 border-green-600 dark:border-green-400" />
-              <span>Correct Guess</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border-4 border-destructive" />
-              <span>Wrong Guess</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded border-4 border-orange-600 dark:border-orange-400" />
-              <span>Missed Prize</span>
-            </div>
-          </div>
-        </Card>
-      )}
-
-      {/* Restart button */}
-      {showResults && (
-        <Button onClick={onRestart} size="lg" className="w-full bg-transparent" variant="outline">
-          <RotateCcw className="mr-2 h-5 w-5" />
-          Play Again
-        </Button>
-      )}
     </div>
   )
 }

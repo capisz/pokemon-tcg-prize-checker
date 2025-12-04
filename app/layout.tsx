@@ -1,44 +1,29 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import "./globals.css"
+import type { Metadata } from "next";
+import "./globals.css";
+import { MusicControls } from "@/components/music-controls";
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Pokémon TCG Prize Checker",
-  description: "Test your memory by identifying prize cards in your Pokémon TCG deck",
-  icons: {
-    icon: [
-      {
-        url: "/public/favicon.ico",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/public/favicon.ico",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/public/favicon.ico",
-        type: "icon/png",
-      },
-    ],
-    apple: "/public/favicon.ico",
-  },
-}
+  title: "PrizeCheckDrillr",
+  description: "Prize check practice app",
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
+      <body className="bg-slate-950 text-slate-50">
         {children}
-        
+
+        {/* Global floating music controls, always mounted */}
+        <div className="fixed right-4 bottom-4 z-50">
+          <MusicControls />
+        </div>
       </body>
+      
     </html>
-  )
+  );
 }
