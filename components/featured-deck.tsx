@@ -210,7 +210,7 @@ export function FeaturedDeckSection() {
   return (
     <Card
       className={cn(
-        "mt-4 rounded-3xl border border-emerald-900/50",
+        "mt-4 rounded-3xl border border-black/50",
         "bg-gradient-to-r from-emerald-900/80 via-slate-900/90 to-slate-900/95",
         "shadow-[0_0_16px_rgba(16,185,129,0.35)]",
         "overflow-visible",
@@ -220,12 +220,15 @@ export function FeaturedDeckSection() {
         {/* LEFT: text + button */}
         <div className="flex-1 min-w-[0]">
           <div
-            className={cn(
-              "flex flex-col gap-3 h-full",
-              "transition-opacity duration-700 ease-out",
-              revealed ? "opacity-100" : "opacity-0",
-            )}
-          >
+  className={cn(
+    "flex flex-col gap-3 h-full",
+    // use both opacity + transform so it "glides" from above
+    "transition-all duration-700 ease-out",
+    revealed
+      ? "opacity-100 translate-y-0"
+      : "opacity-0 -translate-y-3"
+  )}
+>
             <div className="space-y-1">
               <p className="text-[12px] uppercase tracking-[0.22em] text-emerald-300">
                 Featured Deck

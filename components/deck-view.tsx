@@ -221,6 +221,8 @@ export function DeckView({
         </div>
       </Card>
 
+      
+
       {/* Carousel */}
       <div className="flex-1 flex items-start justify-center overflow-hidden pt-2">
         <div className="relative w-full max-w-5xl h-[520px] flex items-center justify-center">
@@ -300,6 +302,9 @@ export function DeckView({
             const zClass =
               distance === 0 ? "z-30" : distance === 1 ? "z-20" : "z-10"
 
+            const name = card.name ?? ""
+            const isExCard = /\bex\b/i.test(name) // matches "Charizard ex", "Gardevoir ex", etc.
+
           return (
   <div
     key={`${card.id}-${index}`}
@@ -352,6 +357,7 @@ export function DeckView({
             </p>
           </div>
         )}
+          {isExCard && <div className="holo-overlay" />}
       </div>
     </div>
   </div>

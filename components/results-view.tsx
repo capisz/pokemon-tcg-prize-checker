@@ -562,7 +562,7 @@ export function ResultsView({
   className={cn(
     "p-5 rounded-3xl",
     // dark neutral background so the cards pop
-    "bg-emerald-700/40",
+    "bg-emerald-900/50",
     // emerald-tinted border & shadow to match results header
     "border-transparent"
   )}

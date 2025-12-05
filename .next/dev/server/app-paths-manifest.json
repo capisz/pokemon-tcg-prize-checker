@@ -1,5 +1,4 @@
 {
   "/api/cards/route": "app/api/cards/route.js",
-  "/api/featured-deck/route": "app/api/featured-deck/route.js",
   "/page": "app/page.js"
 }

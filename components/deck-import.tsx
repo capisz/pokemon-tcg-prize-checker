@@ -23,6 +23,13 @@ interface DeckImportProps {
   onTextChange?: (value: string) => void
   onStartGame?: () => void
   canStartGame?: boolean
+
+  /** Optional: for the green title bar above the list */
+  deckTitle?: string
+  deckPlayer?: string
+
+  /** Optional: if true, auto-imports when the page first loads (using initialText) */
+  autoImportOnMount?: boolean
 }
 
 export function DeckImport(props: DeckImportProps) {
@@ -33,7 +40,14 @@ export function DeckImport(props: DeckImportProps) {
     onTextChange,
     onStartGame,
     canStartGame,
+    deckTitle,
+    deckPlayer,
+    autoImportOnMount,
   } = props
+
+  // Fallbacks until wired to Limitless/API
+  const effectiveDeckTitle = deckTitle ?? "Charizard Noctowl"
+  const effectiveDeckPlayer = deckPlayer ?? "Nicolai Stiborg"
 
   const [rawText, setRawText] = useState(initialText ?? "")
   const [previewCards, setPreviewCards] = useState<ImportedCard[]>([])
@@ -41,9 +55,13 @@ export function DeckImport(props: DeckImportProps) {
   const [hoveredCard, setHoveredCard] = useState<ImportedCard | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [hasAutoImported, setHasAutoImported] = useState(false)
 
+  // Keep textarea in sync with parent-provided initialText
   useEffect(() => {
-    setRawText(initialText ?? "")
+    if (typeof initialText === "string") {
+      setRawText(initialText)
+    }
   }, [initialText])
 
   function parseIdsFromText(text: string) {
@@ -152,8 +170,8 @@ export function DeckImport(props: DeckImportProps) {
       setCardCounts(Object.fromEntries(counts))
       setHoveredCard(fetchedCards[0] ?? null)
 
-      if (onDeckImported) onDeckImported(expandedDeck)
-      if (onImportComplete) onImportComplete(expandedDeck)
+      onDeckImported?.(expandedDeck)
+      onImportComplete?.(expandedDeck)
     } catch (err: any) {
       console.error(err)
       setError(err.message ?? "Something went wrong importing the deck.")
@@ -161,6 +179,18 @@ export function DeckImport(props: DeckImportProps) {
       setIsLoading(false)
     }
   }
+
+  // Auto-import once on mount when you want the featured list preloaded
+  useEffect(() => {
+    if (!autoImportOnMount) return
+    if (hasAutoImported) return
+    if (!rawText.trim()) return
+
+    setHasAutoImported(true)
+    // fire & forget – we don't need to await
+    void handleImport()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoImportOnMount, hasAutoImported, rawText])
 
   const handleTextChange = (value: string) => {
     setRawText(value)
@@ -236,40 +266,56 @@ export function DeckImport(props: DeckImportProps) {
         </Card>
 
         {/* Featured deck banner */}
-      <FeaturedDeckSection />
+        <FeaturedDeckSection />
 
-        {/* Preview list + hover image (shows after import) */}
+        {/* Deck list + hover preview */}
         {previewCards.length > 0 && (
           <div className="flex flex-col md:flex-row gap-6 mt-2">
-            {/* List on the left */}
-            <div className="flex-1 max-h-[420px] overflow-y-auto rounded-lg border border-slate-800 bg-slate-900/70">
-              {previewCards.map((card) => {
-                const baseId = card.id.toLowerCase()
-                const count = cardCounts[baseId] ?? 1
-                const isHovered = hoveredCard?.id === card.id
-
-                return (
-                  <div
-                    key={card.id}
-                    onMouseEnter={() => setHoveredCard(card)}
-                    className={cn(
-                      "flex items-center justify-between px-4 py-2 text-sm border-b border-slate-800/60 last:border-b-0",
-                      "hover:bg-emerald-800/70 cursor-pointer",
-                      isHovered && "bg-emerald-900",
-                    )}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="w-7 text-right text-slate-400">
-                        {count}×
-                      </span>
-                      <span className="text-slate-50">{card.name}</span>
-                    </div>
-                    <span className="text-[11px] text-slate-500">
-                      {card.set.toUpperCase()} • {card.number}
+            {/* LIST: now has its own dark-green title bar INSIDE the card */}
+            <div className="flex-1 max-h-[420px] rounded-lg border border-slate-800 bg-slate-900/70 flex flex-col">
+              {/* Title bar that feels like part of the list */}
+              <div className="px-4 py-2 border-b border-slate-800 bg-emerald-800/35 rounded-t-lg">
+                <p className="text-xs sm:text-sm font-semibold text-emerald-100">
+                  {effectiveDeckTitle}
+                  {effectiveDeckPlayer && (
+                    <span className="font-normal text-emerald-300">
+                      {" "}
+                      by {effectiveDeckPlayer}
                     </span>
-                  </div>
-                )
-              })}
+                  )}
+                </p>
+              </div>
+
+              {/* Scrollable list body */}
+              <div className="flex-1 overflow-y-auto">
+                {previewCards.map((card) => {
+                  const baseId = card.id.toLowerCase()
+                  const count = cardCounts[baseId] ?? 1
+                  const isHovered = hoveredCard?.id === card.id
+
+                  return (
+                    <div
+                      key={card.id}
+                      onMouseEnter={() => setHoveredCard(card)}
+                      className={cn(
+                        "flex items-center justify-between px-4 py-2 text-sm border-b border-slate-800/60 last:border-b-0",
+                        "hover:bg-emerald-800/70 cursor-pointer",
+                        isHovered && "bg-emerald-900",
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="w-7 text-right text-slate-400">
+                          {count}×
+                        </span>
+                        <span className="text-slate-50">{card.name}</span>
+                      </div>
+                      <span className="text-[11px] text-slate-500">
+                        {card.set.toUpperCase()} • {card.number}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
 
             {/* Hover preview on the right */}

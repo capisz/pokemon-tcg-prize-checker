@@ -59,7 +59,7 @@
 
 .dark {
   /* Dark mode with gaming aesthetic */
-  --background: #020b14; /* deep navy–teal, instead of oklch(0.15 0.02 250) */
+ --background: oklch(0.15 0.02 250); /* deep navy–teal, instead of oklch(0.15 0.02 250) */
   --foreground: oklch(0.95 0.01 240);
   --card: oklch(0.2 0.02 250);
   --card-foreground: oklch(0.95 0.01 240);
@@ -99,6 +99,102 @@
   --sidebar-border: oklch(0.3 0.02 250);
   --sidebar-ring: oklch(0.6 0.22 250);
 }
+
+/* Softer, multi-color holographic glitter */
+.holo-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Main sparkle layer */
+.holo-overlay::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  pointer-events: none;
+
+  /* More colors, but lower alpha */
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.55) 0, transparent 55%),
+    radial-gradient(circle, rgba(56, 189, 248, 0.55) 0, transparent 55%),   /* cyan */
+    radial-gradient(circle, rgba(244, 114, 182, 0.55) 0, transparent 55%),  /* pink */
+    radial-gradient(circle, rgba(250, 204, 21, 0.55) 0, transparent 55%),   /* yellow */
+    radial-gradient(circle, rgba(52, 211, 153, 0.55) 0, transparent 55%),   /* teal */
+    radial-gradient(circle, rgba(129, 140, 248, 0.55) 0, transparent 55%);  /* indigo */
+  background-size:
+    18px 18px,
+    22px 22px,
+    20px 20px,
+    26px 26px,
+    24px 24px,
+    30px 30px;
+  background-position:
+    0 0,
+    40px 60px,
+    80px 20px,
+    120px 90px,
+    30px 110px,
+    100px 140px;
+  background-repeat: repeat;
+
+  /* Much softer overall */
+  filter: blur(0.2px) drop-shadow(0 0 3px rgba(255, 255, 255, 0.549));
+  opacity: 0.22; /* main intensity knob */
+
+  animation: holo-twinkle 4s ease-in-out infinite alternate;
+}
+
+/* Subtle secondary shimmer */
+.holo-overlay::after {
+  content: "";
+  position: absolute;
+  inset: -15%;
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.35) 0, transparent 60%),
+    radial-gradient(circle, rgba(59, 130, 246, 0.3) 0, transparent 60%);
+  background-size: 42px 42px, 56px 56px;
+  background-position:
+    10px 20px,
+    70px 80px;
+  background-repeat: repeat;
+
+  filter: blur(0.2px);
+  opacity: 0.16;
+  animation: holo-twinkle-slow 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes holo-twinkle {
+  0% {
+    opacity: 0.18;
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    opacity: 0.30;
+  }
+  100% {
+    opacity: 0.20;
+    transform: translate3d(-24px, -22px, 0);
+  }
+}
+
+@keyframes holo-twinkle-slow {
+  0% {
+    opacity: 0.08;
+    transform: translate3d(4px, -3px, 0);
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0.12;
+    transform: translate3d(-4px, 3px, 0);
+  }
+}
+
 
 @theme inline {
   --font-sans: "Geist", "Geist Fallback";
