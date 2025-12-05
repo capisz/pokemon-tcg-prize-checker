@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -80,6 +81,7 @@ export function ResultsView({
   timeLeft,
   totalTime,
 }: ResultsViewProps) {
+  const router = useRouter()
   const [selectedCards, setSelectedCards] = useState<Set<string>>(new Set())
   const [showResults, setShowResults] = useState(false)
   const [personalBest, setPersonalBest] = useState<number | null>(null)
@@ -222,6 +224,12 @@ export function ResultsView({
     setShowResults(true)
   }
 
+  const handleImportNewList = () => {
+  if (typeof window !== "undefined") {
+    window.location.href = "/"   // hard reset back to main/import screen
+  }
+}
+
   const accuracy =
     totalPrizes > 0 ? Math.round((correctGuesses / totalPrizes) * 100) : 0
 
@@ -314,7 +322,7 @@ export function ResultsView({
     <div className="container mx-auto max-w-7xl p-6 space-y-6 text-slate-50">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold text-balance">
+        <h1 className="text-4xl font-bold text-balance text-slate-300">
           Select The Prize Cards
         </h1>
         <p className="text-slate-400 text-sm sm:text-base">
@@ -421,33 +429,48 @@ export function ResultsView({
           </div>
 
           {/* Legend + Play Again + bottom progress bar (all aligned) */}
-          <div className="pt-3 space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded border-4 border-emerald-400" />
-                  <span>Correct guess</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded border-4 border-rose-500" />
-                  <span>Wrong guess</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded border-4 border-orange-400" />
-                  <span>Missed prize</span>
-                </div>
-              </div>
+          {/* Legend + Play Again + bottom progress bar (all aligned) */}
+<div className="pt-3 space-y-3">
+  <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200">
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded border-4 border-emerald-400" />
+        <span>Correct guess</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded border-4 border-rose-500" />
+        <span>Wrong guess</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="w-4 h-4 rounded border-4 border-orange-400" />
+        <span>Missed prize</span>
+      </div>
+    </div>
 
-            <Button
-  onClick={onRestart}
-  size="sm"
-  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30"
->
-  <RotateCcw className="mr-2 h-4 w-4" />
-  Play Again
-</Button>
+    {/* Right-side buttons */}
+    <div className="flex gap-2">
+      {/* New: Import List / go back to main page */}
+      <Button
+        type="button"
+        size="sm"
+        onClick={handleImportNewList}
+        className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
+      >
+        Import New List
+      </Button>
 
-            </div>
+      {/* Existing: Play Again */}
+      <Button
+        onClick={onRestart}
+        size="sm"
+        className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
+      >
+        <RotateCcw className="mr-2 h-4 w-4" />
+        Play Again
+      </Button>
+    </div>
+  </div>
+  {/* Full-width bottom bar stays the same below this */}
 
             {/* Full-width bottom bar */}
             {rank && rank.tier !== "masterball" && (
@@ -501,14 +524,15 @@ export function ResultsView({
             <div className="text-sm text-slate-300">
               Selected {selectedCards.size} of {totalPrizes} cards
             </div>
-           <Button
+          <Button
   onClick={handleSubmit}
   disabled={selectedCards.size !== totalPrizes}
   size="sm"
-  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none"
+  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none"
 >
   Submit Guesses
 </Button>
+
 
           </div>
         </Card>

@@ -1,99 +1,125 @@
-"use client";
+"use client"
 
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react"
+import { Volume2, VolumeX, Play, Pause } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-const INITIAL_VOLUME = 0.4;
+type MusicControlsProps = {
+  variant?: "footer" | "floating"
+  showButton?: boolean
+}
 
-export function MusicControls() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(INITIAL_VOLUME);
+const MUSIC_SRC = "/music/prize-check-theme.mp3" // <- your audio path
 
-  // Try to autoplay once on mount,
-  // and fall back to "play on first click anywhere"
+export function MusicControls({
+  variant = "footer",
+  showButton = true,
+}: MusicControlsProps) {
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [volume, setVolume] = useState(0.4)
+
+  // create audio element once
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.volume = INITIAL_VOLUME;
-
-    const tryPlay = async () => {
-      try {
-        await audio.play();
-        setIsPlaying(true);
-      } catch {
-        // Autoplay blocked — we'll start on first user interaction
-        // (browser policy thing)
-      }
-    };
-
-    // Try immediately
-    tryPlay();
-
-    // Then try again on first click anywhere on the page
-    const handleFirstInteraction = () => {
-      tryPlay();
-      document.removeEventListener("click", handleFirstInteraction);
-    };
-
-    document.addEventListener("click", handleFirstInteraction);
+    const el = new Audio(MUSIC_SRC)
+    el.loop = true
+    el.volume = volume
+    setAudio(el)
 
     return () => {
-      document.removeEventListener("click", handleFirstInteraction);
-    };
-  }, []);
+      el.pause()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const togglePlay = async () => {
-    const audio = audioRef.current;
-    if (!audio) return;
+  // sync volume
+  useEffect(() => {
+    if (audio) {
+      audio.volume = volume
+    }
+  }, [audio, volume])
 
+  const togglePlay = () => {
+    if (!audio) return
     if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
+      audio.pause()
+      setIsPlaying(false)
     } else {
-      try {
-        audio.volume = volume;
-        await audio.play();
-        setIsPlaying(true);
-      } catch (err) {
-        console.error("Could not start audio", err);
-      }
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {
+          // ignore autoplay errors
+        })
     }
-  };
+  }
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    setVolume(value);
-    if (audioRef.current) {
-      audioRef.current.volume = value;
+  const handleVolumeChange = (value: number) => {
+    const v = value / 100
+    setVolume(v)
+    if (v === 0 && isPlaying) {
+      // you can decide if you want to auto-pause when muted
     }
-  };
+  }
+
+  const isMuted = volume === 0
+
+  const isFloating = variant === "floating"
 
   return (
-    <div className="flex items-center gap-2 text-xs text-slate-200">
+    <div
+      className={cn(
+        "flex items-center gap-2 text-xs",
+        isFloating &&
+          "fixed bottom-4 right-4 z-40 rounded-full bg-slate-900/95 border border-slate-700 px-3 py-2 shadow-lg shadow-black/50",
+      )}
+    >
+      {/* optional play / pause button */}
+      {showButton && (
+        <button
+          type="button"
+          onClick={togglePlay}
+          className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-900 hover:bg-slate-200 transition"
+        >
+          {isPlaying ? (
+            <>
+              <Pause className="h-3 w-3" />
+              <span>Pause</span>
+            </>
+          ) : (
+            <>
+              <Play className="h-3 w-3" />
+              <span>Play Music</span>
+            </>
+          )}
+        </button>
+      )}
+
+      {/* volume icon */}
       <button
         type="button"
-        onClick={togglePlay}
-        className="rounded-full bg-slate-800/60 px-3 py-1 hover:bg-slate-700/80"
+        onClick={() => handleVolumeChange(isMuted ? 40 : 0)}
+        className="p-1 rounded-full hover:bg-slate-800"
       >
-        {isPlaying ? "Pause Music" : "Play Music"}
+        {isMuted ? (
+          <VolumeX className="h-4 w-4 text-slate-200" />
+        ) : (
+          <Volume2 className="h-4 w-4 text-slate-200" />
+        )}
       </button>
 
-      <div className="flex items-center gap-1">
-        <span className="text-[10px] text-slate-400">Vol</span>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={handleVolumeChange}
-          className="h-1 w-20 cursor-pointer"
-        />
-      </div>
-
-      {/* This audio tag is the single global player */}
-      <audio ref={audioRef} src="/audio/bg-music.mp3" loop />
+      {/* slider */}
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={volume * 100}
+        onChange={(e) => handleVolumeChange(Number(e.target.value))}
+        className={cn(
+          "h-1 w-24 cursor-pointer appearance-none rounded-full bg-slate-700",
+          "accent-emerald-400",
+        )}
+      />
     </div>
-  );
+  )
 }

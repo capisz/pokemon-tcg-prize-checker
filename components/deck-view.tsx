@@ -179,7 +179,7 @@ useEffect(() => {
                 type="button"
                 size="sm"
                 onClick={onRestartGame}
-                className="rounded-full px-4 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold border border-slate-600"
+  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
               >
                 Restart
               </Button>
@@ -191,7 +191,7 @@ useEffect(() => {
               onClick={onEndEarly}
               className="rounded-full px-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold shadow-md shadow-emerald-500/30"
             >
-              End game
+              Guess Prizes
             </Button>
           </div>
         </div>

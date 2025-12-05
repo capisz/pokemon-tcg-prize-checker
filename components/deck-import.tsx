@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { MusicControls } from "@/components/music-controls" // ⬅️ NEW
+import { FeaturedDeckSection } from "@/components/featured-deck"
 
 type ImportedCard = {
   id: string
@@ -168,7 +168,7 @@ export function DeckImport(props: DeckImportProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 py-10 bg-slate-950 text-slate-50">
+    <div className="flex flex-col items-center px-4 py-10 text-slate-50">
       <div className="w-full max-w-6xl space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between gap-4">
@@ -177,39 +177,37 @@ export function DeckImport(props: DeckImportProps) {
             <img
               src="/sprite1_vector.svg"
               alt="PrizeCheckDrill mascot"
-              className="h-30 w-30 md:h-12 md:w-12 mascot-bob" // ⬅️ bobbing
+              className="h-30 w-30 md:h-12 md:w-12 mascot-bob"
               style={{ imageRendering: "pixelated" }}
             />
             <div className="flex flex-col">
               <h1 className="text-2xl font-semibold text-emerald-400">
                 PrizeCheckDrillr.io
               </h1>
-             <p className="text-xs sm:text-sm text-slate-400">
-  Paste your deck list and test how well you remember your prizes.{" "}
-  Find importable lists at{" "}
-  <a
-    href="https://limitlesstcg.com/decks/lists"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-sky-200 hover:text-sky-300" 
-    aria-label="LimitlessTCG"
-  >
-    LimitlessTCG
-  </a>
-  .
-</p>
-
+              <p className="text-xs sm:text-sm text-slate-400">
+                Paste your deck list and test how well you remember your prizes.{" "}
+                Find importable lists at{" "}
+                <a
+                  href="https://limitlesstcg.com/decks/lists"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sky-200 hover:text-sky-300"
+                  aria-label="LimitlessTCG"
+                >
+                  LimitlessTCG
+                </a>
+                .
+              </p>
             </div>
           </div>
 
-          {/* Right: music + Import button */}
+          {/* Right: Import button */}
           <div className="flex items-center gap-3">
-            {/* ⬅️ HERE is the music UI */}
             <Button
               size="sm"
               onClick={handleImport}
               disabled={isLoading || !rawText.trim()}
-              className="rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30"
+              className="rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
             >
               {isLoading ? "Importing…" : "Import Deck"}
             </Button>
@@ -237,7 +235,10 @@ export function DeckImport(props: DeckImportProps) {
           </div>
         </Card>
 
-        {/* Preview list + hover image */}
+        {/* Featured deck banner */}
+      <FeaturedDeckSection />
+
+        {/* Preview list + hover image (shows after import) */}
         {previewCards.length > 0 && (
           <div className="flex flex-col md:flex-row gap-6 mt-2">
             {/* List on the left */}

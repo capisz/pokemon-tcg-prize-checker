@@ -1,29 +1,27 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { MusicControls } from "@/components/music-controls";
+import "./globals.css"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import { MusicProvider } from "@/components/music-player"
 
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "PrizeCheckDrillr",
-  description: "Prize check practice app",
-};
+  title: "PrizeCheckDrillr.io",
+  description: "Prize mapping trainer for competitive Pokémon TCG",
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <body className="bg-slate-950 text-slate-50">
-        {children}
-
-        {/* Global floating music controls, always mounted */}
-        <div className="fixed right-4 bottom-4 z-50">
-          <MusicControls />
-        </div>
+      <body className={inter.className}>
+        <MusicProvider>
+          {children}
+        </MusicProvider>
       </body>
-      
     </html>
-  );
+  )
 }

@@ -9,6 +9,7 @@ import { dealCards } from "@/lib/shuffle"
 import { LoadingOverlay } from "@/components/loading-overlay"
 import { CountdownOverlay } from "@/components/countdown-overlay"
 import { SiteFooter } from "@/components/site-footer"
+import { FloatingGameVolume } from "@/components/music-player"
 
 type Stage = "import" | "game" | "results"
 
@@ -57,8 +58,8 @@ export default function HomePage() {
   // Deal a fresh game (deck / hand / prizes) from a given full deck
   const setupNewGameFromDeck = (sourceDeck: PokemonCard[]) => {
     const { deck, prizes, hand } = dealCards(sourceDeck)
-    setPlayDeck(deck)     // 46 in deck
-    setHand(hand)         // 8 in hand
+    setPlayDeck(deck) // 46 in deck
+    setHand(hand) // 8 in hand
     setPrizeCards(prizes) // 6 prizes
   }
 
@@ -105,8 +106,6 @@ export default function HomePage() {
   }
 
   // New: restart the game (from in-game or results)
-  // Re-shuffles a new combo from the same imported deck,
-  // then shows the pokeball 3-2-1 overlay again.
   const handleRestartGame = () => {
     if (fullDeck.length === 0) return
 
@@ -114,20 +113,24 @@ export default function HomePage() {
     startPreGameCountdown()
   }
 
+  // Go back to import screen (for "Import new list" button on results)
+  const handleGoToImport = () => {
+    setStage("import")
+  }
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
-      {/* Riffle shuffle + progress bar while importing */}
+  <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-950 via-slate-950 to-black text-slate-50">
+    {/* Main content area */}
+    <div className="flex-1 relative">
+      {/* Riffle shuffle overlay */}
       <LoadingOverlay
         visible={isShuffling}
         progress={shuffleProgress}
         message="Shuffling & importing your deck"
       />
 
-      {/* 3-2-1 pokeball countdown when starting / restarting the game */}
-      <CountdownOverlay
-        visible={preGameCount !== null}
-        count={preGameCount}
-      />
+      {/* 3-2-1 countdown */}
+      <CountdownOverlay visible={preGameCount !== null} count={preGameCount} />
 
       {stage === "import" && (
         <DeckImport
@@ -138,25 +141,33 @@ export default function HomePage() {
       )}
 
       {stage === "game" && (
-        <DeckView
-          deck={playDeck}
-          hand={hand}
-          onTimeUp={handleTimeUp}
-          onEndEarly={handleTimeUp}      // End game button
-          onRestartGame={handleRestartGame} // NEW: restart button
-        />
+        <>
+          <DeckView
+            deck={playDeck}
+            hand={hand}
+            onTimeUp={handleTimeUp}
+            onEndEarly={handleTimeUp}
+            onRestartGame={handleRestartGame}
+          />
+          {/* Vertical floating volume slider only during game */}
+          <FloatingGameVolume />
+        </>
       )}
 
       {stage === "results" && (
         <ResultsView
           allCards={[...playDeck, ...hand, ...prizeCards]}
           prizeCards={prizeCards}
-          onRestart={handleRestartGame} // Play Again does the same restart flow
+          onRestart={handleRestartGame}
+          onImportNewList={handleGoToImport}
           timeLeft={null}
           totalTime={GAME_DURATION}
         />
       )}
-       <SiteFooter />
     </div>
-  )
+
+    {/* Footer visible on import + results, hidden during game */}
+    {stage !== "game" && <SiteFooter />}
+  </div>
+)
 }
