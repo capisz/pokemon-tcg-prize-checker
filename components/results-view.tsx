@@ -438,15 +438,15 @@ export function ResultsView({
                 </div>
               </div>
 
-              <Button
-                onClick={onRestart}
-                size="sm"
-                className="rounded-full bg-transparent border border-slate-600 text-slate-100 hover:bg-slate-800"
-                variant="outline"
-              >
-                <RotateCcw className="mr-2 h-4 w-4" />
-                Play Again
-              </Button>
+            <Button
+  onClick={onRestart}
+  size="sm"
+  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30"
+>
+  <RotateCcw className="mr-2 h-4 w-4" />
+  Play Again
+</Button>
+
             </div>
 
             {/* Full-width bottom bar */}
@@ -501,14 +501,15 @@ export function ResultsView({
             <div className="text-sm text-slate-300">
               Selected {selectedCards.size} of {totalPrizes} cards
             </div>
-            <Button
-              onClick={handleSubmit}
-              disabled={selectedCards.size !== totalPrizes}
-              size="sm"
-              className="bg-rose-500 hover:bg-rose-500/90 text-white rounded-full px-5"
-            >
-              Submit Guesses
-            </Button>
+           <Button
+  onClick={handleSubmit}
+  disabled={selectedCards.size !== totalPrizes}
+  size="sm"
+  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none"
+>
+  Submit Guesses
+</Button>
+
           </div>
         </Card>
       )}
