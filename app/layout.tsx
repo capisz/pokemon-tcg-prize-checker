@@ -1,3 +1,4 @@
+// app/layout.tsx
 import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
@@ -16,11 +17,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <MusicProvider>
-          {children}
-        </MusicProvider>
+    <html lang="en" className="dark">
+      <body
+        className={`${inter.className} min-h-screen bg-slate-950 text-slate-100`}
+      >
+        <MusicProvider>{children}</MusicProvider>
       </body>
     </html>
   )

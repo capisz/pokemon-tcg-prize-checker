@@ -72,7 +72,17 @@ function computeProgressDelta(
   return currentProgress - (previous.progress ?? 0)
 }
 
-/* ---------- Component ---------- */
+/* ---------- Shared panel styles ---------- */
+
+// Matches the “emerald bar” feel from the game screen
+const resultsPanelClasses =
+  "rounded-3xl border-0 ring-1 ring-emerald-500/30 " +
+  "bg-emerald-900/75 shadow-[0_20px_45px_rgba(0,0,0,0.9)]"
+
+// Neutral dark container behind the card grid (no green tint)
+const gridPanelClasses =
+  "rounded-3xl bg-slate-950/85 border border-slate-800/80 " +
+  "shadow-[0_18px_40px_rgba(0,0,0,0.9)]"
 
 export function ResultsView({
   allCards,
@@ -225,22 +235,21 @@ export function ResultsView({
   }
 
   const handleImportNewList = () => {
-  if (typeof window !== "undefined") {
-    window.location.href = "/"   // hard reset back to main/import screen
+    if (typeof window !== "undefined") {
+      window.location.href = "/"
+    }
   }
-}
 
   const accuracy =
     totalPrizes > 0 ? Math.round((correctGuesses / totalPrizes) * 100) : 0
 
   // If timeLeft is null, assume 0 seconds used (fastest case)
-  const usedTime =
-    timeLeft == null ? 0 : Math.max(0, totalTime - timeLeft)
+  const usedTime = timeLeft == null ? 0 : Math.max(0, totalTime - timeLeft)
 
   const timePercent =
     totalTime === 0
       ? 0
-      : Math.max(0, Math.min(1, (totalTime - usedTime) / totalTime)) // more left = better
+      : Math.max(0, Math.min(1, (totalTime - usedTime) / totalTime))
 
   // scoring: 70% accuracy, 30% speed, scaled to 0–1000
   const score = (() => {
@@ -320,28 +329,63 @@ export function ResultsView({
 
   return (
     <div className="container mx-auto max-w-7xl p-6 space-y-6 text-slate-50">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold text-balance text-slate-300">
-          Select The Prize Cards
-        </h1>
-        <p className="text-slate-400 text-sm sm:text-base">
-          {showResults
-            ? "Here are your results."
-            : "Select the 6 cards you believe were prizes."}
-        </p>
+      {/* Header with inline submit button */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-2 text-center sm:text-left">
+          <h1
+      className={cn(
+        "text-[32px] sm:text-[40px] font-semibold text-emerald-200/90",
+        "tracking-tight"
+      )}
+    >
+      Select the Prize Cards
+    </h1>
+          <p className="text-slate-400 text-sm sm:text-base">
+            {showResults
+              ? "Here are your results."
+              : "Select the 6 cards you believe were prizes."}
+          </p>
+        </div>
+
+        {!showResults && (
+          <div className="flex items-center justify-center sm:justify-end gap-3">
+            <span className="text-xs sm:text-sm text-slate-400">
+              Selected{" "}
+              <span className="font-semibold text-emerald-200">
+                {selectedCards.size}
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-emerald-200">
+                {totalPrizes}
+              </span>
+            </span>
+            <Button
+              onClick={handleSubmit}
+              disabled={selectedCards.size !== totalPrizes}
+              size="sm"
+              className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none"
+            >
+              Submit Guesses
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Score + rank + stats + legend + bar */}
       {showResults && (
-        <Card className="p-4 sm:p-4 bg-slate-900/90 border border-slate-700 text-slate-50 space-y-2">
+        <Card
+          className={cn(
+            "px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4",
+            resultsPanelClasses,
+          )}
+        >
           {/* Top row: Score + Rank + Stats */}
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             {/* Left: Score + PB */}
             <div className="flex items-center gap-4">
               <div
                 className={cn(
-                  "flex items-center gap-3 rounded-xl px-4 py-2 border",
+                  "flex items-center gap-3 rounded-2xl px-4 py-2 border",
                   scoreBadgeBg,
                 )}
               >
@@ -376,10 +420,10 @@ export function ResultsView({
               </div>
             </div>
 
-            {/* Center: Rank (bigger & slightly lower) */}
+            {/* Center: Rank */}
             {rank && previousRank && (
-              <div className="flex justify-center flex-1 mt-4">
-                <div className="scale-150">
+              <div className="flex justify-center flex-1 mt-4 lg:mt-2">
+                <div className="scale-[1.3] drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]">
                   <RankDisplay
                     previous={previousRank}
                     current={rank}
@@ -428,49 +472,45 @@ export function ResultsView({
             </div>
           </div>
 
-          {/* Legend + Play Again + bottom progress bar (all aligned) */}
-          {/* Legend + Play Again + bottom progress bar (all aligned) */}
-<div className="pt-3 space-y-3">
-  <div className="flex flex-wrap items-center justify-between gap-4">
-    <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200">
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded border-4 border-emerald-400" />
-        <span>Correct guess</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded border-4 border-rose-500" />
-        <span>Wrong guess</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-4 h-4 rounded border-4 border-orange-400" />
-        <span>Missed prize</span>
-      </div>
-    </div>
+          {/* Legend + Play Again + bottom progress bar */}
+          <div className="pt-3 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded border-4 border-emerald-400" />
+                  <span>Correct guess</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded border-4 border-rose-500" />
+                  <span>Wrong guess</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded border-4 border-orange-400" />
+                  <span>Missed prize</span>
+                </div>
+              </div>
 
-    {/* Right-side buttons */}
-    <div className="flex gap-2">
-      {/* New: Import List / go back to main page */}
-      <Button
-        type="button"
-        size="sm"
-        onClick={handleImportNewList}
-        className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
-      >
-        Import New List
-      </Button>
+              {/* Right-side buttons */}
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={handleImportNewList}
+                  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
+                >
+                  Import New List
+                </Button>
 
-      {/* Existing: Play Again */}
-      <Button
-        onClick={onRestart}
-        size="sm"
-        className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
-      >
-        <RotateCcw className="mr-2 h-4 w-4" />
-        Play Again
-      </Button>
-    </div>
-  </div>
-  {/* Full-width bottom bar stays the same below this */}
+                <Button
+                  onClick={onRestart}
+                  size="sm"
+                  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
+                >
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Play Again
+                </Button>
+              </div>
+            </div>
 
             {/* Full-width bottom bar */}
             {rank && rank.tier !== "masterball" && (
@@ -517,30 +557,17 @@ export function ResultsView({
         </Card>
       )}
 
-      {/* Selection bar before submit */}
-      {!showResults && (
-        <Card className="p-4 bg-slate-900/90 border border-slate-700">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-slate-300">
-              Selected {selectedCards.size} of {totalPrizes} cards
-            </div>
-          <Button
-  onClick={handleSubmit}
-  disabled={selectedCards.size !== totalPrizes}
-  size="sm"
-  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none"
->
-  Submit Guesses
-</Button>
-
-
-          </div>
-        </Card>
-      )}
-
       {/* Card grid */}
-      <Card className="p-5 bg-slate-900/80 border border-slate-700">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+     <Card
+  className={cn(
+    "p-5 rounded-3xl",
+    // dark neutral background so the cards pop
+    "bg-emerald-700/40",
+    // emerald-tinted border & shadow to match results header
+    "border-transparent"
+  )}
+>
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {cardsWithMeta.map((card, index) => {
             const status = getCardStatus(card.instanceId)
             const isClickable = !showResults
@@ -552,10 +579,10 @@ export function ResultsView({
                 className={cn(
                   "group relative aspect-[2.5/3.5] rounded-xl overflow-hidden transition-all",
                   isClickable && "cursor-pointer",
-                  status === "selected" && "ring-3 ring-sky-400 scale-95",
+                  status === "selected" && "ring-3 ring-sky-400 scale-[0.97]",
                   status === "correct" && "ring-3 ring-emerald-400",
                   status === "incorrect" && "ring-3 ring-rose-500",
-                  status === "missed" && "ring-3 ring-orange-400 opacity-85",
+                  status === "missed" && "ring-3 ring-orange-400 opacity-90",
                   status === "normal" && showResults && "opacity-40",
                   !showResults && "hover:scale-105",
                 )}
@@ -579,17 +606,17 @@ export function ResultsView({
                 {showResults && status !== "normal" && (
                   <div className="absolute top-2 right-2">
                     {status === "correct" && (
-                      <Badge className="bg-emerald-500 text-white">
+                      <Badge className="bg-emerald-500 text-white shadow-md shadow-emerald-500/40">
                         <CheckCircle2 className="h-3 w-3" />
                       </Badge>
                     )}
                     {status === "incorrect" && (
-                      <Badge className="bg-rose-500 text-white">
+                      <Badge className="bg-rose-500 text-white shadow-md shadow-rose-500/40">
                         <XCircle className="h-3 w-3" />
                       </Badge>
                     )}
                     {status === "missed" && (
-                      <Badge className="bg-orange-500 text-white">
+                      <Badge className="bg-orange-500 text-white shadow-md shadow-orange-500/40">
                         Prize
                       </Badge>
                     )}

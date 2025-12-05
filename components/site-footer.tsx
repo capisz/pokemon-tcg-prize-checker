@@ -1,8 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { FooterMusicControls } from "@/components/music-player"
-
+import { FooterMusicControls } from "@/components/music-player" // or MusicControls if that's what you're using
 
 export function SiteFooter() {
   return (
@@ -14,13 +13,11 @@ export function SiteFooter() {
             PrizeCheckDrillr.io
           </p>
           <p className="text-xs text-emerald-900/80">
-            Practice prize mapping for competitive Pokémon TCG decks.
+            Use this and the tools below to become a better player.
           </p>
 
           <nav className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-emerald-900/80">
-            <Link href="mailto:chriszcodes@gmail.com" className="hover:underline">
-              Contact
-            </Link>
+           
             <Link
               href="https://dragapultist.vercel.app"
               target="_blank"
@@ -42,6 +39,9 @@ export function SiteFooter() {
             >
               LimitlessTCG (Deck Database)
             </Link>
+             <Link href="mailto:chriszcodes@gmail.com" className="hover:underline">
+              Contact
+            </Link>
           </nav>
         </div>
 
@@ -61,4 +61,3 @@ export function SiteFooter() {
     </footer>
   )
 }
-

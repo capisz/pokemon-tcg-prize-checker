@@ -59,7 +59,7 @@
 
 .dark {
   /* Dark mode with gaming aesthetic */
-  --background: oklch(0.15 0.02 250);
+  --background: #020b14; /* deep navy–teal, instead of oklch(0.15 0.02 250) */
   --foreground: oklch(0.95 0.01 240);
   --card: oklch(0.2 0.02 250);
   --card-foreground: oklch(0.95 0.01 240);
@@ -153,8 +153,18 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    /* soft navy–teal vignette behind everything */
+    background-image: radial-gradient(
+      circle at top,
+      #04101f 0,
+      #020b14 45%,
+      #020617 100%
+    );
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 }
+
 
 .mascot-bob {
   animation: mascot-bob 1.6s ease-in-out infinite;

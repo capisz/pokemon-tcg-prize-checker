@@ -83,10 +83,10 @@ export function RankDisplay({
         )}
       >
         <div className="relative flex items-center justify-center">
-          {/* glow only is pulsing */}
+          {/* smaller, softer glow */}
           <div
             className={cn(
-              "absolute w-32 h-32 rounded-full blur-3xl opacity-90 animate-pulse",
+              "absolute w-28 h-28 rounded-full blur-2xl opacity-80 animate-pulse",
               GLOW_COLOR.masterball,
             )}
           />
@@ -130,15 +130,15 @@ export function RankDisplay({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-.5 transition-opacity duration-700",
+        "flex flex-col items-center gap-1 transition-opacity duration-700",
         visible ? "opacity-100" : "opacity-0",
       )}
     >
       {/* larger ball with strong, slow pulsing glow */}
-      <div className="relative flex items-center justify-center">
+      <div className="relative flex items-center justify-center mt-1">
         <div
           className={cn(
-            "absolute w-36 h-36 rounded-full blur-3xl opacity-90 animate-pulse",
+            "absolute w-28 h-28 rounded-full blur-2xl opacity-75 animate-pulse",
             GLOW_COLOR[current.tier],
           )}
         />

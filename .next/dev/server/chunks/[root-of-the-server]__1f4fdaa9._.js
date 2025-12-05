@@ -59,10 +59,10 @@ const FEATURED_DECK_IMPORT_TEXT = `
 Pokémon: 4
 2 Charmander PAF 7
 1 Charmeleon PFL 12
-1 Charizard ex OBF 125
+2 Charizard ex OBF 125
 
 Trainer: 4
-4 Ultra Ball PAF 80
+1 Prime Catcher TEF 157
 
 Energy: 4
 4 Fire Energy SVE 2

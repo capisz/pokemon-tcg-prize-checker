@@ -1,12 +1,987 @@
-[00:00:00.561] Server  LOG      ✓ Ready in 384ms
-[00:00:02.112] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:02.380] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.380] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.380] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.381] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.382] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:03.154] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:03.156] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:03.178] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:03.180] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:03.184] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:00.550] Server  LOG      ✓ Ready in 381ms
+[00:00:01.865] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:02.000] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:02.001] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:02.002] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:02.003] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:02.004] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:02.603] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:02.605] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:02.607] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:02.608] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:02.610] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:09.908] Server  LOG      ✓ Compiled in 91ms
+[00:03:34.909] Server  LOG      ✓ Compiled in 71ms
+[00:05:49.040] Server  LOG      ✓ Compiled in 114ms
+[00:06:15.193] Server  LOG      ✓ Compiled in 102ms
+[00:06:33.086] Server  LOG      ✓ Compiled in 51ms
+[00:06:38.094] Server  LOG      ✓ Compiled in 85ms
+[00:06:40.203] Server  LOG      ✓ Compiled in 140ms
+[00:06:42.317] Server  LOG      ✓ Compiled in 85ms
+[00:15:17.997] Server  LOG      ✓ Compiled in 78ms
+[00:15:29.614] Server  LOG      ✓ Compiled in 48ms
+[00:19:14.826] Server  LOG      ✓ Compiled in 96ms
+[00:19:40.190] Server  LOG      ✓ Compiled in 137ms
+[00:19:47.590] Server  LOG      ✓ Compiled in 39ms
+[00:19:53.540] Server  LOG      ✓ Compiled in 70ms
+[00:20:18.799] Server  LOG      ✓ Compiled in 57ms
+[00:20:56.211] Server  LOG      ✓ Compiled in 59ms
+[00:21:06.520] Server  LOG      ✓ Compiled in 45ms
+[00:22:06.347] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:22:57.528] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:25:50.307] Server  LOG      ✓ Compiled in 84ms
+[00:27:56.638] Server  LOG      ✓ Compiled in 89ms
+[00:28:14.272] Server  LOG      ✓ Compiled in 137ms
+[00:28:16.839] Server  LOG      ✓ Compiled in 57ms
+[00:28:53.400] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:33:28.160] Server  LOG      ✓ Compiled in 71ms
+[00:33:47.944] Server  LOG      ✓ Compiled in 53ms
+[00:33:52.092] Server  LOG      ✓ Compiled in 30ms
+[00:35:25.166] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:39:44.056] Server  LOG      ✓ Compiled in 75ms
+[00:39:47.130] Server  LOG      ✓ Compiled in 54ms
+[00:40:00.028] Server  LOG      ✓ Compiled in 90ms
+[00:40:23.634] Server  LOG      ✓ Compiled in 91ms
+[00:40:29.943] Server  LOG      ✓ Compiled in 27ms
+[00:44:23.631] Server  LOG      ✓ Compiled in 99ms
+[00:44:37.054] Server  LOG      ✓ Compiled in 76ms
+[00:50:51.678] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:53:25.572] Server  LOG      ✓ Compiled in 56ms
+[00:53:30.206] Server  LOG      ✓ Compiled in 31ms
+[00:53:32.967] Server  LOG      ✓ Compiled in 48ms
+[00:53:42.106] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:54:35.065] Server  LOG      ✓ Compiled in 56ms
+[00:54:38.753] Server  LOG      ✓ Compiled in 39ms
+[00:57:13.524] Server  LOG      ✓ Compiled in 57ms
+[00:58:44.334] Server  LOG      ✓ Compiled in 91ms
+[00:58:51.494] Server  LOG      ✓ Compiled in 50ms
+[00:59:16.846] Server  LOG      ✓ Compiled in 139ms
+[00:59:29.004] Server  LOG      ✓ Compiled in 53ms
+[01:03:30.479] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:13:35.630] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:14:19.613] Server  LOG      ✓ Compiled in 82ms
+[01:19:50.824] Server  LOG      ✓ Compiled in 99ms
+[01:20:36.418] Server  LOG      ✓ Compiled in 106ms
+[05:30:12.343] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:33:43.418] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:36:04.383] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:42:27.765] Server  LOG      ✓ Compiled in 724ms
+[05:42:31.857] Server  LOG      ✓ Compiled in 74ms
+[05:42:40.013] Server  LOG      ✓ Compiled in 99ms
+[05:42:43.934] Server  LOG      ✓ Compiled in 43ms
+[05:42:46.959] Server  LOG      ✓ Compiled in 192ms
+[05:43:01.487] Server  LOG      ✓ Compiled in 194ms
+[05:43:08.448] Server  LOG      ✓ Compiled in 59ms
+[05:43:10.497] Server  LOG      ✓ Compiled in 38ms
+[05:43:12.163] Server  LOG      ✓ Compiled in 70ms
+[05:43:14.077] Server  LOG      ✓ Compiled in 91ms
+[05:44:01.797] Server  LOG      ✓ Compiled in 147ms
+[05:44:01.901] Browser ERROR   ./app/page.tsx:4:1
+Export DeckImport doesn't exist in target module
+  2 |
+  3 | import { useState } from "react"
+> 4 | import { DeckImport } from "@/components/deck-import"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 | import { DeckView } from "@/components/deck-view"
+  6 | import { ResultsView } from "@/components/results-view"
+  7 | import type { PokemonCard } from "@/lib/types"
+
+The export DeckImport was not found in module [project]/components/deck-import.tsx [app-client] (ecmascript).
+Did you mean to import FeaturedDeckSection?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[05:44:01.901] Browser ERROR   ./app/page.tsx:4:1
+Export DeckImport doesn't exist in target module
+  2 |
+  3 | import { useState } from "react"
+> 4 | import { DeckImport } from "@/components/deck-import"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 | import { DeckView } from "@/components/deck-view"
+  6 | import { ResultsView } from "@/components/results-view"
+  7 | import type { PokemonCard } from "@/lib/types"
+
+The export DeckImport was not found in module [project]/components/deck-import.tsx [app-ssr] (ecmascript).
+Did you mean to import FeaturedDeckSection?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[05:44:31.430] Server  LOG      ✓ Compiled in 53ms
+[05:44:39.410] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:47:05.573] Server  LOG      ✓ Compiled in 111ms
+[05:47:40.838] Server  LOG      ✓ Compiled in 167ms
+[05:47:42.400] Server  LOG      ✓ Compiled in 63ms
+[05:47:46.478] Server  LOG      ✓ Compiled in 101ms
+[05:47:49.600] Server  LOG      ✓ Compiled in 117ms
+[05:47:51.764] Server  LOG      ✓ Compiled in 44ms
+[05:47:54.758] Server  LOG      ✓ Compiled in 35ms
+[05:48:27.432] Server  LOG      ✓ Compiled in 61ms
+[05:49:09.396] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:49:12.215] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:49:30.814] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:49:32.548] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:50:56.860] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:50:58.573] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:51:00.207] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:51:01.899] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:51:03.850] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:51:05.848] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:51:07.480] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:57:37.408] Server  LOG      ✓ Compiled in 103ms
+[06:01:58.681] Server  LOG      ✓ Compiled in 100ms
+[06:02:11.210] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:02:13.285] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:03:30.641] Server  LOG      ✓ Compiled in 86ms
+[06:03:33.531] Server  LOG      ✓ Compiled in 32ms
+[06:03:37.221] Server  LOG      ✓ Compiled in 59ms
+[06:03:39.057] Server  LOG      ✓ Compiled in 41ms
+[06:03:43.074] Server  LOG      ✓ Compiled in 36ms
+[06:03:44.995] Server  LOG      ✓ Compiled in 32ms
+[06:03:46.883] Server  LOG      ✓ Compiled in 42ms
+[06:03:53.608] Server  LOG      ✓ Compiled in 68ms
+[06:03:56.041] Server  LOG      ✓ Compiled in 74ms
+[06:04:00.234] Server  LOG      ✓ Compiled in 106ms
+[06:04:02.470] Server  LOG      ✓ Compiled in 50ms
+[06:04:05.565] Server  LOG      ✓ Compiled in 45ms
+[06:04:07.605] Server  LOG      ✓ Compiled in 36ms
+[06:04:10.475] Server  LOG      ✓ Compiled in 35ms
+[06:04:21.689] Server  LOG      ✓ Compiled in 53ms
+[06:04:29.597] Server  LOG      ✓ Compiled in 334ms
+[06:06:02.214] Server  LOG      ✓ Compiled in 179ms
+[06:06:53.918] Server  LOG      ✓ Compiled in 53ms
+[06:06:56.409] Server  LOG      ✓ Compiled in 133ms
+[06:07:11.572] Server  LOG      ✓ Compiled in 70ms
+[06:07:14.048] Server  LOG      ✓ Compiled in 37ms
+[06:12:57.309] Server  LOG      ✓ Compiled in 122ms
+[06:21:23.317] Server  LOG      ✓ Compiled in 100ms
+[06:21:33.492] Server  LOG      ✓ Compiled in 53ms
+[06:22:11.604] Server  LOG      ✓ Compiled in 77ms
+[06:22:17.465] Server  LOG      ✓ Compiled in 64ms
+[06:25:08.928] Server  LOG      ✓ Compiled in 55ms
+[06:26:51.330] Server  LOG      ✓ Compiled in 52ms
+[06:27:08.532] Server  LOG      ✓ Compiled in 37ms
+[06:27:20.700] Server  LOG      ✓ Compiled in 68ms
+[06:27:27.068] Server  LOG      ✓ Compiled in 75ms
+[06:27:35.751] Server  LOG      ✓ Compiled in 72ms
+[06:27:43.780] Server  LOG      ✓ Compiled in 38ms
+[06:28:02.621] Server  LOG      ✓ Compiled in 33ms
+[06:28:10.069] Server  LOG      ✓ Compiled in 87ms
+[06:28:15.047] Server  LOG      ✓ Compiled in 30ms
+[06:28:20.847] Server  LOG      ✓ Compiled in 30ms
+[06:28:24.077] Server  LOG      ✓ Compiled in 51ms
+[06:28:34.317] Server  LOG      ✓ Compiled in 33ms
+[06:28:41.942] Server  LOG      ✓ Compiled in 28ms
+[06:28:44.281] Server  LOG      ✓ Compiled in 51ms
+[06:28:54.130] Server  LOG      ✓ Compiled in 35ms
+[06:28:57.742] Server  LOG      ✓ Compiled in 26ms
+[06:29:04.461] Server  LOG      ✓ Compiled in 31ms
+[06:29:10.736] Server  LOG      ✓ Compiled in 27ms
+[06:29:50.929] Server  LOG      ✓ Compiled in 57ms
+[06:30:01.671] Server  LOG      ✓ Compiled in 42ms
+[06:30:04.077] Server  LOG      ✓ Compiled in 42ms
+[06:30:06.633] Server  LOG      ✓ Compiled in 27ms
+[06:30:08.979] Server  LOG      ✓ Compiled in 27ms
+[06:30:11.558] Server  LOG      ✓ Compiled in 25ms
+[06:30:16.513] Server  LOG      ✓ Compiled in 31ms
+[06:30:19.152] Server  LOG      ✓ Compiled in 31ms
+[06:30:24.349] Server  LOG      ✓ Compiled in 25ms
+[06:30:56.551] Server  LOG      ✓ Compiled in 50ms
+[06:31:22.440] Server  LOG      ✓ Compiled in 74ms
+[06:31:27.603] Server  LOG      ✓ Compiled in 66ms
+[06:31:29.994] Server  LOG      ✓ Compiled in 38ms
+[06:31:38.805] Server  LOG      ✓ Compiled in 77ms
+[06:31:42.807] Server  LOG      ✓ Compiled in 32ms
+[06:31:47.857] Server  LOG      ✓ Compiled in 34ms
+[06:31:53.203] Server  LOG      ✓ Compiled in 65ms
+[06:31:59.995] Server  LOG      ✓ Compiled in 54ms
+[06:32:03.396] Server  LOG      ✓ Compiled in 54ms
+[06:32:05.212] Server  LOG      ✓ Compiled in 51ms
+[06:37:13.859] Server  LOG      ✓ Compiled in 99ms
+[06:38:32.591] Server  LOG      ✓ Compiled in 58ms
+[06:38:59.540] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:41:43.358] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:42:09.016] Server  LOG      ✓ Compiled in 89ms
+[06:42:35.892] Server  LOG      ✓ Compiled in 66ms
+[06:42:39.907] Server  LOG      ✓ Compiled in 37ms
+[06:42:43.287] Server  LOG      ✓ Compiled in 54ms
+[06:42:48.894] Server  LOG      ✓ Compiled in 49ms
+[06:42:51.394] Server  LOG      ✓ Compiled in 33ms
+[06:42:52.991] Server  LOG      ✓ Compiled in 27ms
+[06:43:10.747] Server  LOG      ✓ Compiled in 36ms
+[06:43:13.211] Server  LOG      ✓ Compiled in 47ms
+[06:43:26.695] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:43:41.061] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:45:37.961] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:51:12.007] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:52:06.449] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:52:51.187] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:53:10.348] Server  LOG      ✓ Compiled in 117ms
+[06:54:10.799] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:56:40.360] Server  LOG      ✓ Compiled in 80ms
+[06:56:57.420] Server  LOG      ✓ Compiled in 83ms
+[06:57:01.015] Server  LOG      ✓ Compiled in 48ms
+[06:57:07.951] Server  LOG      ✓ Compiled in 31ms
+[06:57:15.835] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[06:58:15.566] Server  LOG      ✓ Compiled in 96ms
+[06:59:57.736] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:00:04.928] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:03:34.079] Server  LOG      ✓ Compiled in 181ms
+[07:03:43.617] Server  LOG      ✓ Compiled in 110ms
+[07:04:20.876] Server  LOG      ✓ Compiled in 39ms
+[07:04:28.518] Server  LOG      ✓ Compiled in 53ms
+[07:04:57.399] Server  LOG      ✓ Compiled in 34ms
+[07:05:26.747] Server  LOG      ✓ Compiled in 89ms
+[07:06:02.466] Server  LOG      ✓ Compiled in 53ms
+[07:08:54.754] Server  LOG      ✓ Compiled in 84ms
+[07:10:59.437] Server  LOG      ✓ Compiled in 83ms
+[07:11:06.874] Server  LOG      ✓ Compiled in 53ms
+[07:11:46.513] Server  LOG      ✓ Compiled in 52ms
+[07:11:58.520] Server  LOG      ✓ Compiled in 43ms
+[07:12:03.392] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:12:29.795] Server  LOG      ✓ Compiled in 64ms
+[07:14:11.927] Server  LOG      ✓ Compiled in 35ms
+[07:14:12.018] Browser ERROR   The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goNext]": (prev)=>Math.min(prev + 1, deckOrder.length - 1)
+            }["DeckView.useCallback[goNext]"]);
+        }, ()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goPrevious]": (prev)=>Math.max(0, prev - 1)
+            }["DeckView.useCallback[goPrevious]"]);
+        }] [()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goNext]": (prev)=>Math.min(prev + 1, deckOrder.length - 1)
+            }["DeckView.useCallback[goNext]"]);
+        }, ()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goPrevious]": (prev)=>Math.max(0, prev - 1)
+            }["DeckView.useCallback[goPrevious]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.unshift(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToFront]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return prev;
+                }
+            }["DeckView.useCallback[moveCardToFront]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.push(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToBack]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return Math.min(prev, newDeck.length - 1);
+                }
+            }["DeckView.useCallback[moveCardToBack]"]);
+        }, 5, 46]
+[07:15:23.072] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:17:33.346] Server  LOG      ✓ Compiled in 55ms
+[07:17:49.245] Server  LOG      ✓ Compiled in 45ms
+[07:18:22.194] Server  LOG      ✓ Compiled in 63ms
+[07:18:22.279] Browser ERROR   The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goNext]": (prev)=>Math.min(prev + 1, deckOrder.length - 1)
+            }["DeckView.useCallback[goNext]"]);
+        }, ()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goPrevious]": (prev)=>Math.max(0, prev - 1)
+            }["DeckView.useCallback[goPrevious]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.unshift(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToFront]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return prev;
+                }
+            }["DeckView.useCallback[moveCardToFront]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.push(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToBack]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return Math.min(prev, newDeck.length - 1);
+                }
+            }["DeckView.useCallback[moveCardToBack]"]);
+        }, 3] [()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goNext]": (prev)=>Math.min(prev + 1, deckOrder.length - 1)
+            }["DeckView.useCallback[goNext]"]);
+        }, ()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goPrevious]": (prev)=>Math.max(0, prev - 1)
+            }["DeckView.useCallback[goPrevious]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.unshift(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToFront]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return prev;
+                }
+            }["DeckView.useCallback[moveCardToFront]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.push(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToBack]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return Math.min(prev, newDeck.length - 1);
+                }
+            }["DeckView.useCallback[moveCardToBack]"]);
+        }, 3, 46]
+[07:18:33.383] Server  LOG      ✓ Compiled in 51ms
+[07:18:37.936] Server  LOG      ✓ Compiled in 51ms
+[07:18:38.040] Browser ERROR   ./components/deck-view.tsx:2:3
+Parsing ecmascript source code failed
+  1 | Pokémon: 26
+> 2 | 2 Charmander PAF 7
+    |   ^^^^^^^^^^
+  3 | 1 Charmander PFL 11
+  4 | 1 Charmeleon PFL 12
+  5 | 2 Charizard ex OBF 125
+
+Expected ';', '}' or <eof>
+
+Import traces:
+  Client Component Browser:
+    ./components/deck-view.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/deck-view.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[07:18:49.309] Server  LOG      ✓ Compiled in 35ms
+[07:18:49.363] Browser ERROR   The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goNext]": (prev)=>Math.min(prev + 1, deckOrder.length - 1)
+            }["DeckView.useCallback[goNext]"]);
+        }, ()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goPrevious]": (prev)=>Math.max(0, prev - 1)
+            }["DeckView.useCallback[goPrevious]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.unshift(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToFront]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return prev;
+                }
+            }["DeckView.useCallback[moveCardToFront]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.push(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToBack]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return Math.min(prev, newDeck.length - 1);
+                }
+            }["DeckView.useCallback[moveCardToBack]"]);
+        }, 3, 46] [()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goNext]": (prev)=>Math.min(prev + 1, deckOrder.length - 1)
+            }["DeckView.useCallback[goNext]"]);
+        }, ()=>{
+            setCenterIndex({
+                "DeckView.useCallback[goPrevious]": (prev)=>Math.max(0, prev - 1)
+            }["DeckView.useCallback[goPrevious]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.unshift(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToFront]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return prev;
+                }
+            }["DeckView.useCallback[moveCardToFront]"]);
+        }, (cardIndex)=>{
+            const newDeck = [
+                ...deckOrder
+            ];
+            const [card] = newDeck.splice(cardIndex, 1);
+            newDeck.push(card);
+            setDeckOrder(newDeck);
+            setCenterIndex({
+                "DeckView.useCallback[moveCardToBack]": (prev)=>{
+                    if (cardIndex < prev) return Math.max(prev - 1, 0);
+                    return Math.min(prev, newDeck.length - 1);
+                }
+            }["DeckView.useCallback[moveCardToBack]"]);
+        }, 3]
+[07:19:14.538] Server  LOG      ✓ Compiled in 59ms
+[07:19:21.030] Server  LOG      ✓ Compiled in 101ms
+[07:19:25.780] Server  LOG      ✓ Compiled in 103ms
+[07:19:52.207] Server  LOG      ✓ Compiled in 88ms
+[07:19:56.126] Server  LOG      ✓ Compiled in 69ms
+[07:20:11.984] Server  LOG      ✓ Compiled in 26ms
+[07:20:35.926] Server  LOG      ✓ Compiled in 89ms
+[07:20:38.817] Server  LOG      ✓ Compiled in 37ms
+[07:20:41.809] Server  LOG      ✓ Compiled in 67ms
+[07:20:44.900] Server  LOG      ✓ Compiled in 56ms
+[07:20:46.145] Server  LOG      ✓ Compiled in 30ms
+[07:20:50.244] Server  LOG      ✓ Compiled in 58ms
+[07:20:51.437] Server  LOG      ✓ Compiled in 29ms
+[07:20:53.078] Server  LOG      ✓ Compiled in 48ms
+[07:20:54.537] Server  LOG      ✓ Compiled in 24ms
+[07:20:55.828] Server  LOG      ✓ Compiled in 29ms
+[07:20:57.288] Server  LOG      ✓ Compiled in 30ms
+[07:23:03.879] Server  LOG      ✓ Compiled in 50ms
+[07:23:25.782] Server  LOG      ✓ Compiled in 55ms
+[07:23:46.365] Server  LOG      ✓ Compiled in 50ms
+[07:25:38.444] Server  LOG      ✓ Compiled in 48ms
+[07:27:16.240] Server  LOG      ✓ Compiled in 77ms
+[07:27:40.003] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:31:12.588] Server  LOG      ✓ Compiled in 103ms
+[07:32:02.912] Server  LOG      ✓ Compiled in 82ms
+[07:32:32.926] Server  LOG      ✓ Compiled in 63ms
+[07:33:35.276] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:34:10.842] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:35:14.161] Server  LOG      ✓ Compiled in 78ms
+[07:35:29.087] Server  LOG      ✓ Compiled in 69ms
+[07:36:15.103] Server  LOG      ✓ Compiled in 60ms
+[07:38:32.873] Server  LOG      ✓ Compiled in 88ms
+[07:39:06.631] Server  LOG      ✓ Compiled in 92ms
+[07:40:05.157] Server  LOG      ✓ Compiled in 69ms
+[07:46:46.628] Server  LOG      ✓ Compiled in 99ms
+[07:47:53.112] Server  LOG      ✓ Compiled in 89ms
+[07:48:15.684] Server  LOG      ✓ Compiled in 75ms
+[07:48:35.118] Server  LOG      ✓ Compiled in 41ms
+[07:49:00.728] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:49:26.439] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:56:04.742] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[07:58:14.641] Server  LOG      ✓ Compiled in 143ms
+[07:58:59.475] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:06:52.750] Server  LOG      ✓ Compiled in 149ms
+[08:08:55.481] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:12:02.382] Server  LOG      ✓ Compiled in 95ms
+[08:12:10.430] Server  LOG      ✓ Compiled in 53ms
+[08:12:16.025] Server  LOG      ✓ Compiled in 47ms
+[08:12:32.086] Server  LOG      ✓ Compiled in 94ms
+[08:13:00.869] Server  LOG      ✓ Compiled in 69ms
+[08:13:04.454] Server  LOG      ✓ Compiled in 29ms
+[08:13:45.826] Server  LOG      ✓ Compiled in 55ms
+[08:13:50.920] Server  LOG      ✓ Compiled in 53ms
+[08:17:48.518] Server  LOG      ✓ Compiled in 96ms
+[08:18:33.062] Server  LOG      ✓ Compiled in 97ms
+[08:18:38.449] Server  LOG      ✓ Compiled in 32ms
+[08:18:42.183] Server  LOG      ✓ Compiled in 43ms
+[08:18:45.410] Server  LOG      ✓ Compiled in 38ms
+[08:18:47.947] Server  LOG      ✓ Compiled in 31ms
+[08:18:51.646] Server  LOG      ✓ Compiled in 67ms
+[08:18:57.411] Server  LOG      ✓ Compiled in 111ms
+[08:19:00.329] Server  LOG      ✓ Compiled in 67ms
+[08:19:04.265] Server  LOG      ✓ Compiled in 63ms
+[08:19:06.688] Server  LOG      ✓ Compiled in 36ms
+[08:19:14.430] Server  LOG      ✓ Compiled in 44ms
+[08:19:17.743] Server  LOG      ✓ Compiled in 66ms
+[08:19:22.476] Server  LOG      ✓ Compiled in 35ms
+[08:19:24.758] Server  LOG      ✓ Compiled in 36ms
+[08:19:27.534] Server  LOG      ✓ Compiled in 39ms
+[08:19:29.791] Server  LOG      ✓ Compiled in 35ms
+[08:19:32.517] Server  LOG      ✓ Compiled in 34ms
+[08:19:36.555] Server  LOG      ✓ Compiled in 35ms
+[08:19:39.332] Server  LOG      ✓ Compiled in 56ms
+[08:19:41.607] Server  LOG      ✓ Compiled in 37ms
+[08:19:43.526] Server  LOG      ✓ Compiled in 38ms
+[08:19:47.845] Server  LOG      ✓ Compiled in 32ms
+[08:19:51.739] Server  LOG      ✓ Compiled in 33ms
+[08:19:54.983] Server  LOG      ✓ Compiled in 38ms
+[08:20:23.414] Server  LOG      ✓ Compiled in 154ms
+[08:20:26.305] Server  LOG      ✓ Compiled in 69ms
+[08:20:32.753] Server  LOG      ✓ Compiled in 32ms
+[08:20:35.827] Server  LOG      ✓ Compiled in 107ms
+[08:20:38.010] Server  LOG      ✓ Compiled in 97ms
+[08:20:40.036] Server  LOG      ✓ Compiled in 68ms
+[08:20:42.312] Server  LOG      ✓ Compiled in 85ms
+[08:20:45.051] Server  LOG      ✓ Compiled in 66ms
+[08:21:02.085] Server  LOG      ✓ Compiled in 140ms
+[08:21:12.014] Server  LOG      ✓ Compiled in 65ms
+[08:21:14.176] Server  LOG      ✓ Compiled in 100ms
+[08:21:17.760] Server  LOG      ✓ Compiled in 44ms
+[08:21:20.897] Server  LOG      ✓ Compiled in 39ms
+[08:21:30.281] Server  LOG      ✓ Compiled in 68ms
+[08:21:32.085] Server  LOG      ✓ Compiled in 38ms
+[08:21:33.577] Server  LOG      ✓ Compiled in 46ms
+[08:21:35.842] Server  LOG      ✓ Compiled in 41ms
+[08:21:37.418] Server  LOG      ✓ Compiled in 61ms
+[08:21:40.329] Server  LOG      ✓ Compiled in 70ms
+[08:21:42.193] Server  LOG      ✓ Compiled in 51ms
+[08:21:44.347] Server  LOG      ✓ Compiled in 51ms
+[08:21:46.182] Server  LOG      ✓ Compiled in 35ms
+[08:21:54.510] Server  LOG      ✓ Compiled in 43ms
+[08:21:55.610] Server  LOG      ✓ Compiled in 38ms
+[08:22:09.071] Server  LOG      ✓ Compiled in 30ms
+[08:22:12.098] Server  LOG      ✓ Compiled in 43ms
+[08:22:13.940] Server  LOG      ✓ Compiled in 47ms
+[08:22:15.953] Server  LOG      ✓ Compiled in 76ms
+[08:22:19.845] Server  LOG      ✓ Compiled in 64ms
+[08:22:35.241] Server  LOG      ✓ Compiled in 40ms
+[08:22:39.375] Server  LOG      ✓ Compiled in 53ms
+[08:22:41.664] Server  LOG      ✓ Compiled in 39ms
+[08:22:45.777] Server  LOG      ✓ Compiled in 52ms
+[08:22:47.793] Server  LOG      ✓ Compiled in 35ms
+[08:22:50.896] Server  LOG      ✓ Compiled in 51ms
+[08:23:28.455] Server  LOG      ✓ Compiled in 110ms
+[08:23:30.738] Server  LOG      ✓ Compiled in 73ms
+[08:23:47.881] Server  LOG      ✓ Compiled in 59ms
+[08:23:50.459] Server  LOG      ✓ Compiled in 62ms
+[08:24:52.275] Server  LOG      ✓ Compiled in 86ms
+[08:24:56.736] Server  LOG      ✓ Compiled in 73ms
+[08:24:59.568] Server  LOG      ✓ Compiled in 60ms
+[08:25:01.643] Server  LOG      ✓ Compiled in 93ms
+[08:25:02.951] Server  LOG      ✓ Compiled in 113ms
+[08:25:05.038] Server  LOG      ✓ Compiled in 39ms
+[08:25:07.981] Server  LOG      ✓ Compiled in 134ms
+[08:27:54.612] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:28:44.146] Server  LOG      ✓ Compiled in 114ms
+[08:28:51.267] Server  LOG      ✓ Compiled in 49ms
+[08:28:55.662] Server  LOG      ✓ Compiled in 41ms
+[08:29:01.489] Server  LOG      ✓ Compiled in 37ms
+[08:29:07.867] Server  LOG      ✓ Compiled in 199ms
+[08:29:11.087] Server  LOG      ✓ Compiled in 51ms
+[08:29:13.317] Server  LOG      ✓ Compiled in 33ms
+[08:29:15.696] Server  LOG      ✓ Compiled in 35ms
+[08:29:18.370] Server  LOG      ✓ Compiled in 122ms
+[08:29:21.014] Server  LOG      ✓ Compiled in 103ms
+[08:29:23.448] Server  LOG      ✓ Compiled in 39ms
+[08:29:26.540] Server  LOG      ✓ Compiled in 61ms
+[08:29:33.720] Server  LOG      ✓ Compiled in 64ms
+[08:29:36.485] Server  LOG      ✓ Compiled in 64ms
+[08:29:40.981] Server  LOG      ✓ Compiled in 405ms
+[08:29:47.276] Server  LOG      ✓ Compiled in 60ms
+[08:30:08.892] Server  LOG      ✓ Compiled in 64ms
+[08:30:13.609] Server  LOG      ✓ Compiled in 157ms
+[08:30:19.283] Server  LOG      ✓ Compiled in 105ms
+[08:30:21.524] Server  LOG      ✓ Compiled in 90ms
+[08:30:23.741] Server  LOG      ✓ Compiled in 161ms
+[08:30:25.798] Server  LOG      ✓ Compiled in 90ms
+[08:30:28.350] Server  LOG      ✓ Compiled in 94ms
+[08:30:36.379] Server  LOG      ✓ Compiled in 75ms
+[08:30:56.295] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:32:04.572] Server  LOG      ✓ Compiled in 94ms
+[08:32:07.995] Server  LOG      ✓ Compiled in 45ms
+[08:32:11.729] Server  LOG      ✓ Compiled in 37ms
+[08:32:16.138] Server  LOG      ✓ Compiled in 99ms
+[08:32:23.863] Server  LOG      ✓ Compiled in 81ms
+[08:32:25.826] Server  LOG      ✓ Compiled in 39ms
+[08:32:29.514] Server  LOG      ✓ Compiled in 102ms
+[08:32:34.177] Server  LOG      ✓ Compiled in 83ms
+[08:32:36.933] Server  LOG      ✓ Compiled in 86ms
+[08:32:40.101] Server  LOG      ✓ Compiled in 111ms
+[08:32:45.520] Server  LOG      ✓ Compiled in 322ms
+[08:32:50.253] Server  LOG      ✓ Compiled in 104ms
+[08:32:52.447] Server  LOG      ✓ Compiled in 35ms
+[08:32:55.027] Server  LOG      ✓ Compiled in 79ms
+[08:33:01.833] Server  LOG      ✓ Compiled in 142ms
+[08:33:10.799] Server  LOG      ✓ Compiled in 87ms
+[08:33:13.189] Server  LOG      ✓ Compiled in 53ms
+[08:33:15.416] Server  LOG      ✓ Compiled in 54ms
+[08:33:25.182] Server  LOG      ✓ Compiled in 138ms
+[08:33:28.059] Server  LOG      ✓ Compiled in 75ms
+[08:34:00.026] Server  LOG      ✓ Compiled in 139ms
+[08:34:30.976] Server  LOG      ✓ Compiled in 82ms
+[08:34:34.653] Server  LOG      ✓ Compiled in 863ms
+[08:34:38.076] Server  LOG      ✓ Compiled in 101ms
+[08:35:32.823] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:36:55.813] Server  LOG      ✓ Compiled in 107ms
+[08:37:12.457] Server  LOG      ✓ Compiled in 90ms
+[08:37:20.757] Server  LOG      ✓ Compiled in 92ms
+[08:37:31.734] Server  LOG      ✓ Compiled in 89ms
+[08:37:37.628] Server  LOG      ✓ Compiled in 80ms
+[08:37:57.761] Server  LOG      ✓ Compiled in 93ms
+[08:38:06.921] Server  LOG      ✓ Compiled in 135ms
+[08:38:15.300] Server  LOG      ✓ Compiled in 84ms
+[08:38:19.587] Server  LOG      ✓ Compiled in 74ms
+[08:38:31.661] Server  LOG      ✓ Compiled in 141ms
+[08:38:40.959] Server  LOG      ✓ Compiled in 154ms
+[08:39:16.742] Server  LOG      ✓ Compiled in 87ms
+[08:39:30.005] Server  LOG      ✓ Compiled in 270ms
+[08:39:46.473] Server  LOG      ✓ Compiled in 73ms
+[08:39:57.569] Server  LOG      ✓ Compiled in 63ms
+[08:40:03.242] Server  LOG      ✓ Compiled in 64ms
+[08:40:06.750] Server  LOG      ✓ Compiled in 73ms
+[08:41:16.407] Server  LOG      ✓ Compiled in 325ms
+[08:41:27.083] Server  LOG      ✓ Compiled in 95ms
+[08:41:33.913] Server  LOG      ✓ Compiled in 131ms
+[08:41:34.101] Browser ERROR   ./components/deck-import.tsx:218:96
+Parsing ecmascript source code failed
+  216 |
+  217 |         {/* Text area */}
+> 218 |         <Card className="bg-gradient-to-r from-emerald-900/80 via-slate-900/90 to-slate-950/95"">
+      |                                                                                                ^^
+  219 |           <div className="p-4">
+  220 |             <Textarea
+  221 |               rows={6}
+
+Unterminated string constant
+
+Import traces:
+  Client Component Browser:
+    ./components/deck-import.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/deck-import.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[08:41:41.754] Browser ERROR   ./components/deck-import.tsx:218:112
+Parsing ecmascript source code failed
+  216 |
+  217 |         {/* Text area */}
+> 218 |         <Card className="bg-slate-800/60 bg-gradient-to-r from-emerald-900/80 via-slate-900/90 to-slate-950/95"">
+      |                                                                                                                ^^
+  219 |           <div className="p-4">
+  220 |             <Textarea
+  221 |               rows={6}
+
+Unterminated string constant
+
+Import traces:
+  Client Component Browser:
+    ./components/deck-import.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/deck-import.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[08:43:28.853] Server  LOG      ✓ Compiled in 93ms
+[08:43:43.001] Server  LOG      ✓ Compiled in 82ms
+[08:43:51.469] Server  LOG      ✓ Compiled in 98ms
+[08:43:58.039] Server  LOG      ✓ Compiled in 74ms
+[08:44:03.046] Server  LOG      ✓ Compiled in 48ms
+[08:44:06.578] Server  LOG      ✓ Compiled in 101ms
+[08:44:14.143] Server  LOG      ✓ Compiled in 117ms
+[08:44:19.717] Server  LOG      ✓ Compiled in 119ms
+[08:44:43.479] Server  LOG      ✓ Compiled in 144ms
+[08:44:49.068] Server  LOG      ✓ Compiled in 100ms
+[08:44:51.026] Server  LOG      ✓ Compiled in 60ms
+[08:44:57.886] Server  LOG      ✓ Compiled in 197ms
+[08:45:03.396] Server  LOG      ✓ Compiled in 256ms
+[08:45:13.297] Server  LOG      ✓ Compiled in 138ms
+[08:45:18.306] Server  LOG      ✓ Compiled in 157ms
+[08:47:44.475] Server  LOG      ✓ Compiled in 144ms
+[08:47:50.896] Server  LOG      ✓ Compiled in 68ms
+[08:49:13.235] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:49:24.555] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:50:13.829] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:51:05.655] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[08:52:08.731] Server  LOG      ✓ Compiled in 180ms
+[08:52:48.477] Server  LOG      ✓ Compiled in 848ms
+[08:53:03.448] Server  LOG      ✓ Compiled in 167ms
+[08:53:18.498] Server  LOG      ✓ Compiled in 329ms
+[08:53:28.456] Server  LOG      ✓ Compiled in 138ms
+[08:53:38.265] Server  LOG      ✓ Compiled in 100ms
+[08:53:44.830] Server  LOG      ✓ Compiled in 171ms
+[08:53:49.115] Server  LOG      ✓ Compiled in 81ms
+[08:53:51.708] Server  LOG      ✓ Compiled in 79ms
+[08:53:55.963] Server  LOG      ✓ Compiled in 124ms
+[08:53:59.751] Server  LOG      ✓ Compiled in 116ms
+[08:54:01.848] Server  LOG      ✓ Compiled in 147ms
+[08:54:06.573] Server  LOG      ✓ Compiled in 211ms
+[08:54:26.172] Server  LOG      ✓ Compiled in 148ms
+[08:54:46.847] Server  LOG      ✓ Compiled in 75ms
+[08:54:51.829] Server  LOG      ✓ Compiled in 127ms
+[08:54:54.628] Server  LOG      ✓ Compiled in 148ms
+[08:54:58.425] Server  LOG      ✓ Compiled in 109ms
+[08:55:08.192] Server  LOG      ✓ Compiled in 261ms
+[08:55:15.932] Server  LOG      ✓ Compiled in 174ms
+[08:55:18.786] Server  LOG      ✓ Compiled in 126ms
+[08:55:20.501] Server  LOG      ✓ Compiled in 76ms
+[08:55:22.243] Server  LOG      ✓ Compiled in 204ms
+[08:56:16.724] Server  LOG      ✓ Compiled in 82ms
+[08:56:31.376] Server  LOG      ✓ Compiled in 98ms
+[08:59:18.495] Server  LOG      ✓ Compiled in 148ms
+[08:59:46.776] Server  LOG      ✓ Compiled in 56ms
+[09:00:04.692] Server  LOG      ✓ Compiled in 84ms
+[09:00:18.055] Server  LOG      ✓ Compiled in 52ms
+[09:03:10.303] Server  LOG      ✓ Compiled in 78ms
+[09:03:50.927] Server  LOG      ✓ Compiled in 67ms
+[09:04:01.892] Server  LOG      ✓ Compiled in 50ms
+[09:04:01.998] Browser ERROR   ./components/deck-view.tsx:407:2
+Parsing ecmascript source code failed
+  405 |         {/* Help bar */}
+  406 |         <Card
+> 407 |  <Card
+      |  ^
+  408 |   className={cn(
+  409 |     "relative z-30 p-4 text-slate-200",
+  410 |     panelClasses, // adds rounded-3xl etc
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./components/deck-view.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/deck-view.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[09:04:21.208] Server  LOG      ✓ Compiled in 62ms
+[09:04:37.838] Server  LOG      ✓ Compiled in 108ms
+[09:04:40.307] Server  LOG      ✓ Compiled in 74ms
+[09:04:47.651] Server  LOG      ✓ Compiled in 112ms
+[09:04:50.314] Server  LOG      ✓ Compiled in 57ms
+[09:04:55.550] Server  LOG      ✓ Compiled in 82ms
+[09:07:29.242] Server  LOG      ✓ Compiled in 1150ms
+[09:08:08.247] Server  LOG      ✓ Compiled in 61ms
+[09:08:15.726] Server  LOG      ✓ Compiled in 123ms
+[09:08:20.762] Server  LOG      ✓ Compiled in 106ms
+[09:08:23.582] Server  LOG      ✓ Compiled in 78ms
+[09:08:28.335] Server  LOG      ✓ Compiled in 68ms
+[09:08:34.007] Server  LOG      ✓ Compiled in 47ms
+[09:08:46.134] Server  LOG      ✓ Compiled in 116ms
+[09:08:53.108] Server  LOG      ✓ Compiled in 50ms
+[09:09:46.157] Server  LOG      ✓ Compiled in 101ms
+[09:09:49.420] Server  LOG      ✓ Compiled in 55ms
+[09:10:00.956] Server  LOG      ✓ Compiled in 125ms
+[09:10:11.127] Server  LOG      ✓ Compiled in 98ms
+[09:10:22.805] Server  LOG      ✓ Compiled in 142ms
+[09:10:28.456] Server  LOG      ✓ Compiled in 142ms
+[09:10:35.167] Server  LOG      ✓ Compiled in 57ms
+[09:10:38.629] Server  LOG      ✓ Compiled in 48ms
+[09:12:57.801] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[09:13:44.762] Server  LOG      ✓ Compiled in 110ms
+[09:13:56.977] Server  LOG      ✓ Compiled in 49ms
+[09:14:00.992] Server  LOG      ✓ Compiled in 46ms
+[09:14:04.356] Server  LOG      ✓ Compiled in 92ms
+[09:14:07.678] Server  LOG      ✓ Compiled in 65ms
+[09:14:10.438] Server  LOG      ✓ Compiled in 60ms
+[09:14:19.786] Server  LOG      ✓ Compiled in 111ms
+[09:14:25.216] Server  LOG      ✓ Compiled in 38ms
+[09:14:40.600] Server  LOG      ✓ Compiled in 69ms
+[09:14:43.793] Server  LOG      ✓ Compiled in 38ms
+[09:14:50.911] Server  LOG      ✓ Compiled in 52ms
+[09:16:28.799] Server  LOG      ✓ Compiled in 53ms
+[09:20:59.274] Server  LOG      ✓ Compiled in 65ms
+[09:27:26.595] Server  LOG      ✓ Compiled in 80ms
+[09:28:50.460] Server  LOG      ✓ Compiled in 74ms
+[09:29:09.626] Server  LOG      ✓ Compiled in 58ms
+[09:29:15.991] Server  LOG      ✓ Compiled in 41ms
+[09:29:21.586] Server  LOG      ✓ Compiled in 68ms
+[09:29:31.549] Server  LOG      ✓ Compiled in 93ms
+[09:29:33.748] Server  LOG      ✓ Compiled in 35ms
+[09:29:35.279] Server  LOG      ✓ Compiled in 34ms
+[09:29:44.259] Server  LOG      ✓ Compiled in 31ms
+[09:32:51.443] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[09:46:27.805] Server  LOG      ✓ Compiled in 218ms
+[09:46:48.459] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:06:33.723] Server  LOG      ✓ Compiled in 192ms
+[10:07:26.699] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:13:16.156] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:15:03.032] Server  LOG      ✓ Compiled in 165ms
+[10:15:46.102] Server  LOG      ✓ Compiled in 145ms
+[10:15:49.207] Server  LOG      ✓ Compiled in 79ms
+[10:15:54.537] Server  LOG      ✓ Compiled in 76ms
+[10:17:02.437] Server  LOG      ✓ Compiled in 106ms
+[10:18:17.612] Server  LOG      ✓ Compiled in 101ms
+[10:18:51.422] Server  LOG      ✓ Compiled in 74ms
+[10:18:59.107] Server  LOG      ✓ Compiled in 53ms
+[10:21:05.130] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:22:00.746] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:23:06.857] Server  LOG      ✓ Compiled in 111ms
+[10:23:06.961] Browser ERROR   ./components/results-view.tsx:661:8
+Parsing ecmascript source code failed
+  659 |           })}
+  660 |         </div>
+> 661 |       </Card>
+      |        ^^^^^^
+  662 |     </div>
+  663 |   )
+  664 | }
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./components/results-view.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/results-view.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[10:23:06.964] Browser ERROR   ./components/results-view.tsx:661:8
+Parsing ecmascript source code failed
+  659 |           })}
+  660 |         </div>
+> 661 |       </Card>
+      |        ^^^^^^
+  662 |     </div>
+  663 |   )
+  664 | }
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./components/results-view.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/results-view.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[10:23:57.836] Browser ERROR   ./components/results-view.tsx:659:8
+Parsing ecmascript source code failed
+  657 |           })}
+  658 |         </div>
+> 659 |       </Card>
+      |        ^^^^^^
+  660 |     </div>
+  661 |   )
+  662 | }
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./components/results-view.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/results-view.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[10:23:57.836] Browser ERROR   ./components/results-view.tsx:659:8
+Parsing ecmascript source code failed
+  657 |           })}
+  658 |         </div>
+> 659 |       </Card>
+      |        ^^^^^^
+  660 |     </div>
+  661 |   )
+  662 | }
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./components/results-view.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/results-view.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[10:25:05.904] Server  LOG      ✓ Compiled in 72ms
+[10:25:50.715] Server  LOG      ✓ Compiled in 117ms
+[10:26:03.348] Server  LOG      ✓ Compiled in 130ms
+[10:26:06.041] Server  LOG      ✓ Compiled in 40ms
+[10:26:12.259] Server  LOG      ✓ Compiled in 87ms
+[10:26:15.252] Server  LOG      ✓ Compiled in 57ms
+[10:26:47.481] Server  LOG      ✓ Compiled in 80ms
+[10:26:59.910] Server  LOG      ✓ Compiled in 38ms
+[10:27:01.951] Server  LOG      ✓ Compiled in 37ms
+[10:27:09.610] Server  LOG      ✓ Compiled in 30ms
+[10:27:29.494] Server  LOG      ✓ Compiled in 77ms
+[10:27:42.183] Server  LOG      ✓ Compiled in 39ms
+[10:27:53.860] Server  LOG      ✓ Compiled in 69ms
+[10:27:56.830] Server  LOG      ✓ Compiled in 69ms
+[10:27:59.265] Server  LOG      ✓ Compiled in 46ms
+[10:28:04.927] Server  LOG      ✓ Compiled in 85ms
+[10:28:07.117] Server  LOG      ✓ Compiled in 74ms
+[10:28:11.690] Server  LOG      ✓ Compiled in 78ms
+[10:28:14.185] Server  LOG      ✓ Compiled in 49ms
+[10:28:18.068] Server  LOG      ✓ Compiled in 76ms
+[10:28:20.046] Server  LOG      ✓ Compiled in 41ms
+[10:28:23.453] Server  LOG      ✓ Compiled in 37ms
+[10:28:26.293] Server  LOG      ✓ Compiled in 55ms
+[10:28:29.169] Server  LOG      ✓ Compiled in 60ms
+[10:28:32.434] Server  LOG      ✓ Compiled in 42ms
+[10:28:36.909] Server  LOG      ✓ Compiled in 35ms
+[10:28:42.288] Server  LOG      ✓ Compiled in 72ms
+[10:28:44.094] Server  LOG      ✓ Compiled in 95ms
+[10:28:46.481] Server  LOG      ✓ Compiled in 60ms
+[10:28:49.922] Server  LOG      ✓ Compiled in 63ms
+[10:28:51.895] Server  LOG      ✓ Compiled in 33ms
+[10:28:54.362] Server  LOG      ✓ Compiled in 34ms
+[10:29:05.818] Server  LOG      ✓ Compiled in 85ms
+[10:29:17.763] Server  LOG      ✓ Compiled in 93ms
+[10:29:19.678] Server  LOG      ✓ Compiled in 95ms
+[10:29:21.745] Server  LOG      ✓ Compiled in 47ms
+[10:29:24.762] Server  LOG      ✓ Compiled in 77ms
+[10:29:28.815] Server  LOG      ✓ Compiled in 59ms
+[10:29:30.942] Server  LOG      ✓ Compiled in 60ms
+[10:29:35.156] Server  LOG      ✓ Compiled in 33ms
+[10:29:37.114] Server  LOG      ✓ Compiled in 70ms
+[10:29:38.913] Server  LOG      ✓ Compiled in 71ms
+[10:29:51.826] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:31:37.348] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:32:43.164] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:38:12.010] Server  LOG      ✓ Compiled in 202ms
+[10:39:40.085] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:40:06.477] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

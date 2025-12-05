@@ -215,7 +215,7 @@ export function DeckImport(props: DeckImportProps) {
         </div>
 
         {/* Text area */}
-        <Card className="bg-slate-900/70 border border-slate-800">
+        <Card className="bg-slate-800/45 border border-emerald-900/40">
           <div className="p-4">
             <Textarea
               rows={6}
@@ -254,8 +254,8 @@ export function DeckImport(props: DeckImportProps) {
                     onMouseEnter={() => setHoveredCard(card)}
                     className={cn(
                       "flex items-center justify-between px-4 py-2 text-sm border-b border-slate-800/60 last:border-b-0",
-                      "hover:bg-slate-800/70 cursor-pointer",
-                      isHovered && "bg-slate-800",
+                      "hover:bg-emerald-800/70 cursor-pointer",
+                      isHovered && "bg-emerald-900",
                     )}
                   >
                     <div className="flex items-center gap-3">
