@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils"
 interface DeckViewProps {
   deck: PokemonCard[]
   hand: PokemonCard[]
-  onTimeUp: () => void
-  onEndEarly: () => void
+  onTimeUp: (timeLeft: number) => void
+  onEndEarly: (timeLeft: number) => void
   onRestartGame?: () => void
 }
 
@@ -47,11 +47,12 @@ export function DeckView({
   // Timer countdown
   useEffect(() => {
     if (timeRemaining <= 0) {
-      onTimeUp()
+      // ⏱ when timer hits zero, tell parent we ended with 0 seconds left
+      onTimeUp(0)
       return
     }
 
-    const timer = setInterval(() => {
+    const timer = window.setInterval(() => {
       setTimeRemaining((prev) => Math.max(0, prev - 1))
     }, 1000)
 
@@ -146,6 +147,11 @@ export function DeckView({
     onRestartGame?.()
   }
 
+  const handleGuessPrizesClick = () => {
+    // 🟢 when user ends early, report how many seconds are left
+    onEndEarly(timeRemaining)
+  }
+
   return (
     <div className="relative container mx-auto max-w-7xl p-6 h-screen flex flex-col gap-4 text-slate-50">
       {/* Header with timer + end button */}
@@ -199,7 +205,6 @@ export function DeckView({
                   "rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40",
                   "bg-emerald-500 text-slate-950 hover:bg-emerald-400",
                   "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
-                  "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
                 )}
               >
                 Restart
@@ -209,12 +214,11 @@ export function DeckView({
             <Button
               type="button"
               size="sm"
-              onClick={onEndEarly}
+              onClick={handleGuessPrizesClick}
               className={cn(
                 "rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40",
                 "bg-emerald-500 text-slate-950 hover:bg-emerald-400",
                 "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
-                "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
               )}
             >
               Guess Prizes
@@ -222,8 +226,6 @@ export function DeckView({
           </div>
         </div>
       </Card>
-
-      
 
       {/* Carousel */}
       <div className="flex-1 flex items-start justify-center overflow-hidden pt-2">
@@ -251,7 +253,7 @@ export function DeckView({
             className={cn(
               "absolute left-0 z-40 h-12 w-12 rounded-full border border-slate-700/70",
               "bg-slate-950/90 text-slate-100 shadow-md shadow-emerald-500/20",
-              "!hover:bg-slate-800-* !hover:text-emerald-100-*",
+              "hover:bg-slate-800 hover:text-emerald-100",
               "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
               centerIndex === 0 && "opacity-40 cursor-default hover:bg-slate-950",
             )}
@@ -269,7 +271,7 @@ export function DeckView({
             className={cn(
               "absolute right-0 z-40 h-12 w-12 rounded-full border border-slate-700/70",
               "bg-slate-950/90 text-slate-100 shadow-md shadow-emerald-500/20",
-              "!hover:bg-slate-900-* !hover:text-emerald-100-*",
+              "hover:bg-slate-900 hover:text-emerald-100",
               "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
               centerIndex === deckOrder.length - 1 &&
                 "opacity-40 cursor-default hover:bg-slate-950",
@@ -307,70 +309,71 @@ export function DeckView({
             const name = card.name ?? ""
             const isExCard = /\bex\b/i.test(name) // matches "Charizard ex", "Gardevoir ex", etc.
 
-          return (
-  <div
-    key={`${card.id}-${index}`}
-    className={cn(
-      "absolute cursor-pointer transition-all duration-500 ease-out will-change-transform",
-      zClass,
-      hidden && "pointer-events-none",
-    )}
-    style={{
-      transform: `translateX(${xTranslate}px) scale(${scale})`,
-      opacity: baseOpacity,
-    }}
-    onContextMenu={(e) => {
-      e.preventDefault()
-      moveCardToBack(index)
-    }}
-    onClick={() => {
-      if (isCenter) {
-        moveCardToFront(index)
-      } else {
-        setCenterIndex(index)
-      }
-    }}
-  >
-    <div
-      className={cn(
-        "w-[235px] transition-shadow duration-500 rounded-xl", // 🔹 outer wrapper now rounded
-        isCenter
-          ? "shadow-[0_0_80px_rgba(56,189,248,0.9)]"
-          : "shadow-[0_0_40px_rgba(15,23,42,0.9)]",
-      )}
-    >
-      <div
-        className={cn(
-          "aspect-[2.5/3.5] relative overflow-hidden rounded-xl", // 🔹 clip to radius
-          "bg-slate-900" // subtle base color behind the image
-        )}
-      >
-        {card.image ? (
-          <img
-            src={card.image || "/placeholder.svg"}
-            alt={card.name}
-            className="absolute inset-0 w-full h-full object-cover select-none"
-            draggable={false}
-          />
-        ) : (
-          <div className="w-full h-full bg-slate-800 flex items-center justify-center p-4">
-            <p className="text-lg text-center text-slate-50 font-bold text-balance">
-              {card.name}
-            </p>
-          </div>
-        )}
-          {isExCard && <div className="holo-overlay" />}
-      </div>
-    </div>
-  </div>
-)
+            return (
+              <div
+                key={`${card.id}-${index}`}
+                className={cn(
+                  "absolute cursor-pointer transition-all duration-500 ease-out will-change-transform",
+                  zClass,
+                  hidden && "pointer-events-none",
+                )}
+                style={{
+                  transform: `translateX(${xTranslate}px) scale(${scale})`,
+                  opacity: baseOpacity,
+                }}
+                onContextMenu={(e) => {
+                  e.preventDefault()
+                  moveCardToBack(index)
+                }}
+                onClick={() => {
+                  if (isCenter) {
+                    moveCardToFront(index)
+                  } else {
+                    setCenterIndex(index)
+                  }
+                }}
+              >
+                <div
+                  className={cn(
+                    "w-[235px] transition-shadow duration-500 rounded-xl",
+                    isCenter
+                      ? "shadow-[0_0_80px_rgba(56,189,248,0.9)]"
+                      : "shadow-[0_0_40px_rgba(15,23,42,0.9)]",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "aspect-[2.5/3.5] relative overflow-hidden rounded-xl",
+                      "bg-slate-900",
+                    )}
+                  >
+                    {card.image ? (
+                      <img
+                        src={card.image || "/placeholder.svg"}
+                        alt={card.name}
+                        className="absolute inset-0 w-full h-full object-cover select-none"
+                        draggable={false}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-slate-800 flex items-center justify-center p-4">
+                        <p className="text-lg text-center text-slate-50 font-bold text-balance">
+                          {card.name}
+                        </p>
+                      </div>
+                    )}
 
+                    {/* Holographic overlay for ex cards */}
+                    {isExCard && <div className="holo-overlay" />}
+                  </div>
+                </div>
+              </div>
+            )
           })}
         </div>
       </div>
 
-            {/* Bottom instructions + starting hand overlay */}
-      <div className="relative mt-6">
+      {/* Bottom instructions + starting hand overlay */}
+      <div className="relative mt-6 group">
         {hand.length > 0 && (
           <div className="pointer-events-none absolute inset-x-16 bottom-6 h-16 rounded-full bg-emerald-500/18 blur-3xl opacity-80 z-10" />
         )}
@@ -380,8 +383,8 @@ export function DeckView({
           <div
             className={cn(
               "absolute inset-x-0 bottom-6 flex justify-center transition-transform duration-300 ease-out z-20",
-              "translate-y-8 hover:translate-y-3",
-              "peer", // 👈 make this the peer that controls the help bar
+              "translate-y-8",
+              "group-hover:translate-y-3",
             )}
           >
             <div className="flex gap-3 px-8 pb-2">
@@ -392,7 +395,6 @@ export function DeckView({
                 >
                   <div className="aspect-[2.5/3.5] overflow-hidden rounded-md bg-slate-950 shadow-[0_0_25px_rgba(15,23,42,0.9)]">
                     {card.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={card.image || "/placeholder.svg"}
                         alt={card.name}
@@ -414,13 +416,7 @@ export function DeckView({
         )}
 
         {/* Help bar */}
-        <Card
-          className={cn(
-            "relative z-30 p-4 text-slate-200 transition-opacity duration-300", // 👈 add transition
-            panelClasses,
-            hand.length > 0 && "peer-hover:opacity-10", // 👈 fade when hand is hovered
-          )}
-        >
+        <Card className={cn("relative z-30 p-4 text-slate-200", panelClasses)}>
           <div className="text-center text-sm space-y-1">
             <p className="font-medium">
               <span className="text-emerald-300">Left Click or Press A:</span>{" "}
@@ -440,7 +436,6 @@ export function DeckView({
           </div>
         </Card>
       </div>
-
     </div>
   )
 }

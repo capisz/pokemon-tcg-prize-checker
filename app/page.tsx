@@ -10,8 +10,7 @@ import { LoadingOverlay } from "@/components/loading-overlay"
 import { CountdownOverlay } from "@/components/countdown-overlay"
 import { SiteFooter } from "@/components/site-footer"
 import { FloatingGameVolume } from "@/components/music-player"
-import { cn } from "@/lib/utils" 
-
+import { cn } from "@/lib/utils"
 
 type Stage = "import" | "game" | "results"
 
@@ -56,11 +55,12 @@ Energy: 7
 
 export default function HomePage() {
   const [stage, setStage] = useState<Stage>("import")
-  // Track if user has seen initial import (to avoid repeating auto-import)
   const [hasSeenInitialImport, setHasSeenInitialImport] = useState(false)
 
+  // how many seconds were left when the game ended
+  const [timeLeft, setTimeLeft] = useState<number | null>(null)
 
-  // Full imported deck (52) so we can reshuffle new combos
+  // Full imported deck (so we can reshuffle new games)
   const [fullDeck, setFullDeck] = useState<PokemonCard[]>([])
 
   // Current game state
@@ -68,7 +68,7 @@ export default function HomePage() {
   const [hand, setHand] = useState<PokemonCard[]>([])
   const [prizeCards, setPrizeCards] = useState<PokemonCard[]>([])
 
-  // Shuffle overlay (riffle + progress bar)
+  // Shuffle overlay
   const [isShuffling, setIsShuffling] = useState(false)
   const [shuffleProgress, setShuffleProgress] = useState(0)
 
@@ -100,8 +100,8 @@ export default function HomePage() {
   // Deal a fresh game (deck / hand / prizes) from a given full deck
   const setupNewGameFromDeck = (sourceDeck: PokemonCard[]) => {
     const { deck, prizes, hand } = dealCards(sourceDeck)
-    setPlayDeck(deck) // 46 in deck
-    setHand(hand) // 8 in hand
+    setPlayDeck(deck)   // 46 in deck
+    setHand(hand)       // 8 in hand
     setPrizeCards(prizes) // 6 prizes
   }
 
@@ -128,17 +128,15 @@ export default function HomePage() {
   // When a deck is first imported from text
   const handleDeckImported = (importedFullDeck: PokemonCard[]) => {
     setFullDeck(importedFullDeck)
-
-    // Create initial game state from this deck
     setupNewGameFromDeck(importedFullDeck)
 
-    // Show riffle shuffle overlay
+    // On the very first auto-import, skip the riffle overlay
     if (hasSeenInitialImport) {
-    startShuffleAnimation()
-  } else {
-    setHasSeenInitialImport(true)
+      startShuffleAnimation()
+    } else {
+      setHasSeenInitialImport(true)
+    }
   }
-}
 
   // When user presses Start Game from the import screen
   const handleStartGame = () => {
@@ -146,86 +144,84 @@ export default function HomePage() {
     startPreGameCountdown()
   }
 
-  // When timer ends or user hits "End game"
-  const handleTimeUp = () => {
+  // NEW: called when the game ends (timer hits 0 OR user clicks Guess Prizes)
+  const handleGameFinished = (remaining: number) => {
+    setTimeLeft(remaining)
     setStage("results")
   }
 
-  // New: restart the game (from in-game or results)
+  // Restart the game from the same full deck
   const handleRestartGame = () => {
-    if (fullDeck.length === 0) return
+    if (fullDeck.length === 0) {
+      setStage("import")
+      return
+    }
 
     setupNewGameFromDeck(fullDeck)
+    setTimeLeft(null)
+    startShuffleAnimation()
     startPreGameCountdown()
   }
 
-  // Go back to import screen (for "Import new list" button on results)
-  const handleGoToImport = () => {
-    setStage("import")
-  }
-
   return (
-  <div
-    className={cn(
-      "min-h-screen flex flex-col text-slate-50",
-      stage === "results"
-        // lighter background just for the Select-the-Prize-Cards page
-        ? "bg-gradient-to-b from-slate-600/40 via-slate-900 to-slate-700"
-        // rest of app theme color
-        : "bg-gradient-to-b from-slate-850 via-slate-800 to-slate-850",
-    )}
-  >
-    {/* Main content area */}
-    <div className="flex-1 relative">
-      {/* Riffle shuffle overlay */}
-      <LoadingOverlay
-        visible={isShuffling}
-        progress={shuffleProgress}
-        message="Shuffling & importing your deck"
-      />
-
-      {/* 3-2-1 countdown */}
-      <CountdownOverlay visible={preGameCount !== null} count={preGameCount} />
-
-      {stage === "import" && (
-        <DeckImport
-          onDeckImported={handleDeckImported}
-          canStartGame={playDeck.length > 0}
-          onStartGame={handleStartGame}
-          initialText={DEFAULT_FEATURED_DECK_TEXT}
-          autoImportOnMount
-          deckTitle="Charizard Noctowl"
-          deckPlayer="Nicolai Stiborg"
-        />
+    <div
+      className={cn(
+        "min-h-screen flex flex-col text-slate-50",
+        stage === "results"
+          ? "bg-gradient-to-b from-slate-600/40 via-slate-900 to-slate-700" // lighter for results
+          : "bg-gradient-to-b from-slate-850 via-slate-800 to-slate-850",    // default theme
       )}
+    >
+      {/* Main content area */}
+      <div className="flex-1 relative">
+        {/* Riffle shuffle overlay */}
+        <LoadingOverlay
+          visible={isShuffling}
+          progress={shuffleProgress}
+          message="Shuffling & importing your deck"
+        />
 
-      {stage === "game" && (
-        <>
-          <DeckView
-            deck={playDeck}
-            hand={hand}
-            onTimeUp={handleTimeUp}
-            onEndEarly={handleTimeUp}
-            onRestartGame={handleRestartGame}
+        {/* 3-2-1 countdown */}
+        <CountdownOverlay visible={preGameCount !== null} count={preGameCount} />
+
+        {stage === "import" && (
+          <DeckImport
+            onDeckImported={handleDeckImported}
+            canStartGame={playDeck.length > 0}
+            onStartGame={handleStartGame}
+            initialText={DEFAULT_FEATURED_DECK_TEXT}
+            autoImportOnMount
+            deckTitle="Charizard Noctowl"
+            deckPlayer="Nicolai Stiborg"
           />
-          <FloatingGameVolume />
-        </>
-      )}
+        )}
 
-      {stage === "results" && (
-        <ResultsView
-          allCards={[...playDeck, ...hand, ...prizeCards]}
-          prizeCards={prizeCards}
-          onRestart={handleRestartGame}
-          onImportNewList={handleGoToImport}
-          timeLeft={null}
-          totalTime={GAME_DURATION}
-        />
-      )}
+        {stage === "game" && (
+          <>
+            <DeckView
+              deck={playDeck}
+              hand={hand}
+              onTimeUp={handleGameFinished}
+              onEndEarly={handleGameFinished}
+              onRestartGame={handleRestartGame}
+            />
+            <FloatingGameVolume />
+          </>
+        )}
+
+        {stage === "results" && (
+          <ResultsView
+            allCards={[...playDeck, ...hand, ...prizeCards]}
+            prizeCards={prizeCards}
+            onRestart={handleRestartGame}
+            timeLeft={timeLeft}
+            totalTime={GAME_DURATION}
+          />
+        )}
+      </div>
+
+      {/* Footer visible on import + results, hidden during game */}
+      {stage !== "game" && <SiteFooter />}
     </div>
-
-    {stage !== "game" && <SiteFooter />}
-  </div>
-)
-
+  )
 }

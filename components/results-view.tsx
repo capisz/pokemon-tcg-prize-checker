@@ -96,6 +96,9 @@ export function ResultsView({
   const [showResults, setShowResults] = useState(false)
   const [personalBest, setPersonalBest] = useState<number | null>(null)
 
+  // NEW: whether the summary overlay is open
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false)
+
   // Rank state
   const [rank, setRank] = useState<RankState | null>(null)
   const [previousRank, setPreviousRank] = useState<RankState | null>(null)
@@ -168,70 +171,83 @@ export function ResultsView({
     setSelectedCards(next)
   }
 
-  const [statusMap, correctGuesses, incorrectGuesses, missedPrizes] = useMemo(() => {
-    if (!showResults) return [new Map<string, Status>(), 0, 0, 0] as const
+  const [statusMap, correctGuesses, incorrectGuesses, missedPrizes] = useMemo(
+    () => {
+      if (!showResults)
+        return [new Map<string, Status>(), 0, 0, 0] as const
 
-    const status = new Map<string, Status>()
+      const status = new Map<string, Status>()
 
-    // group instances by baseId
-    const cardsByBase = new Map<string, string[]>()
-    for (const c of cardsWithMeta) {
-      const ids = cardsByBase.get(c.baseId) || []
-      ids.push(c.instanceId)
-      cardsByBase.set(c.baseId, ids)
-    }
+      // group instances by baseId
+      const cardsByBase = new Map<string, string[]>()
+      for (const c of cardsWithMeta) {
+        const ids = cardsByBase.get(c.baseId) || []
+        ids.push(c.instanceId)
+        cardsByBase.set(c.baseId, ids)
+      }
 
-    let correct = 0
-    let incorrect = 0
-    let missed = 0
+      let correct = 0
+      let incorrect = 0
+      let missed = 0
 
-    for (const [baseId, instanceIds] of cardsByBase.entries()) {
-      const prizeCount = prizeCountByBase.get(baseId) || 0
-      if (prizeCount === 0) {
-        // nothing prized for this card: only mark selected as incorrect
-        for (const id of instanceIds) {
-          if (selectedCards.has(id)) {
-            status.set(id, "incorrect")
-            incorrect++
+      for (const [baseId, instanceIds] of cardsByBase.entries()) {
+        const prizeCount = prizeCountByBase.get(baseId) || 0
+        if (prizeCount === 0) {
+          // nothing prized for this card: only mark selected as incorrect
+          for (const id of instanceIds) {
+            if (selectedCards.has(id)) {
+              status.set(id, "incorrect")
+              incorrect++
+            }
+          }
+          continue
+        }
+
+        const selectedIds = instanceIds.filter((id) =>
+          selectedCards.has(id),
+        )
+        const correctCount = Math.min(prizeCount, selectedIds.length)
+
+        // mark correct selected
+        for (let i = 0; i < correctCount; i++) {
+          const id = selectedIds[i]
+          status.set(id, "correct")
+          correct++
+        }
+
+        // extra selected -> incorrect
+        for (let i = correctCount; i < selectedIds.length; i++) {
+          const id = selectedIds[i]
+          status.set(id, "incorrect")
+          incorrect++
+        }
+
+        // remaining prized copies that were never selected -> missed
+        const remainingPrizes = prizeCount - correctCount
+        if (remainingPrizes > 0) {
+          const unselectedIds = instanceIds.filter(
+            (id) => !selectedCards.has(id),
+          )
+          for (
+            let i = 0;
+            i < Math.min(remainingPrizes, unselectedIds.length);
+            i++
+          ) {
+            const id = unselectedIds[i]
+            status.set(id, "missed")
+            missed++
           }
         }
-        continue
       }
 
-      const selectedIds = instanceIds.filter((id) => selectedCards.has(id))
-      const correctCount = Math.min(prizeCount, selectedIds.length)
-
-      // mark correct selected
-      for (let i = 0; i < correctCount; i++) {
-        const id = selectedIds[i]
-        status.set(id, "correct")
-        correct++
-      }
-
-      // extra selected -> incorrect
-      for (let i = correctCount; i < selectedIds.length; i++) {
-        const id = selectedIds[i]
-        status.set(id, "incorrect")
-        incorrect++
-      }
-
-      // remaining prized copies that were never selected -> missed
-      const remainingPrizes = prizeCount - correctCount
-      if (remainingPrizes > 0) {
-        const unselectedIds = instanceIds.filter((id) => !selectedCards.has(id))
-        for (let i = 0; i < Math.min(remainingPrizes, unselectedIds.length); i++) {
-          const id = unselectedIds[i]
-          status.set(id, "missed")
-          missed++
-        }
-      }
-    }
-
-    return [status, correct, incorrect, missed] as const
-  }, [showResults, cardsWithMeta, prizeCountByBase, selectedCards])
+      return [status, correct, incorrect, missed] as const
+    },
+    [showResults, cardsWithMeta, prizeCountByBase, selectedCards],
+  )
 
   const handleSubmit = () => {
     setShowResults(true)
+    setIsSummaryOpen(true) // open overlay when results first appear
   }
 
   const handleImportNewList = () => {
@@ -243,13 +259,17 @@ export function ResultsView({
   const accuracy =
     totalPrizes > 0 ? Math.round((correctGuesses / totalPrizes) * 100) : 0
 
-  // If timeLeft is null, assume 0 seconds used (fastest case)
-  const usedTime = timeLeft == null ? 0 : Math.max(0, totalTime - timeLeft)
+// If timeLeft is null for some reason, assume they used the full timer
+const usedTime =
+  timeLeft == null
+    ? totalTime
+    : Math.max(0, totalTime - timeLeft)
 
-  const timePercent =
-    totalTime === 0
-      ? 0
-      : Math.max(0, Math.min(1, (totalTime - usedTime) / totalTime))
+const timePercent =
+  totalTime === 0
+    ? 0
+    : Math.max(0, Math.min(1, (totalTime - usedTime) / totalTime))
+
 
   // scoring: 70% accuracy, 30% speed, scaled to 0–1000
   const score = (() => {
@@ -267,14 +287,19 @@ export function ResultsView({
       const currentBest =
         prev ??
         (() => {
-          const stored = window.localStorage.getItem("prizeCheckerPersonalBest")
+          const stored = window.localStorage.getItem(
+            "prizeCheckerPersonalBest",
+          )
           const n = stored ? Number(stored) : 0
           return Number.isNaN(n) ? 0 : n
         })()
 
       const newBest = score > currentBest ? score : currentBest
       if (newBest !== currentBest) {
-        window.localStorage.setItem("prizeCheckerPersonalBest", String(newBest))
+        window.localStorage.setItem(
+          "prizeCheckerPersonalBest",
+          String(newBest),
+        )
       }
       return newBest
     })
@@ -307,19 +332,18 @@ export function ResultsView({
     return "text-rose-400"
   })()
 
-const scoreBadgeBg = (() => {
-  if (score >= 800) {
-    return "bg-emerald-600/60 border-emerald-900 "
-  }
-  if (score >= 600) {
-    return "bg-lime-600/60 border-lime-900 "
-  }
-  if (score >= 400) {
-    return "bg-amber-600/60 border-amber-900 "
-  }
-  return "bg-rose-600/60 border-rose-900 "
-})()
-
+  const scoreBadgeBg = (() => {
+    if (score >= 800) {
+      return "bg-emerald-600/60 border-emerald-900 "
+    }
+    if (score >= 600) {
+      return "bg-lime-600/60 border-lime-900 "
+    }
+    if (score >= 400) {
+      return "bg-amber-600/60 border-amber-900 "
+    }
+    return "bg-rose-600/60 border-rose-900 "
+  })()
 
   const getCardStatus = (cardId: string): Status => {
     if (!showResults) {
@@ -340,13 +364,13 @@ const scoreBadgeBg = (() => {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-2 text-center sm:text-left">
           <h1
-      className={cn(
-        "text-[32px] sm:text-[40px] font-semibold text-emerald-200/90",
-        "tracking-tight"
-      )}
-    >
-      Select the Prize Cards
-    </h1>
+            className={cn(
+              "text-[32px] sm:text-[40px] font-semibold text-emerald-200/90",
+              "tracking-tight",
+            )}
+          >
+            Select the Prize Cards
+          </h1>
           <p className="text-slate-400 text-sm sm:text-base">
             {showResults
               ? "Here are your results."
@@ -378,203 +402,238 @@ const scoreBadgeBg = (() => {
         )}
       </div>
 
-      {/* Score + rank + stats + legend + bar */}
-      {showResults && (
-        <Card
-          className={cn(
-            "px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4",
-            resultsPanelClasses,
-          )}
-        >
-          {/* Top row: Score + Rank + Stats */}
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            {/* Left: Score + PB */}
-            <div className="flex items-center gap-4">
-              <div
-                className={cn(
-                  "flex items-center gap-3 rounded-2xl px-4 py-2 border",
-                  scoreBadgeBg,
-                )}
-              >
-                <Trophy className="h-6 w-6 text-amber-300" />
-                <div className="flex flex-col items-start">
-                  <span
-                    className={cn(
-                      "text-2xl sm:text-3xl font-semibold",
-                      scoreColor,
-                    )}
-                  >
-                    {score}
-                  </span>
-                  <span className="text-[11px] uppercase tracking-wide text-slate-300">
-                    Overall score
-                  </span>
-                </div>
-              </div>
+      {/* View summary button when overlay is closed */}
+    {showResults && !isSummaryOpen && (
+  <div className="flex justify-center mt-1">
+    <Button
+      type="button"
+      size="sm"
+      onClick={() => setIsSummaryOpen(true)}
+      className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
+    >
+      View summary
+    </Button>
+  </div>
+)}
 
-              <div className="flex flex-col gap-1 text-xs sm:text-sm text-slate-300">
-                <div className="flex items-center gap-2">
-                  <span className="text-slate-400">Personal Best:</span>
-                  <span className="font-semibold">
-                    {personalBest ?? "—"}
-                  </span>
-                  {isNewPB && (
-                    <Badge className="bg-emerald-500 text-white text-[10px] uppercase tracking-wide">
-                      New PB
-                    </Badge>
+
+      {/* Summary overlay (score + rank + stats + legend + bar) */}
+      {showResults && isSummaryOpen && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/70 backdrop-blur-md">
+          <Card
+            className={cn(
+              "relative w-[min(960px,100%-2rem)] max-h-[80vh] overflow-y-auto px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4",
+              resultsPanelClasses,
+            )}
+          >
+            {/* Close X */}
+            <button
+              type="button"
+              onClick={() => setIsSummaryOpen(false)}
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-100"
+              aria-label="Close summary"
+            >
+              ✕
+            </button>
+
+            {/* Top row: Score + Rank + Stats */}
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mt-4">
+              {/* Left: Score + PB */}
+              <div className="flex items-center gap-4">
+                <div
+                  className={cn(
+                    "flex items-center gap-3 rounded-2xl px-4 py-2 border",
+                    scoreBadgeBg,
                   )}
-                </div>
-              </div>
-            </div>
-
-            {/* Center: Rank */}
-            {rank && previousRank && (
-              <div className="flex justify-center flex-1 mt-4 lg:mt-2">
-                <div className="scale-[1.3] drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]">
-                  <RankDisplay
-                    previous={previousRank}
-                    current={rank}
-                    maxScore={1000}
-                    lastScore={score}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Right: Stats */}
-            <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-slate-300 justify-end">
-              <div className="flex flex-col items-start">
-                <span className="font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                  {correctGuesses} / {totalPrizes}
-                </span>
-                <span className="text-slate-400">Correct ({accuracy}%)</span>
-              </div>
-
-              <div className="flex flex-col items-start">
-                <span className="font-semibold flex items-center gap-1">
-                  <XCircle className="h-4 w-4 text-rose-400" />
-                  {incorrectGuesses}
-                </span>
-                <span className="text-slate-400">Wrong</span>
-              </div>
-
-              <div className="flex flex-col items-start">
-                <span className="font-semibold flex items-center gap-1">
-                  <XCircle className="h-4 w-4 text-orange-400" />
-                  {missedPrizes}
-                </span>
-                <span className="text-slate-400">Missed</span>
-              </div>
-
-              <div className="flex flex-col items-start">
-                <span className="font-semibold flex items-center gap-1">
-                  <Timer className="h-4 w-4 text-sky-400" />
-                  {formatTime(usedTime)}
-                </span>
-                <span className="text-slate-400">
-                  of {formatTime(totalTime)} used
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Legend + Play Again + bottom progress bar */}
-          <div className="pt-3 space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded border-4 border-emerald-400" />
-                  <span>Correct guess</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded border-4 border-rose-500" />
-                  <span>Wrong guess</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded border-4 border-orange-400" />
-                  <span>Missed prize</span>
-                </div>
-              </div>
-
-              {/* Right-side buttons */}
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={handleImportNewList}
-                  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
                 >
-                  Import New List
-                </Button>
+                  <Trophy className="h-6 w-6 text-amber-300" />
+                  <div className="flex flex-col items-start">
+                    <span
+                      className={cn(
+                        "text-2xl sm:text-3xl font-semibold",
+                        scoreColor,
+                      )}
+                    >
+                      {score}
+                    </span>
+                    <span className="text-[11px] uppercase tracking-wide text-slate-300">
+                      Overall score
+                    </span>
+                  </div>
+                </div>
 
-                <Button
-                  onClick={onRestart}
-                  size="sm"
-                  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
-                >
-                  <RotateCcw className="mr-2 h-4 w-4" />
-                  Play Again
-                </Button>
+                <div className="flex flex-col gap-1 text-xs sm:text-sm text-slate-300">
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-400">Personal Best:</span>
+                    <span className="font-semibold">
+                      {personalBest ?? "—"}
+                    </span>
+                    {isNewPB && (
+                      <Badge className="bg-emerald-500 text-white text-[10px] uppercase tracking-wide">
+                        New PB
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Center: Rank */}
+              {rank && previousRank && (
+                <div className="flex justify-center flex-1 mt-4 lg:mt-2">
+                  <div className="scale-[1.3] drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]">
+                    <RankDisplay
+                      previous={previousRank}
+                      current={rank}
+                      maxScore={1000}
+                      lastScore={score}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Right: Stats */}
+              <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-slate-300 justify-end">
+                <div className="flex flex-col items-start">
+                  <span className="font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                    {correctGuesses} / {totalPrizes}
+                  </span>
+                  <span className="text-slate-400">
+                    Correct ({accuracy}%)
+                  </span>
+                </div>
+
+                <div className="flex flex-col items-start">
+                  <span className="font-semibold flex items-center gap-1">
+                    <XCircle className="h-4 w-4 text-rose-400" />
+                    {incorrectGuesses}
+                  </span>
+                  <span className="text-slate-400">Wrong</span>
+                </div>
+
+                <div className="flex flex-col items-start">
+                  <span className="font-semibold flex items-center gap-1">
+                    <XCircle className="h-4 w-4 text-orange-400" />
+                    {missedPrizes}
+                  </span>
+                  <span className="text-slate-400">Missed</span>
+                </div>
+
+                <div className="flex flex-col items-start">
+                  <span className="font-semibold flex items-center gap-1">
+                    <Timer className="h-4 w-4 text-sky-400" />
+                    {formatTime(usedTime)}
+                  </span>
+                  <span className="text-slate-400">
+                    of {formatTime(totalTime)} used
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Full-width bottom bar */}
-            {rank && rank.tier !== "masterball" && (
-              <div className="w-full">
-                {(() => {
-                  const clamped = Math.max(
-                    0,
-                    Math.min(100, rank.progress ?? 0),
-                  )
-                  const toNext = Math.max(0, 100 - clamped)
-                  const delta = computeProgressDelta(previousRank, rank)
+            {/* Legend + Play Again + bottom progress bar */}
+            <div className="pt-3 space-y-3 mb-1">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded border-4 border-emerald-400" />
+                    <span>Correct guess</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded border-4 border-rose-500" />
+                    <span>Wrong guess</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded border-4 border-orange-400" />
+                    <span>Missed prize</span>
+                  </div>
+                </div>
 
-                  return (
-                    <>
-                      <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
-                        <div
-                          className={cn(
-                            "h-full transition-all duration-800",
-                            RANK_BAR_COLOR[rank.tier],
-                          )}
-                          style={{ width: `${clamped}%` }}
-                        />
-                      </div>
-                      <div className="mt-1 text-center text-[11px] text-slate-400">
-                        {toNext}% to next rank
-                        {delta !== null && delta !== 0 && (
-                          <span
+                {/* Right-side buttons */}
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleImportNewList}
+                    className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
+                  >
+                    Import New List
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      setIsSummaryOpen(false) // close overlay
+                      onRestart() // restart game
+                    }}
+                    size="sm"
+                    className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
+                  >
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    Play Again
+                  </Button>
+                </div>
+              </div>
+
+              {/* Full-width bottom bar */}
+              {rank && rank.tier !== "masterball" && (
+                <div className="w-full">
+                  {(() => {
+                    const clamped = Math.max(
+                      0,
+                      Math.min(100, rank.progress ?? 0),
+                    )
+                    const toNext = Math.max(0, 100 - clamped)
+                    const delta = computeProgressDelta(
+                      previousRank,
+                      rank,
+                    )
+
+                    return (
+                      <>
+                        <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
+                          <div
                             className={cn(
-                              "ml-1",
-                              delta > 0 ? "text-emerald-400" : "text-rose-400",
+                              "h-full transition-all duration-800",
+                              RANK_BAR_COLOR[rank.tier],
                             )}
-                          >
-                            ({delta > 0 ? "+" : ""}
-                            {Math.round(delta)})
-                          </span>
-                        )}
-                      </div>
-                    </>
-                  )
-                })()}
-              </div>
-            )}
-          </div>
-        </Card>
+                            style={{ width: `${clamped}%` }}
+                          />
+                        </div>
+                        <div className="mt-1 text-center text-[11px] text-slate-400">
+                          {toNext}% to next rank
+                          {delta !== null && delta !== 0 && (
+                            <span
+                              className={cn(
+                                "ml-1",
+                                delta > 0
+                                  ? "text-emerald-400"
+                                  : "text-rose-400",
+                              )}
+                            >
+                              ({delta > 0 ? "+" : ""}
+                              {Math.round(delta)})
+                            </span>
+                          )}
+                        </div>
+                      </>
+                    )
+                  })()}
+                </div>
+              )}
+            </div>
+          </Card>
+        </div>
       )}
 
       {/* Card grid */}
-     <Card
-  className={cn(
-    "p-5 rounded-3xl",
-    // dark neutral background so the cards pop
-    "bg-teal-900/40 shadow-[0_20px_45px_rgba(0,0,0,0.9)]",
-    // emerald-tinted border & shadow for results
-    "border-transparent"
-  )}
->
-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <Card
+        className={cn(
+          "p-5 rounded-3xl",
+          "bg-teal-900/40 shadow-[0_20px_45px_rgba(0,0,0,0.9)]",
+          "border-transparent",
+        )}
+      >
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {cardsWithMeta.map((card, index) => {
             const status = getCardStatus(card.instanceId)
             const isClickable = !showResults
@@ -586,11 +645,15 @@ const scoreBadgeBg = (() => {
                 className={cn(
                   "group relative aspect-[2.5/3.5] rounded-xl overflow-hidden transition-all",
                   isClickable && "cursor-pointer",
-                  status === "selected" && "ring-3 ring-sky-400 scale-[0.97]",
+                  status === "selected" &&
+                    "ring-3 ring-sky-400 scale-[0.97]",
                   status === "correct" && "ring-3 ring-emerald-400",
                   status === "incorrect" && "ring-3 ring-rose-500",
-                  status === "missed" && "ring-3 ring-orange-400 opacity-90",
-                  status === "normal" && showResults && "opacity-40",
+                  status === "missed" &&
+                    "ring-3 ring-orange-400 opacity-90",
+                  status === "normal" &&
+                    showResults &&
+                    "opacity-40",
                   !showResults && "hover:scale-105",
                 )}
               >
