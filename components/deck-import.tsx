@@ -478,7 +478,7 @@ export function DeckImport(props: DeckImportProps) {
           </p>
         </div>
 
-        <p className="pt-2 text-[11px] text-slate-500">
+        <p className="pt-2 text-[11px] text-slate-400">
           <span className="text-emerald-300 font-semibold">Tip:</span>{" "}
           Don&apos;t write anything down so you can build your deck memorization and visualization skills.
         </p>

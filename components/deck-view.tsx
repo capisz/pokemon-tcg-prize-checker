@@ -367,8 +367,8 @@ export function DeckView({
         </div>
       </div>
 
-      {/* Bottom instructions + starting hand overlay */}
-      <div className="relative mt-6 group">
+            {/* Bottom instructions + starting hand overlay */}
+      <div className="relative mt-6">
         {hand.length > 0 && (
           <div className="pointer-events-none absolute inset-x-16 bottom-6 h-16 rounded-full bg-emerald-500/18 blur-3xl opacity-80 z-10" />
         )}
@@ -378,8 +378,8 @@ export function DeckView({
           <div
             className={cn(
               "absolute inset-x-0 bottom-6 flex justify-center transition-transform duration-300 ease-out z-20",
-              "translate-y-8",
-              "group-hover:translate-y-3",
+              "translate-y-8 hover:translate-y-3",
+              "peer", // 👈 make this the peer that controls the help bar
             )}
           >
             <div className="flex gap-3 px-8 pb-2">
@@ -413,33 +413,32 @@ export function DeckView({
 
         {/* Help bar */}
         <Card
-  className={cn(
-    "relative z-30 p-4 text-slate-200",
-    panelClasses
-  )}
->
-  <div className="text-center text-sm space-y-1">
-    <p className="font-medium">
-      <span className="text-emerald-200">Left Click or Press A:</span>{" "}
-      Move to front •{" "}
-      <span className="text-emerald-200">Right Click or Press D:</span>{" "}
-      Move card to back
-    </p>
-    <p>
-      <span className="text-emerald-200">Arrow Keys / Mouse Wheel:</span>{" "}
-      Scroll through deck •{" "}
-      <span className="text-emerald-200">Side Arrows:</span> Step one
-      card at a time
-    </p>
-    <p className="text-xs mt-2 text-slate-100">
-      Viewing card {centerIndex + 1} of {deckOrder.length}
-    </p>
-  </div>
-</Card>
-
-
-
+          className={cn(
+            "relative z-30 p-4 text-slate-200 transition-opacity duration-300", // 👈 add transition
+            panelClasses,
+            hand.length > 0 && "peer-hover:opacity-10", // 👈 fade when hand is hovered
+          )}
+        >
+          <div className="text-center text-sm space-y-1">
+            <p className="font-medium">
+              <span className="text-emerald-300">Left Click or Press A:</span>{" "}
+              Center card (or move to front if centered) •{" "}
+              <span className="text-emerald-300">Right Click or Press D:</span>{" "}
+              Move card to back
+            </p>
+            <p>
+              <span className="text-emerald-300">Arrow Keys / Mouse Wheel:</span>{" "}
+              Scroll through deck •{" "}
+              <span className="text-emerald-300">Side Arrows:</span> Step one
+              card at a time
+            </p>
+            <p className="text-xs mt-2 text-slate-100">
+              Viewing card {centerIndex + 1} of {deckOrder.length}
+            </p>
+          </div>
+        </Card>
       </div>
+
     </div>
   )
 }
