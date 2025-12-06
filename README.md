@@ -25,15 +25,15 @@ Paste a deck list, let the app simulate a real game (opening hand + 6 prizes), t
 
 ---
 
-## Demo
+## Live demo
 
-> 🔗 **Live demo:**  [
-📷 **Screenshots:** 
+### 📷 Screenshots
 
-- Import screen  
-  `![Import deck](public/import-screen.png)`
-- Game screen  
-  `![Game view](public/game-screen.png)`
+- **Import screen**  
+  ![Import deck](public/import-screen.png)
+
+- **Game screen**  
+  ![Game view](public/game-screen.png)
 
 ---
 
