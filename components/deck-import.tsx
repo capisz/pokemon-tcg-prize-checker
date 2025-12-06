@@ -213,7 +213,7 @@ export function DeckImport(props: DeckImportProps) {
               className="
                    h-24 w-30 md:h-12 md:w-18
                    mascot-bob                                     
-                  drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
+                  drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]"
               style={{ imageRendering: "pixelated" }}
             />
             <div className="flex flex-col">
