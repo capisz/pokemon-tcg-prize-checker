@@ -210,11 +210,14 @@ export function DeckImport(props: DeckImportProps) {
             <img
               src="/sprite1_vector.svg"
               alt="PrizeCheckDrill mascot"
-              className="h-30 w-30 md:h-12 md:w-12 mascot-bob"
+              className="
+                   h-24 w-30 md:h-12 md:w-18
+                   mascot-bob                                     
+                  drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
               style={{ imageRendering: "pixelated" }}
             />
             <div className="flex flex-col">
-              <h1 className="text-2xl font-semibold text-emerald-400">
+              <h1 className="text-2xl font-semibold text-emerald-300">
                 PrizeCheckDrillr.io
               </h1>
               <p className="text-xs sm:text-sm text-slate-400">
