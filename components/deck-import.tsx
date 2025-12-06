@@ -243,7 +243,7 @@ export function DeckImport(props: DeckImportProps) {
               size="sm"
               onClick={handleImport}
               disabled={isLoading || !rawText.trim()}
-              className="rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
+              className="rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
             >
               {isLoading ? "Importing…" : "Import Deck"}
             </Button>
@@ -350,7 +350,7 @@ export function DeckImport(props: DeckImportProps) {
                 <Button
                   type="button"
                   size="sm"
-                  className="mb-4 rounded-full px-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30"
+                  className="mb-4 rounded-full px-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
                   onClick={onStartGame}
                 >
                   Start Game

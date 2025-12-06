@@ -370,7 +370,7 @@ const scoreBadgeBg = (() => {
               onClick={handleSubmit}
               disabled={selectedCards.size !== totalPrizes}
               size="sm"
-              className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none"
+              className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
             >
               Submit Guesses
             </Button>
@@ -503,7 +503,7 @@ const scoreBadgeBg = (() => {
                   type="button"
                   size="sm"
                   onClick={handleImportNewList}
-                  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
+                  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
                 >
                   Import New List
                 </Button>
@@ -511,7 +511,7 @@ const scoreBadgeBg = (() => {
                 <Button
                   onClick={onRestart}
                   size="sm"
-                  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
+                  className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
                 >
                   <RotateCcw className="mr-2 h-4 w-4" />
                   Play Again

@@ -267,6 +267,7 @@ export function FeaturedDeckSection() {
                   "rounded-full h-9 px-5 font-semibold shadow-md shadow-emerald-500/40",
                   // emerald color system
                   "bg-emerald-500 text-slate-950 hover:bg-emerald-400",
+                 "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                   // interaction + animation
                   "transition-colors transition-transform duration-150",
                   "active:scale-95 active:translate-y-[1px]",

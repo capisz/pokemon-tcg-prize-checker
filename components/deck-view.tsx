@@ -199,6 +199,7 @@ export function DeckView({
                   "rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40",
                   "bg-emerald-500 text-slate-950 hover:bg-emerald-400",
                   "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
+                  "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
                 )}
               >
                 Restart
@@ -213,6 +214,7 @@ export function DeckView({
                 "rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40",
                 "bg-emerald-500 text-slate-950 hover:bg-emerald-400",
                 "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
+                "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
               )}
             >
               Guess Prizes

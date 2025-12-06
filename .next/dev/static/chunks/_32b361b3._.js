@@ -538,7 +538,7 @@ function FeaturedDeckSection() {
                                         },
                                         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])(// base shape + shadow
                                         "rounded-full h-9 px-5 font-semibold shadow-md shadow-emerald-500/40", // emerald color system
-                                        "bg-emerald-500 text-slate-950 hover:bg-emerald-400", // interaction + animation
+                                        "bg-emerald-500 text-slate-950 hover:bg-emerald-400", "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]", // interaction + animation
                                         "transition-colors transition-transform duration-150", "active:scale-95 active:translate-y-[1px]", // override the default blue focus ring
                                         "focus-visible:ring-emerald-300 focus-visible:ring-offset-emerald-950", // copied override (keeps same emerald family)
                                         copied && "bg-emerald-400"),
@@ -547,7 +547,7 @@ function FeaturedDeckSection() {
                                                 className: "mr-2 h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/featured-deck.tsx",
-                                                lineNumber: 279,
+                                                lineNumber: 280,
                                                 columnNumber: 17
                                             }, this),
                                             copied ? "Copied!" : "Copy Decklist"
@@ -594,39 +594,39 @@ function FeaturedDeckSection() {
                                             className: "h-full w-full object-cover"
                                         }, void 0, false, {
                                             fileName: "[project]/components/featured-deck.tsx",
-                                            lineNumber: 315,
+                                            lineNumber: 316,
                                             columnNumber: 23
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex h-full w-full items-center justify-center text-[10px] px-2 text-slate-300",
                                             children: card.name
                                         }, void 0, false, {
                                             fileName: "[project]/components/featured-deck.tsx",
-                                            lineNumber: 321,
+                                            lineNumber: 322,
                                             columnNumber: 23
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/featured-deck.tsx",
-                                        lineNumber: 312,
+                                        lineNumber: 313,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/featured-deck.tsx",
-                                    lineNumber: 303,
+                                    lineNumber: 304,
                                     columnNumber: 17
                                 }, this)
                             }, card.id, false, {
                                 fileName: "[project]/components/featured-deck.tsx",
-                                lineNumber: 290,
+                                lineNumber: 291,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/components/featured-deck.tsx",
-                        lineNumber: 288,
+                        lineNumber: 289,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/featured-deck.tsx",
-                    lineNumber: 287,
+                    lineNumber: 288,
                     columnNumber: 9
                 }, this)
             ]
@@ -889,7 +889,7 @@ function DeckImport(props) {
                                         size: "sm",
                                         onClick: handleImport,
                                         disabled: isLoading || !rawText.trim(),
-                                        className: "rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95",
+                                        className: "rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                                         children: isLoading ? "Importing…" : "Import Deck"
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
@@ -1084,7 +1084,7 @@ function DeckImport(props) {
                                     canStartGame && onStartGame && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                         type: "button",
                                         size: "sm",
-                                        className: "mb-4 rounded-full px-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30",
+                                        className: "mb-4 rounded-full px-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                                         onClick: onStartGame,
                                         children: "Start Game"
                                     }, void 0, false, {
@@ -1916,7 +1916,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                     type: "button",
                                     size: "sm",
                                     onClick: handleRestartClick,
-                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40", "bg-emerald-500 text-slate-950 hover:bg-emerald-400", "transition-transform duration-150 active:scale-95 active:translate-y-[1px]"),
+                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40", "bg-emerald-500 text-slate-950 hover:bg-emerald-400", "transition-transform duration-150 active:scale-95 active:translate-y-[1px]", "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"),
                                     children: "Restart"
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-view.tsx",
@@ -1927,11 +1927,11 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                     type: "button",
                                     size: "sm",
                                     onClick: onEndEarly,
-                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40", "bg-emerald-500 text-slate-950 hover:bg-emerald-400", "transition-transform duration-150 active:scale-95 active:translate-y-[1px]"),
+                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40", "bg-emerald-500 text-slate-950 hover:bg-emerald-400", "transition-transform duration-150 active:scale-95 active:translate-y-[1px]", "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"),
                                     children: "Guess Prizes"
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-view.tsx",
-                                    lineNumber: 208,
+                                    lineNumber: 209,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -1960,7 +1960,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                             className: " pointer-events-none absolute inset-x-16 top-16 h-64 rounded-[999px] bg-sky-400/18 blur-3xl opacity-80 "
                         }, void 0, false, {
                             fileName: "[project]/components/deck-view.tsx",
-                            lineNumber: 230,
+                            lineNumber: 232,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1974,12 +1974,12 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                 className: "h-6 w-6"
                             }, void 0, false, {
                                 fileName: "[project]/components/deck-view.tsx",
-                                lineNumber: 259,
+                                lineNumber: 261,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/deck-view.tsx",
-                            lineNumber: 245,
+                            lineNumber: 247,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1993,12 +1993,12 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                 className: "h-6 w-6"
                             }, void 0, false, {
                                 fileName: "[project]/components/deck-view.tsx",
-                                lineNumber: 278,
+                                lineNumber: 280,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/deck-view.tsx",
-                            lineNumber: 263,
+                            lineNumber: 265,
                             columnNumber: 11
                         }, this),
                         deckOrder.map((card, index)=>{
@@ -2049,7 +2049,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                                 draggable: false
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-view.tsx",
-                                                lineNumber: 347,
+                                                lineNumber: 349,
                                                 columnNumber: 11
                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "w-full h-full bg-slate-800 flex items-center justify-center p-4",
@@ -2058,47 +2058,47 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                                     children: card.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-view.tsx",
-                                                    lineNumber: 355,
+                                                    lineNumber: 357,
                                                     columnNumber: 13
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-view.tsx",
-                                                lineNumber: 354,
+                                                lineNumber: 356,
                                                 columnNumber: 11
                                             }, this),
                                             isExCard && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "holo-overlay"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-view.tsx",
-                                                lineNumber: 360,
+                                                lineNumber: 362,
                                                 columnNumber: 24
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/deck-view.tsx",
-                                        lineNumber: 340,
+                                        lineNumber: 342,
                                         columnNumber: 7
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-view.tsx",
-                                    lineNumber: 332,
+                                    lineNumber: 334,
                                     columnNumber: 5
                                 }, this)
                             }, `${card.id}-${index}`, false, {
                                 fileName: "[project]/components/deck-view.tsx",
-                                lineNumber: 309,
+                                lineNumber: 311,
                                 columnNumber: 3
                             }, this);
                         })
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/deck-view.tsx",
-                    lineNumber: 228,
+                    lineNumber: 230,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/deck-view.tsx",
-                lineNumber: 227,
+                lineNumber: 229,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2108,7 +2108,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                         className: "pointer-events-none absolute inset-x-16 bottom-6 h-16 rounded-full bg-emerald-500/18 blur-3xl opacity-80 z-10"
                     }, void 0, false, {
                         fileName: "[project]/components/deck-view.tsx",
-                        lineNumber: 373,
+                        lineNumber: 375,
                         columnNumber: 11
                     }, this),
                     hand.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2127,7 +2127,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                             draggable: false
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-view.tsx",
-                                            lineNumber: 394,
+                                            lineNumber: 396,
                                             columnNumber: 23
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "w-full h-full bg-slate-800 flex items-center justify-center p-2",
@@ -2136,32 +2136,32 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                                 children: card.name
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-view.tsx",
-                                                lineNumber: 402,
+                                                lineNumber: 404,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-view.tsx",
-                                            lineNumber: 401,
+                                            lineNumber: 403,
                                             columnNumber: 23
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-view.tsx",
-                                        lineNumber: 391,
+                                        lineNumber: 393,
                                         columnNumber: 19
                                     }, this)
                                 }, `${card.id}-hand-${index}`, false, {
                                     fileName: "[project]/components/deck-view.tsx",
-                                    lineNumber: 387,
+                                    lineNumber: 389,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/components/deck-view.tsx",
-                            lineNumber: 385,
+                            lineNumber: 387,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/deck-view.tsx",
-                        lineNumber: 378,
+                        lineNumber: 380,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -2177,7 +2177,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                             children: "Left Click or Press A:"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-view.tsx",
-                                            lineNumber: 424,
+                                            lineNumber: 426,
                                             columnNumber: 15
                                         }, this),
                                         " ",
@@ -2188,7 +2188,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                             children: "Right Click or Press D:"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-view.tsx",
-                                            lineNumber: 426,
+                                            lineNumber: 428,
                                             columnNumber: 15
                                         }, this),
                                         " ",
@@ -2196,7 +2196,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-view.tsx",
-                                    lineNumber: 423,
+                                    lineNumber: 425,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2206,7 +2206,7 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                             children: "Arrow Keys / Mouse Wheel:"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-view.tsx",
-                                            lineNumber: 430,
+                                            lineNumber: 432,
                                             columnNumber: 15
                                         }, this),
                                         " ",
@@ -2217,14 +2217,14 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                             children: "Side Arrows:"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-view.tsx",
-                                            lineNumber: 432,
+                                            lineNumber: 434,
                                             columnNumber: 15
                                         }, this),
                                         " Step one card at a time"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-view.tsx",
-                                    lineNumber: 429,
+                                    lineNumber: 431,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2237,24 +2237,24 @@ function DeckView({ deck, hand, onTimeUp, onEndEarly, onRestartGame }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-view.tsx",
-                                    lineNumber: 435,
+                                    lineNumber: 437,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/deck-view.tsx",
-                            lineNumber: 422,
+                            lineNumber: 424,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/deck-view.tsx",
-                        lineNumber: 415,
+                        lineNumber: 417,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/deck-view.tsx",
-                lineNumber: 371,
+                lineNumber: 373,
                 columnNumber: 7
             }, this)
         ]
@@ -3005,7 +3005,7 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                 onClick: handleSubmit,
                                 disabled: selectedCards.size !== totalPrizes,
                                 size: "sm",
-                                className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none",
+                                className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 disabled:bg-emerald-900 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                                 children: "Submit Guesses"
                             }, void 0, false, {
                                 fileName: "[project]/components/results-view.tsx",
@@ -3396,7 +3396,7 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                                 type: "button",
                                                 size: "sm",
                                                 onClick: handleImportNewList,
-                                                className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95",
+                                                className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                                                 children: "Import New List"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
@@ -3406,7 +3406,7 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                                 onClick: onRestart,
                                                 size: "sm",
-                                                className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95",
+                                                className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__["RotateCcw"], {
                                                         className: "mr-2 h-4 w-4"
@@ -3815,45 +3815,67 @@ __turbopack_context__.s([
     ()=>CountdownOverlay
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
 "use client";
 ;
 ;
 function CountdownOverlay({ visible, count }) {
+    _s();
+    const [isPulsing, setIsPulsing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "CountdownOverlay.useEffect": ()=>{
+            if (count == null) return;
+            // turn pulse on when count changes
+            setIsPulsing(true);
+            // turn it off after a short delay so it can retrigger next time
+            const timeout = setTimeout({
+                "CountdownOverlay.useEffect.timeout": ()=>setIsPulsing(false)
+            }["CountdownOverlay.useEffect.timeout"], 200);
+            return ({
+                "CountdownOverlay.useEffect": ()=>clearTimeout(timeout)
+            })["CountdownOverlay.useEffect"];
+        }
+    }["CountdownOverlay.useEffect"], [
+        count
+    ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300", visible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"),
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "flex flex-col items-center gap-4",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                    src: "/pokeball.gif",
+                    src: "/pidgeot.gif",
                     alt: "Get ready...",
-                    className: "w-40 h-auto md:w-52 drop-shadow-[0_0_28px_rgba(45,212,191,0.55)]"
+                    className: "w-86 h-auto md:w-134 drop-shadow-[0_0_28px_rgba(45,212,191,0.55)]"
                 }, void 0, false, {
                     fileName: "[project]/components/countdown-overlay.tsx",
-                    lineNumber: 20,
+                    lineNumber: 35,
                     columnNumber: 9
                 }, this),
                 count != null && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "text-slate-50 text-6xl md:text-6xl font-semibold tracking-widest font-TimesNewRoman",
+                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("text-slate-300 text-6xl md:text-4xl font-semibold tabular-nums", "transition-transform duration-200 ease-out", "drop-shadow-[0_0_12px_rgba(45,212,191,0.9)]", "opacity-80", isPulsing ? "scale-120" : "scale-100"),
                     children: count
                 }, void 0, false, {
                     fileName: "[project]/components/countdown-overlay.tsx",
-                    lineNumber: 26,
+                    lineNumber: 42,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/countdown-overlay.tsx",
-            lineNumber: 19,
+            lineNumber: 34,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/countdown-overlay.tsx",
-        lineNumber: 13,
+        lineNumber: 28,
         columnNumber: 5
     }, this);
 }
+_s(CountdownOverlay, "R0KlM7A1jfLN6h1Kbul6iWCwnrY=");
 _c = CountdownOverlay;
 var _c;
 __turbopack_context__.k.register(_c, "CountdownOverlay");

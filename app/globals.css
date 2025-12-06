@@ -261,6 +261,19 @@ body {
   }
 }
 
+@keyframes countdown-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+}
+
+.countdown-pulse {
+  animation: countdown-pulse 0.4s ease-out;
+}
+
 
 .mascot-bob {
   animation: mascot-bob 1.6s ease-in-out infinite;
@@ -278,4 +291,6 @@ body {
     transform: translateY(0);
   }
 }
+
+
 

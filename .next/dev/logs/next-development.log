@@ -1,162 +1,246 @@
-[00:00:01.206] Server  LOG      ✓ Ready in 1004ms
-[00:00:05.369] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:05.716] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.718] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.719] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.719] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.720] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.720] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.720] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.720] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.721] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.721] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.721] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.721] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.722] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.722] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.722] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.723] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.723] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.723] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.724] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.724] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.725] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.725] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.726] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.727] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.727] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.729] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.730] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.730] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.730] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.731] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.731] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.732] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.733] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.734] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.735] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.735] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.736] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.736] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.736] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.736] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.737] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.737] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.738] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.738] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.739] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.739] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.739] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.740] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.740] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.741] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.742] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.743] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.743] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.744] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.744] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.744] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.745] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.745] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.745] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:05.746] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:14.605] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.608] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.619] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.624] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.660] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.665] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.669] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.673] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.677] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.680] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.684] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.688] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.692] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.694] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.702] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.705] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.707] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.712] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.714] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.721] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.724] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.737] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.742] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.744] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.746] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.748] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.753] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.754] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.757] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.766] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.769] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.771] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.779] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.782] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.794] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.797] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.804] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.812] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.814] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.821] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.824] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.833] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.858] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.861] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.868] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.871] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.878] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.886] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.891] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.894] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.897] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.899] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.907] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.912] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.914] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.918] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.923] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.925] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.928] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:14.937] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:10:05.760] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:10:48.135] Server  LOG      ✓ Compiled in 120ms
-[00:10:53.997] Server  LOG      ✓ Compiled in 73ms
-[00:11:01.210] Server  LOG      ✓ Compiled in 73ms
-[00:11:06.588] Server  LOG      ✓ Compiled in 83ms
-[00:11:22.158] Server  LOG      ✓ Compiled in 130ms
-[00:11:40.056] Server  LOG      ✓ Compiled in 69ms
-[00:12:01.682] Server  LOG      ✓ Compiled in 622ms
-[00:12:09.569] Server  LOG      ✓ Compiled in 133ms
-[00:12:16.918] Server  LOG      ✓ Compiled in 79ms
-[00:12:28.874] Server  LOG      ✓ Compiled in 64ms
-[00:13:08.180] Server  LOG      ✓ Compiled in 133ms
-[00:13:11.341] Server  LOG      ✓ Compiled in 40ms
-[00:15:54.180] Server  LOG      ✓ Compiled in 98ms
-[00:16:11.226] Server  LOG      ✓ Compiled in 91ms
-[00:16:23.084] Server  LOG      ✓ Compiled in 54ms
-[00:21:00.807] Server  LOG      ✓ Compiled in 102ms
-[00:21:17.832] Server  LOG      ✓ Compiled in 127ms
-[00:21:22.289] Server  LOG      ✓ Compiled in 68ms
-[00:21:31.362] Server  LOG      ✓ Compiled in 100ms
-[00:21:33.853] Server  LOG      ✓ Compiled in 763ms
-[00:21:37.470] Server  LOG      ✓ Compiled in 53ms
-[00:22:12.210] Server  LOG      ✓ Compiled in 72ms
-[00:22:13.839] Server  LOG      ✓ Compiled in 33ms
-[00:22:17.481] Server  LOG      ✓ Compiled in 50ms
-[00:22:44.894] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:24:34.367] Server  LOG      ✓ Compiled in 912ms
-[00:24:35.930] Server  LOG      ✓ Compiled in 300ms
-[00:26:59.112] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:27:38.549] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:29:31.608] Server  LOG      ✓ Compiled in 88ms
-[00:29:41.899] Server  LOG      ✓ Compiled in 174ms
-[00:29:43.921] Server  LOG      ✓ Compiled in 43ms
-[00:29:46.551] Server  LOG      ✓ Compiled in 39ms
-[00:30:23.204] Server  LOG      ✓ Compiled in 63ms
-[00:30:32.006] Server  LOG      ✓ Compiled in 69ms
-[00:30:34.680] Server  LOG      ✓ Compiled in 41ms
-[00:30:37.691] Server  LOG      ✓ Compiled in 407ms
-[00:30:42.760] Server  LOG      ✓ Compiled in 83ms
-[00:33:55.302] Server  LOG      ✓ Compiled in 153ms
+[00:00:00.828] Server  LOG      ✓ Ready in 550ms
+[00:00:06.523] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:07.202] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.204] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.205] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.205] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.206] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.206] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.207] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.210] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.214] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.217] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.219] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.221] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.222] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.224] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.226] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.230] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.233] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.233] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.234] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.234] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.238] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.240] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.241] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.242] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.243] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.244] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.246] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.247] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.249] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.252] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.268] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.268] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.269] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.270] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.270] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.271] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.271] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.271] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.271] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.272] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.272] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.273] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.274] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.275] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.275] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.276] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.277] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.279] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.280] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.281] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.282] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.283] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.284] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.284] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.286] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.287] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.288] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.289] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.290] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:07.290] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:15.923] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.932] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.940] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.946] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.963] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.967] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.970] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.973] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.976] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.981] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.984] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.987] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:15.990] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.002] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.003] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.006] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.011] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.021] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.024] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.026] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.037] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.040] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.041] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.045] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.048] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.055] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.058] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.061] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.064] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.067] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.096] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.101] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.106] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.109] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.115] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.125] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.129] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.132] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.135] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.139] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.147] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.149] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.150] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.158] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.164] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.167] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.171] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.176] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.181] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.184] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.198] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.202] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.205] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.206] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.209] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.213] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.220] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.225] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.232] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:16.238] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:24.405] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:53.215] Server  LOG      ✓ Compiled in 224ms
+[00:01:00.467] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:16.483] Server  LOG      ✓ Compiled in 108ms
+[00:01:18.308] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:24.104] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:36.731] Server  LOG      ✓ Compiled in 370ms
+[00:01:38.174] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:32.829] Server  LOG      ✓ Compiled in 54ms
+[00:02:35.854] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:48.626] Server  LOG      ✓ Compiled in 49ms
+[00:02:50.762] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:58.017] Server  LOG      ✓ Compiled in 41ms
+[00:03:01.092] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:12.571] Server  LOG      ✓ Compiled in 59ms
+[00:03:13.564] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:32.634] Server  LOG      ✓ Compiled in 119ms
+[00:03:34.725] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:12.878] Server  LOG      ✓ Compiled in 465ms
+[00:04:18.253] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:26.474] Server  LOG      ✓ Compiled in 113ms
+[00:04:28.029] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:34.390] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:40.999] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:18.501] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:49.993] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:04.612] Server  LOG      ✓ Compiled in 239ms
+[00:07:37.906] Server  LOG      ✓ Compiled in 99ms
+[00:07:48.387] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:58.351] Server  LOG      ✓ Compiled in 57ms
+[00:07:59.678] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:04.193] Server  LOG      ✓ Compiled in 83ms
+[00:08:06.254] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:11.070] Server  LOG      ✓ Compiled in 55ms
+[00:08:12.666] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:26.229] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:54.791] Server  LOG      ✓ Compiled in 202ms
+[00:11:33.369] Server  LOG      ✓ Compiled in 104ms
+[00:12:24.023] Server  LOG      ✓ Compiled in 149ms
+[00:12:32.440] Server  LOG      ✓ Compiled in 101ms
+[00:12:33.762] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:12:53.212] Server  LOG      ✓ Compiled in 760ms
+[00:13:21.576] Server  LOG      ✓ Compiled in 117ms
+[00:13:23.354] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:33.293] Server  LOG      ✓ Compiled in 123ms
+[00:13:34.584] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:41.850] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:14:06.862] Server  LOG      ✓ Compiled in 82ms
+[00:14:08.810] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:14:15.323] Server  LOG      ✓ Compiled in 79ms
+[00:14:16.684] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:14:23.120] Server  LOG      ✓ Compiled in 50ms
+[00:15:16.944] Server  LOG      ✓ Compiled in 61ms
+[00:15:28.662] Server  LOG      ✓ Compiled in 61ms
+[00:15:35.910] Server  LOG      ✓ Compiled in 353ms
+[00:15:36.988] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:42.137] Server  LOG      ✓ Compiled in 63ms
+[00:16:05.756] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:23.227] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:43:50.254] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:45:21.133] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:52:49.174] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:54:43.068] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:01:28.756] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:06:55.609] Server  LOG      ✓ Compiled in 327ms
+[01:08:24.541] Server  LOG      ✓ Compiled in 166ms
+[01:08:54.204] Server  LOG      ✓ Compiled in 128ms
+[01:09:50.737] Server  LOG      ✓ Compiled in 662ms
+[01:10:08.991] Server  LOG      ✓ Compiled in 107ms
+[01:10:53.126] Server  LOG      ✓ Compiled in 92ms
+[01:11:22.041] Server  LOG      ✓ Compiled in 118ms
+[01:11:31.253] Server  LOG      ✓ Compiled in 90ms
+[01:11:48.553] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:12:30.909] Server  LOG      ✓ Compiled in 154ms
+[01:12:31.018] Browser ERROR   ./components/featured-deck.tsx:272:19
+Parsing ecmascript source code failed
+  270 |                  "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
+  271 |                   // interaction + animation
+> 272 |                   "transition-colors transition-transform duration-150",
+      |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  273 |                   "active:scale-95 active:translate-y-[1px]",
+  274 |                   // override the default blue focus ring
+  275 |                   "focus-visible:ring-emerald-300 focus-visible:ring-offset-emerald-950",
+
+Expected '</', got 'string literal (transition-colors transition-transform duration-150, "transition-colors transition-transform duration-150")'
+
+Import traces:
+  Client Component Browser:
+    ./components/featured-deck.tsx [Client Component Browser]
+    ./components/deck-import.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/featured-deck.tsx [Client Component SSR]
+    ./components/deck-import.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[01:12:31.027] Browser ERROR   ./components/featured-deck.tsx:272:19
+Parsing ecmascript source code failed
+  270 |                  "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
+  271 |                   // interaction + animation
+> 272 |                   "transition-colors transition-transform duration-150",
+      |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  273 |                   "active:scale-95 active:translate-y-[1px]",
+  274 |                   // override the default blue focus ring
+  275 |                   "focus-visible:ring-emerald-300 focus-visible:ring-offset-emerald-950",
+
+Expected '</', got 'string literal (transition-colors transition-transform duration-150, "transition-colors transition-transform duration-150")'
+
+Import traces:
+  Client Component Browser:
+    ./components/featured-deck.tsx [Client Component Browser]
+    ./components/deck-import.tsx [Client Component Browser]
+    ./app/page.tsx [Client Component Browser]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/featured-deck.tsx [Client Component SSR]
+    ./components/deck-import.tsx [Client Component SSR]
+    ./app/page.tsx [Client Component SSR]
+    ./app/page.tsx [Server Component]
+[01:37:48.227] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:40:18.901] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
