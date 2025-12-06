@@ -307,12 +307,19 @@ export function ResultsView({
     return "text-rose-400"
   })()
 
-  const scoreBadgeBg = (() => {
-    if (score >= 800) return "bg-emerald-500/15 border-emerald-500/50"
-    if (score >= 600) return "bg-lime-500/10 border-lime-500/40"
-    if (score >= 400) return "bg-amber-500/10 border-amber-500/40"
-    return "bg-rose-500/10 border-rose-500/40"
-  })()
+const scoreBadgeBg = (() => {
+  if (score >= 800) {
+    return "bg-emerald-600/60 border-emerald-900 "
+  }
+  if (score >= 600) {
+    return "bg-lime-600/60 border-lime-900 "
+  }
+  if (score >= 400) {
+    return "bg-amber-600/60 border-amber-900 "
+  }
+  return "bg-rose-600/60 border-rose-900 "
+})()
+
 
   const getCardStatus = (cardId: string): Status => {
     if (!showResults) {
@@ -399,7 +406,7 @@ export function ResultsView({
                   >
                     {score}
                   </span>
-                  <span className="text-[11px] uppercase tracking-wide text-slate-400">
+                  <span className="text-[11px] uppercase tracking-wide text-slate-300">
                     Overall score
                   </span>
                 </div>
@@ -562,8 +569,8 @@ export function ResultsView({
   className={cn(
     "p-5 rounded-3xl",
     // dark neutral background so the cards pop
-    "bg-emerald-900/50",
-    // emerald-tinted border & shadow to match results header
+    "bg-teal-900/40 shadow-[0_20px_45px_rgba(0,0,0,0.9)]",
+    // emerald-tinted border & shadow for results
     "border-transparent"
   )}
 >

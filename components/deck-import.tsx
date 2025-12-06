@@ -245,7 +245,7 @@ export function DeckImport(props: DeckImportProps) {
         </div>
 
         {/* Text area */}
-        <Card className="bg-slate-800/45 border border-emerald-900/40">
+        <Card className="bg-slate-800/45 border border-emerald-900/40 shadow-[0_0_16px_rgba(16,185,129,0.35)]">
           <div className="p-4">
             <Textarea
               rows={6}
@@ -270,11 +270,11 @@ export function DeckImport(props: DeckImportProps) {
 
         {/* Deck list + hover preview */}
         {previewCards.length > 0 && (
-          <div className="flex flex-col md:flex-row gap-6 mt-2">
+          <div className="flex flex-col md:flex-row gap-6 mt-2 outer-glow-emerald-900 border-emerald-500/50">
             {/* LIST: now has its own dark-green title bar INSIDE the card */}
             <div className="flex-1 max-h-[420px] rounded-lg border border-slate-800 bg-slate-900/70 flex flex-col">
               {/* Title bar that feels like part of the list */}
-              <div className="px-4 py-2 border-b border-slate-800 bg-emerald-800/35 rounded-t-lg">
+              <div className="px-4 py-2 border-b border-slate-800 bg-emerald-300/35 rounded-t-lg">
                 <p className="text-xs sm:text-sm font-semibold text-emerald-100">
                   {effectiveDeckTitle}
                   {effectiveDeckPlayer && (
@@ -288,33 +288,40 @@ export function DeckImport(props: DeckImportProps) {
 
               {/* Scrollable list body */}
               <div className="flex-1 overflow-y-auto">
-                {previewCards.map((card) => {
-                  const baseId = card.id.toLowerCase()
-                  const count = cardCounts[baseId] ?? 1
-                  const isHovered = hoveredCard?.id === card.id
+               {previewCards.map((card, index) => {
+  const baseId = card.id.toLowerCase()
+  const count = cardCounts[baseId] ?? 1
+  const isHovered = hoveredCard?.id === card.id
+  const isEvenRow = index % 2 === 0
 
-                  return (
-                    <div
-                      key={card.id}
-                      onMouseEnter={() => setHoveredCard(card)}
-                      className={cn(
-                        "flex items-center justify-between px-4 py-2 text-sm border-b border-slate-800/60 last:border-b-0",
-                        "hover:bg-emerald-800/70 cursor-pointer",
-                        isHovered && "bg-emerald-900",
-                      )}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="w-7 text-right text-slate-400">
-                          {count}×
-                        </span>
-                        <span className="text-slate-50">{card.name}</span>
-                      </div>
-                      <span className="text-[11px] text-slate-500">
-                        {card.set.toUpperCase()} • {card.number}
-                      </span>
-                    </div>
-                  )
-                })}
+  return (
+    <div
+      key={card.id}
+      onMouseEnter={() => setHoveredCard(card)}
+      className={cn(
+        "flex items-center justify-between px-4 py-2 text-sm border-b border-slate-800/60 last:border-b-0 cursor-pointer transition-colors",
+
+        // 🔹 zebra-striping
+        isEvenRow ? "bg-slate-800/20" : "bg-slate-900/90",
+
+        // 🔹 hover + active state overrides stripe
+        "hover:bg-emerald-700/60",
+        isHovered && "bg-emerald-900/90",
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <span className="w-7 text-right text-slate-400">
+          {count}×
+        </span>
+        <span className="text-slate-50">{card.name}</span>
+      </div>
+      <span className="text-[11px] text-slate-500">
+        {card.set.toUpperCase()} • {card.number}
+      </span>
+    </div>
+  )
+})}
+
               </div>
             </div>
 

@@ -249,7 +249,7 @@ export function DeckView({
             className={cn(
               "absolute left-0 z-40 h-12 w-12 rounded-full border border-slate-700/70",
               "bg-slate-950/90 text-slate-100 shadow-md shadow-emerald-500/20",
-              "hover:bg-slate-900 hover:text-emerald-100",
+              "!hover:bg-slate-800-* !hover:text-emerald-100-*",
               "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
               centerIndex === 0 && "opacity-40 cursor-default hover:bg-slate-950",
             )}
@@ -267,7 +267,7 @@ export function DeckView({
             className={cn(
               "absolute right-0 z-40 h-12 w-12 rounded-full border border-slate-700/70",
               "bg-slate-950/90 text-slate-100 shadow-md shadow-emerald-500/20",
-              "hover:bg-slate-900 hover:text-emerald-100",
+              "!hover:bg-slate-900-* !hover:text-emerald-100-*",
               "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
               centerIndex === deckOrder.length - 1 &&
                 "opacity-40 cursor-default hover:bg-slate-950",
@@ -420,15 +420,15 @@ export function DeckView({
 >
   <div className="text-center text-sm space-y-1">
     <p className="font-medium">
-      <span className="text-emerald-300">Left Click or Press A:</span>{" "}
-      Center card (or move to front if centered) •{" "}
-      <span className="text-emerald-300">Right Click or Press D:</span>{" "}
+      <span className="text-emerald-200">Left Click or Press A:</span>{" "}
+      Move to front •{" "}
+      <span className="text-emerald-200">Right Click or Press D:</span>{" "}
       Move card to back
     </p>
     <p>
-      <span className="text-emerald-300">Arrow Keys / Mouse Wheel:</span>{" "}
+      <span className="text-emerald-200">Arrow Keys / Mouse Wheel:</span>{" "}
       Scroll through deck •{" "}
-      <span className="text-emerald-300">Side Arrows:</span> Step one
+      <span className="text-emerald-200">Side Arrows:</span> Step one
       card at a time
     </p>
     <p className="text-xs mt-2 text-slate-100">

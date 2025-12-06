@@ -10,6 +10,8 @@ import { LoadingOverlay } from "@/components/loading-overlay"
 import { CountdownOverlay } from "@/components/countdown-overlay"
 import { SiteFooter } from "@/components/site-footer"
 import { FloatingGameVolume } from "@/components/music-player"
+import { cn } from "@/lib/utils" 
+
 
 type Stage = "import" | "game" | "results"
 
@@ -163,60 +165,67 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-50">
-      {/* Main content area */}
-      <div className="flex-1 relative">
-        {/* Riffle shuffle overlay */}
-        <LoadingOverlay
-          visible={isShuffling}
-          progress={shuffleProgress}
-          message="Shuffling & importing your deck"
+  <div
+    className={cn(
+      "min-h-screen flex flex-col text-slate-50",
+      stage === "results"
+        // lighter background just for the Select-the-Prize-Cards page
+        ? "bg-gradient-to-b from-slate-600/40 via-slate-900 to-slate-700"
+        // rest of app theme color
+        : "bg-gradient-to-b from-slate-850 via-slate-800 to-slate-850",
+    )}
+  >
+    {/* Main content area */}
+    <div className="flex-1 relative">
+      {/* Riffle shuffle overlay */}
+      <LoadingOverlay
+        visible={isShuffling}
+        progress={shuffleProgress}
+        message="Shuffling & importing your deck"
+      />
+
+      {/* 3-2-1 countdown */}
+      <CountdownOverlay visible={preGameCount !== null} count={preGameCount} />
+
+      {stage === "import" && (
+        <DeckImport
+          onDeckImported={handleDeckImported}
+          canStartGame={playDeck.length > 0}
+          onStartGame={handleStartGame}
+          initialText={DEFAULT_FEATURED_DECK_TEXT}
+          autoImportOnMount
+          deckTitle="Charizard Noctowl"
+          deckPlayer="Nicolai Stiborg"
         />
+      )}
 
-        {/* 3-2-1 countdown */}
-        <CountdownOverlay visible={preGameCount !== null} count={preGameCount} />
-
-        {stage === "import" && (
-          <DeckImport
-            onDeckImported={handleDeckImported}
-            canStartGame={playDeck.length > 0}
-            onStartGame={handleStartGame}
-            // 🔹 new props for auto-import + title bar
-            initialText={DEFAULT_FEATURED_DECK_TEXT}
-            autoImportOnMount
-            deckTitle="Charizard Noctowl"
-            deckPlayer="Nicolai Stiborg"
+      {stage === "game" && (
+        <>
+          <DeckView
+            deck={playDeck}
+            hand={hand}
+            onTimeUp={handleTimeUp}
+            onEndEarly={handleTimeUp}
+            onRestartGame={handleRestartGame}
           />
-        )}
+          <FloatingGameVolume />
+        </>
+      )}
 
-        {stage === "game" && (
-          <>
-            <DeckView
-              deck={playDeck}
-              hand={hand}
-              onTimeUp={handleTimeUp}
-              onEndEarly={handleTimeUp}
-              onRestartGame={handleRestartGame}
-            />
-            {/* Vertical floating volume slider only during game */}
-            <FloatingGameVolume />
-          </>
-        )}
-
-        {stage === "results" && (
-          <ResultsView
-            allCards={[...playDeck, ...hand, ...prizeCards]}
-            prizeCards={prizeCards}
-            onRestart={handleRestartGame}
-            onImportNewList={handleGoToImport}
-            timeLeft={null}
-            totalTime={GAME_DURATION}
-          />
-        )}
-      </div>
-
-      {/* Footer visible on import + results, hidden during game */}
-      {stage !== "game" && <SiteFooter />}
+      {stage === "results" && (
+        <ResultsView
+          allCards={[...playDeck, ...hand, ...prizeCards]}
+          prizeCards={prizeCards}
+          onRestart={handleRestartGame}
+          onImportNewList={handleGoToImport}
+          timeLeft={null}
+          totalTime={GAME_DURATION}
+        />
+      )}
     </div>
-  )
+
+    {stage !== "game" && <SiteFooter />}
+  </div>
+)
+
 }

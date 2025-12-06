@@ -211,7 +211,7 @@ export function FeaturedDeckSection() {
     <Card
       className={cn(
         "mt-4 rounded-3xl border border-black/50",
-        "bg-gradient-to-r from-emerald-900/80 via-slate-900/90 to-slate-900/95",
+        "bg-gradient-to-r from-emerald-900/90 via-slate-900/90 to-slate-800/90",
         "shadow-[0_0_16px_rgba(16,185,129,0.35)]",
         "overflow-visible",
       )}

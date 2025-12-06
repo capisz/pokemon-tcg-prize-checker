@@ -164,20 +164,20 @@
 
   filter: blur(0.2px);
   opacity: 0.16;
-  animation: holo-twinkle-slow 2.4s ease-in-out infinite alternate;
+  animation: holo-twinkle-slow .6s ease-in-out infinite alternate;
 }
 
 @keyframes holo-twinkle {
   0% {
-    opacity: 0.18;
+    opacity: 0.08;
     transform: translate3d(0, 0, 0);
   }
   50% {
-    opacity: 0.30;
+    opacity: 0.35;
   }
   100% {
-    opacity: 0.20;
-    transform: translate3d(-24px, -22px, 0);
+    opacity: 0.15;
+    transform: translate3d(-24px, -25px, 0);
   }
 }
 
