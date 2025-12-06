@@ -31,9 +31,9 @@ Paste a deck list, let the app simulate a real game (opening hand + 6 prizes), t
 📷 **Screenshots:** 
 
 - Import screen  
-  `![Import deck](./public/import-screen.png)`
+  `![Import deck](public/import-screen.png)`
 - Game screen  
-  `![Game view](./public/game-screen.png)`
+  `![Game view](public/game-screen.png)`
 
 ---
 
