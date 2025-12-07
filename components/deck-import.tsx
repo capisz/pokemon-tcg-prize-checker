@@ -408,7 +408,7 @@ export function DeckImport(props: DeckImportProps) {
               <HelpCircle className="h-5 w-5 text-emerald-300" />
               <h2 className="text-lg font-semibold">
                 <span className="text-emerald-300">How to use</span>{" "}
-                <span className="text-emerald-100">PrizeCheckDrillr</span>
+                <span className="text-emerald-100">PrizeCheckr.io</span>
               </h2>
             </div>
 

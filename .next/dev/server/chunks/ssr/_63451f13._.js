@@ -1142,7 +1142,7 @@ function DeckImport(props) {
                                         " ",
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "text-emerald-100",
-                                            children: "PrizeCheckDrillr"
+                                            children: "PrizeCheckr.io"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
                                             lineNumber: 411,
@@ -3173,7 +3173,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 type: "button",
                                                 onClick: ()=>handleShare("twitter"),
-                                                className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold bg-sky-500 hover:bg-sky-400 text-slate-950 shadow-md shadow-sky-500/40 transition-transform duration-150 active:scale-95",
+                                                className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold bg-sky-300/90 hover:bg-sky-400 text-slate-950 shadow-md shadow-sky-500/40 transition-transform duration-150 active:scale-95",
                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "𝕏 / Twitter"
                                                 }, void 0, false, {
@@ -3205,7 +3205,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 type: "button",
                                                 onClick: ()=>handleShare("instagram"),
-                                                className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold bg-pink-500 hover:bg-pink-400 text-white shadow-md shadow-pink-500/40 transition-transform duration-150 active:scale-95",
+                                                className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold bg-pink-700/90 hover:bg-pink-700 text-white shadow-md shadow-pink-500/40 transition-transform duration-150 active:scale-95",
                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Instagram"
                                                 }, void 0, false, {

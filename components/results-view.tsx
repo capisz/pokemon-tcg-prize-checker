@@ -568,7 +568,7 @@ export function ResultsView({
                     type="button"
                     onClick={() => handleShare("twitter")}
                     className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold
-                               bg-sky-500 hover:bg-sky-400 text-slate-950
+                               bg-sky-300/90 hover:bg-sky-400 text-slate-950
                                shadow-md shadow-sky-500/40 transition-transform duration-150 active:scale-95"
                   >
                     <span>𝕏 / Twitter</span>
@@ -590,7 +590,7 @@ export function ResultsView({
                     type="button"
                     onClick={() => handleShare("instagram")}
                     className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold
-                               bg-pink-500 hover:bg-pink-400 text-white
+                               bg-pink-700/90 hover:bg-pink-700 text-white
                                shadow-md shadow-pink-500/40 transition-transform duration-150 active:scale-95"
                   >
                     <span>Instagram</span>
