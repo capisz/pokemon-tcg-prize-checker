@@ -2687,10 +2687,7 @@ function computeProgressDelta(previous, current) {
     // Same tier: diff from previous.progress
     return currentProgress - (previous.progress ?? 0);
 }
-/* ---------- Shared panel styles ---------- */ // Matches the “emerald bar” feel from the game screen
-const resultsPanelClasses = "rounded-3xl border-0 ring-1 ring-emerald-500/30 " + "bg-emerald-900/75 shadow-[0_20px_45px_rgba(0,0,0,0.9)]";
-// Neutral dark container behind the card grid (no green tint)
-const gridPanelClasses = "rounded-3xl bg-slate-950/85 border border-slate-800/80 " + "shadow-[0_18px_40px_rgba(0,0,0,0.9)]";
+/* ---------- Shared panel styles ---------- */ const resultsPanelClasses = "rounded-3xl border-0 ring-1 ring-emerald-500/30 " + "bg-emerald-900/75 shadow-[0_20px_45px_rgba(0,0,0,0.9)]";
 function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLeft, totalTime }) {
     _s();
     const [selectedCards, setSelectedCards] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(new Set());
@@ -2699,8 +2696,8 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
     // Rank state
     const [rank, setRank] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [previousRank, setPreviousRank] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    // Rank modal (summary popup)
-    const [showRankModal, setShowRankModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Summary modal visibility
+    const [showSummary, setShowSummary] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const totalPrizes = prizeCards.length || 6;
     // Load personal best once
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
@@ -2816,8 +2813,8 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                     correct++;
                 }
                 // extra selected -> incorrect
-                for(let i = correctCount; i < selectedIds.length; i++){
-                    const id = selectedIds[i];
+                for(let i = 0; i < selectedIds.length - correctCount; i++){
+                    const id = selectedIds[correctCount + i];
                     status.set(id, "incorrect");
                     incorrect++;
                 }
@@ -2849,17 +2846,8 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
     ]);
     const handleSubmit = ()=>{
         setShowResults(true);
+        setShowSummary(true); // auto open on first submit
     };
-    // When we first show results, automatically open the rank modal
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "ResultsView.useEffect": ()=>{
-            if (showResults) {
-                setShowRankModal(true);
-            }
-        }
-    }["ResultsView.useEffect"], [
-        showResults
-    ]);
     const accuracy = totalPrizes > 0 ? Math.round(correctGuesses / totalPrizes * 100) : 0;
     // If timeLeft is null, assume 0 seconds used (fastest case)
     const usedTime = timeLeft == null ? 0 : Math.max(0, totalTime - timeLeft);
@@ -2954,33 +2942,29 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
             window.location.href = "/";
         }
     };
-    // ----- Social share handlers -----
+    // ----- Social share helpers -----
     const shareTextBase = `I scored ${score} points in PrizeCheckDrillr guessing my prize cards!`;
-    const handleShareTwitter = ()=>{
+    const handleShare = (platform)=>{
         if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
         ;
         const url = encodeURIComponent(window.location.href);
-        const text = encodeURIComponent(shareTextBase);
-        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank", "noopener,noreferrer");
-    };
-    const handleShareFacebook = ()=>{
-        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-        ;
-        const url = encodeURIComponent(window.location.href);
-        const quote = encodeURIComponent(shareTextBase);
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, "_blank", "noopener,noreferrer");
-    };
-    const handleShareInstagram = async ()=>{
-        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
-        ;
-        const shareText = `${shareTextBase} Try it here: ${window.location.href}`;
-        try {
-            await navigator.clipboard.writeText(shareText);
-            // Quick, non-fancy feedback – you can swap to a toast later
-            alert("Share text copied! Open Instagram and paste it into your post or story.");
-        } catch  {
-            window.prompt("Copy this text and share it on Instagram:", shareText);
+        if (platform === "twitter") {
+            const text = encodeURIComponent(shareTextBase);
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank", "noopener,noreferrer");
+            return;
         }
+        if (platform === "facebook") {
+            const quote = encodeURIComponent(shareTextBase);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, "_blank", "noopener,noreferrer");
+            return;
+        }
+        // instagram – copy text to clipboard
+        const shareText = `${shareTextBase} Try it here: ${window.location.href}`;
+        navigator.clipboard.writeText(shareText).then(()=>{
+            alert("Share text copied! Open Instagram and paste it into your post or story.");
+        }).catch(()=>{
+            window.prompt("Copy this text and share it on Instagram:", shareText);
+        });
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "container mx-auto max-w-7xl p-6 space-y-6 text-slate-50",
@@ -2996,7 +2980,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                 children: "Select the Prize Cards"
                             }, void 0, false, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 401,
+                                lineNumber: 394,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3004,13 +2988,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                 children: showResults ? "Here are your results." : "Select the 6 cards you believe were prizes."
                             }, void 0, false, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 409,
+                                lineNumber: 402,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/results-view.tsx",
-                        lineNumber: 400,
+                        lineNumber: 393,
                         columnNumber: 9
                     }, this),
                     !showResults ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3026,7 +3010,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                         children: selectedCards.size
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 420,
+                                        lineNumber: 413,
                                         columnNumber: 15
                                     }, this),
                                     " ",
@@ -3037,13 +3021,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                         children: totalPrizes
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 424,
+                                        lineNumber: 417,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 418,
+                                lineNumber: 411,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -3054,60 +3038,60 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                 children: "Submit Guesses"
                             }, void 0, false, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 428,
+                                lineNumber: 421,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/results-view.tsx",
-                        lineNumber: 417,
+                        lineNumber: 410,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex items-center justify-center sm:justify-end",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                             type: "button",
                             size: "sm",
-                            onClick: ()=>setShowRankModal(true),
+                            onClick: ()=>setShowSummary(true),
                             className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                             children: "View Summary"
                         }, void 0, false, {
                             fileName: "[project]/components/results-view.tsx",
-                            lineNumber: 439,
+                            lineNumber: 432,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/results-view.tsx",
-                        lineNumber: 438,
+                        lineNumber: 431,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/results-view.tsx",
-                lineNumber: 399,
+                lineNumber: 392,
                 columnNumber: 7
             }, this),
-            showResults && showRankModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            showResults && showSummary && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "relative w-full max-w-3xl mx-4",
+                    className: "relative w-full max-w-4xl mx-4",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4", resultsPanelClasses),
+                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4", resultsPanelClasses),
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
-                                onClick: ()=>setShowRankModal(false),
+                                onClick: ()=>setShowSummary(false),
                                 className: "absolute right-5 top-5 text-slate-400 hover:text-emerald-300 transition-colors",
                                 "aria-label": "Close summary",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
                                     className: "h-4 w-4"
                                 }, void 0, false, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 468,
+                                    lineNumber: 461,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 462,
+                                lineNumber: 455,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3123,7 +3107,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                         className: "h-6 w-6 text-amber-300"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 481,
+                                                        lineNumber: 474,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3134,7 +3118,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 children: score
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 483,
+                                                                lineNumber: 476,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3142,19 +3126,19 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 children: "Overall score"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 491,
+                                                                lineNumber: 484,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 482,
+                                                        lineNumber: 475,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 475,
+                                                lineNumber: 468,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3167,7 +3151,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                             children: "Personal Best:"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 499,
+                                                            lineNumber: 492,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3175,7 +3159,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                             children: personalBest ?? "—"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 500,
+                                                            lineNumber: 493,
                                                             columnNumber: 23
                                                         }, this),
                                                         isNewPB && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -3183,30 +3167,30 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                             children: "New PB"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 504,
+                                                            lineNumber: 497,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 498,
+                                                    lineNumber: 491,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 497,
+                                                lineNumber: 490,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 474,
+                                        lineNumber: 467,
                                         columnNumber: 17
                                     }, this),
                                     rank && previousRank && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex justify-center flex-1 mt-4 lg:mt-2",
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "scale-[1.3] drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]",
+                                            className: "w-32 sm:w-40 aspect-square flex items-center justify-center drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]",
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$rank$2d$display$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RankDisplay"], {
                                                 previous: previousRank,
                                                 current: rank,
@@ -3214,17 +3198,17 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                 lastScore: score
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 516,
+                                                lineNumber: 509,
                                                 columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 515,
+                                            lineNumber: 508,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 514,
+                                        lineNumber: 507,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3240,7 +3224,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 className: "h-4 w-4 text-emerald-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 530,
+                                                                lineNumber: 523,
                                                                 columnNumber: 23
                                                             }, this),
                                                             correctGuesses,
@@ -3249,7 +3233,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 529,
+                                                        lineNumber: 522,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3261,13 +3245,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 533,
+                                                        lineNumber: 526,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 528,
+                                                lineNumber: 521,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3280,14 +3264,14 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 className: "h-4 w-4 text-rose-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 540,
+                                                                lineNumber: 533,
                                                                 columnNumber: 23
                                                             }, this),
                                                             incorrectGuesses
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 539,
+                                                        lineNumber: 532,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3295,13 +3279,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                         children: "Wrong"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 543,
+                                                        lineNumber: 536,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 538,
+                                                lineNumber: 531,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3314,14 +3298,14 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 className: "h-4 w-4 text-orange-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 548,
+                                                                lineNumber: 541,
                                                                 columnNumber: 23
                                                             }, this),
                                                             missedPrizes
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 547,
+                                                        lineNumber: 540,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3329,13 +3313,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                         children: "Missed"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 551,
+                                                        lineNumber: 544,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 546,
+                                                lineNumber: 539,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3348,14 +3332,14 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 className: "h-4 w-4 text-sky-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 556,
+                                                                lineNumber: 549,
                                                                 columnNumber: 23
                                                             }, this),
                                                             formatTime(usedTime)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 555,
+                                                        lineNumber: 548,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3367,25 +3351,25 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 559,
+                                                        lineNumber: 552,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 554,
+                                                lineNumber: 547,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 527,
+                                        lineNumber: 520,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 472,
+                                lineNumber: 465,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3396,8 +3380,8 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                         children: "Share your score with friends:"
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 568,
-                                        columnNumber: 3
+                                        lineNumber: 561,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex flex-wrap justify-center gap-3",
@@ -3410,13 +3394,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                     children: "𝕏 / Twitter"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 581,
-                                                    columnNumber: 7
+                                                    lineNumber: 574,
+                                                    columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 574,
-                                                columnNumber: 5
+                                                lineNumber: 567,
+                                                columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 type: "button",
@@ -3426,13 +3410,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                     children: "Facebook"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 592,
-                                                    columnNumber: 7
+                                                    lineNumber: 585,
+                                                    columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 585,
-                                                columnNumber: 5
+                                                lineNumber: 578,
+                                                columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 type: "button",
@@ -3442,25 +3426,25 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                     children: "Instagram"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 603,
-                                                    columnNumber: 7
+                                                    lineNumber: 596,
+                                                    columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 596,
-                                                columnNumber: 5
+                                                lineNumber: 589,
+                                                columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 572,
-                                        columnNumber: 3
+                                        lineNumber: 565,
+                                        columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 567,
-                                columnNumber: 1
+                                lineNumber: 560,
+                                columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "pt-3 space-y-3",
@@ -3478,20 +3462,20 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 className: "w-4 h-4 rounded border-4 border-emerald-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 613,
+                                                                lineNumber: 606,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "Correct guess"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 614,
+                                                                lineNumber: 607,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 612,
+                                                        lineNumber: 605,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3501,20 +3485,20 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 className: "w-4 h-4 rounded border-4 border-rose-500"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 617,
+                                                                lineNumber: 610,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "Wrong guess"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 618,
+                                                                lineNumber: 611,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 616,
+                                                        lineNumber: 609,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3524,26 +3508,26 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 className: "w-4 h-4 rounded border-4 border-orange-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 621,
+                                                                lineNumber: 614,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: "Missed prize"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 622,
+                                                                lineNumber: 615,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 620,
+                                                        lineNumber: 613,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 611,
+                                                lineNumber: 604,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3552,17 +3536,20 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                                         type: "button",
                                                         size: "sm",
-                                                        onClick: handleImportNewListClick,
+                                                        onClick: ()=>{
+                                                            setShowSummary(false);
+                                                            handleImportNewListClick();
+                                                        },
                                                         className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                                                         children: "Import New List"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 628,
+                                                        lineNumber: 621,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                                         onClick: ()=>{
-                                                            setShowRankModal(false);
+                                                            setShowSummary(false);
                                                             onRestart();
                                                         },
                                                         size: "sm",
@@ -3572,26 +3559,26 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 className: "mr-2 h-4 w-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 645,
+                                                                lineNumber: 641,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "Play Again"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 637,
+                                                        lineNumber: 633,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 627,
+                                                lineNumber: 620,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 610,
+                                        lineNumber: 603,
                                         columnNumber: 17
                                     }, this),
                                     rank && rank.tier !== "masterball" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3611,12 +3598,12 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                             }
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 665,
+                                                            lineNumber: 661,
                                                             columnNumber: 29
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 664,
+                                                        lineNumber: 660,
                                                         columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3634,13 +3621,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/results-view.tsx",
-                                                                lineNumber: 676,
+                                                                lineNumber: 672,
                                                                 columnNumber: 31
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 673,
+                                                        lineNumber: 669,
                                                         columnNumber: 27
                                                     }, this)
                                                 ]
@@ -3648,29 +3635,29 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                         })()
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 653,
+                                        lineNumber: 649,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 609,
+                                lineNumber: 602,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/results-view.tsx",
-                        lineNumber: 455,
+                        lineNumber: 448,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/results-view.tsx",
-                    lineNumber: 454,
+                    lineNumber: 447,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/results-view.tsx",
-                lineNumber: 453,
+                lineNumber: 446,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -3691,7 +3678,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                     className: "w-full h-full object-cover"
                                 }, void 0, false, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 730,
+                                    lineNumber: 726,
                                     columnNumber: 19
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "w-full h-full bg-slate-800 flex items-center justify-center p-2",
@@ -3700,12 +3687,12 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                         children: card.name
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 737,
+                                        lineNumber: 733,
                                         columnNumber: 21
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 736,
+                                    lineNumber: 732,
                                     columnNumber: 19
                                 }, this),
                                 showResults && status !== "normal" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3717,12 +3704,12 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                 className: "h-3 w-3"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 748,
+                                                lineNumber: 744,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 747,
+                                            lineNumber: 743,
                                             columnNumber: 23
                                         }, this),
                                         status === "incorrect" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -3731,12 +3718,12 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                 className: "h-3 w-3"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 753,
+                                                lineNumber: 749,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 752,
+                                            lineNumber: 748,
                                             columnNumber: 23
                                         }, this),
                                         status === "missed" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -3744,13 +3731,13 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                             children: "Prize"
                                         }, void 0, false, {
                                             fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 757,
+                                            lineNumber: 753,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 745,
+                                    lineNumber: 741,
                                     columnNumber: 19
                                 }, this),
                                 !showResults && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3767,7 +3754,7 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 776,
+                                                lineNumber: 772,
                                                 columnNumber: 25
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3775,52 +3762,52 @@ function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLef
                                                 children: "Selected"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 779,
+                                                lineNumber: 775,
                                                 columnNumber: 25
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 775,
+                                        lineNumber: 771,
                                         columnNumber: 23
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "text-xs text-white text-center font-medium",
                                         children: card.name
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 784,
+                                        lineNumber: 780,
                                         columnNumber: 23
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 766,
+                                    lineNumber: 762,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, `${card.instanceId}-${index}`, true, {
                             fileName: "[project]/components/results-view.tsx",
-                            lineNumber: 714,
+                            lineNumber: 710,
                             columnNumber: 15
                         }, this);
                     })
                 }, void 0, false, {
                     fileName: "[project]/components/results-view.tsx",
-                    lineNumber: 708,
+                    lineNumber: 704,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/results-view.tsx",
-                lineNumber: 701,
+                lineNumber: 697,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/results-view.tsx",
-        lineNumber: 397,
+        lineNumber: 390,
         columnNumber: 5
     }, this);
 }
-_s(ResultsView, "dPo30cCm7aRyU34SrI6aOMN+hHQ=");
+_s(ResultsView, "39jfF/IU3FMGES6LaPNnw+FlZGY=");
 _c = ResultsView;
 var _c;
 __turbopack_context__.k.register(_c, "ResultsView");

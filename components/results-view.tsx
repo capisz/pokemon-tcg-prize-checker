@@ -11,7 +11,6 @@ import {
   RotateCcw,
   Timer,
   X,
-  Share2,
 } from "lucide-react"
 import type { PokemonCard } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -82,15 +81,9 @@ function computeProgressDelta(
 
 /* ---------- Shared panel styles ---------- */
 
-// Matches the “emerald bar” feel from the game screen
 const resultsPanelClasses =
   "rounded-3xl border-0 ring-1 ring-emerald-500/30 " +
   "bg-emerald-900/75 shadow-[0_20px_45px_rgba(0,0,0,0.9)]"
-
-// Neutral dark container behind the card grid (no green tint)
-const gridPanelClasses =
-  "rounded-3xl bg-slate-950/85 border border-slate-800/80 " +
-  "shadow-[0_18px_40px_rgba(0,0,0,0.9)]"
 
 export function ResultsView({
   allCards,
@@ -108,8 +101,8 @@ export function ResultsView({
   const [rank, setRank] = useState<RankState | null>(null)
   const [previousRank, setPreviousRank] = useState<RankState | null>(null)
 
-  // Rank modal (summary popup)
-  const [showRankModal, setShowRankModal] = useState(false)
+  // Summary modal visibility
+  const [showSummary, setShowSummary] = useState(false)
 
   const totalPrizes = prizeCards.length || 6
 
@@ -220,8 +213,8 @@ export function ResultsView({
       }
 
       // extra selected -> incorrect
-      for (let i = correctCount; i < selectedIds.length; i++) {
-        const id = selectedIds[i]
+      for (let i = 0; i < selectedIds.length - correctCount; i++) {
+        const id = selectedIds[correctCount + i]
         status.set(id, "incorrect")
         incorrect++
       }
@@ -243,14 +236,8 @@ export function ResultsView({
 
   const handleSubmit = () => {
     setShowResults(true)
+    setShowSummary(true) // auto open on first submit
   }
-
-  // When we first show results, automatically open the rank modal
-  useEffect(() => {
-    if (showResults) {
-      setShowRankModal(true)
-    }
-  }, [showResults])
 
   const accuracy =
     totalPrizes > 0 ? Math.round((correctGuesses / totalPrizes) * 100) : 0
@@ -354,43 +341,49 @@ export function ResultsView({
     }
   }
 
-  // ----- Social share handlers -----
-
+  // ----- Social share helpers -----
   const shareTextBase = `I scored ${score} points in PrizeCheckDrillr guessing my prize cards!`
 
-  const handleShareTwitter = () => {
+  const handleShare = (platform: "twitter" | "facebook" | "instagram") => {
     if (typeof window === "undefined") return
+
     const url = encodeURIComponent(window.location.href)
-    const text = encodeURIComponent(shareTextBase)
-    window.open(
-      `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
-      "_blank",
-      "noopener,noreferrer",
-    )
-  }
 
-  const handleShareFacebook = () => {
-    if (typeof window === "undefined") return
-    const url = encodeURIComponent(window.location.href)
-    const quote = encodeURIComponent(shareTextBase)
-    window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`,
-      "_blank",
-      "noopener,noreferrer",
-    )
-  }
-
-  const handleShareInstagram = async () => {
-    if (typeof window === "undefined") return
-    const shareText = `${shareTextBase} Try it here: ${window.location.href}`
-
-    try {
-      await navigator.clipboard.writeText(shareText)
-      // Quick, non-fancy feedback – you can swap to a toast later
-      alert("Share text copied! Open Instagram and paste it into your post or story.")
-    } catch {
-      window.prompt("Copy this text and share it on Instagram:", shareText)
+    if (platform === "twitter") {
+      const text = encodeURIComponent(shareTextBase)
+      window.open(
+        `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+        "_blank",
+        "noopener,noreferrer",
+      )
+      return
     }
+
+    if (platform === "facebook") {
+      const quote = encodeURIComponent(shareTextBase)
+      window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`,
+        "_blank",
+        "noopener,noreferrer",
+      )
+      return
+    }
+
+    // instagram – copy text to clipboard
+    const shareText = `${shareTextBase} Try it here: ${window.location.href}`
+    navigator.clipboard
+      .writeText(shareText)
+      .then(() => {
+        alert(
+          "Share text copied! Open Instagram and paste it into your post or story.",
+        )
+      })
+      .catch(() => {
+        window.prompt(
+          "Copy this text and share it on Instagram:",
+          shareText,
+        )
+      })
   }
 
   return (
@@ -439,7 +432,7 @@ export function ResultsView({
             <Button
               type="button"
               size="sm"
-              onClick={() => setShowRankModal(true)}
+              onClick={() => setShowSummary(true)}
               className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
             >
               View Summary
@@ -448,20 +441,20 @@ export function ResultsView({
         )}
       </div>
 
-      {/* Score + rank modal overlay */}
-      {showResults && showRankModal && (
+      {/* Summary modal */}
+      {showResults && showSummary && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-3xl mx-4">
+          <div className="relative w-full max-w-4xl mx-4">
             <Card
               className={cn(
-                "px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4",
+                "relative px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4",
                 resultsPanelClasses,
               )}
             >
               {/* Close button */}
               <button
                 type="button"
-                onClick={() => setShowRankModal(false)}
+                onClick={() => setShowSummary(false)}
                 className="absolute right-5 top-5 text-slate-400 hover:text-emerald-300 transition-colors"
                 aria-label="Close summary"
               >
@@ -512,7 +505,7 @@ export function ResultsView({
                 {/* Center: Rank */}
                 {rank && previousRank && (
                   <div className="flex justify-center flex-1 mt-4 lg:mt-2">
-                    <div className="scale-[1.3] drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]">
+                    <div className="w-32 sm:w-40 aspect-square flex items-center justify-center drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]">
                       <RankDisplay
                         previous={previousRank}
                         current={rank}
@@ -563,47 +556,47 @@ export function ResultsView({
                 </div>
               </div>
 
-             {/* Share row */}
-<div className="flex flex-col items-center gap-2 pt-2">
-  <p className="text-sm text-slate-200">
-    Share your score with friends:
-  </p>
+              {/* Share row */}
+              <div className="flex flex-col items-center gap-2 pt-2">
+                <p className="text-sm text-slate-200">
+                  Share your score with friends:
+                </p>
 
-  <div className="flex flex-wrap justify-center gap-3">
-    {/* X / Twitter */}
-    <button
-      type="button"
-      onClick={() => handleShare("twitter")}
-      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold
-                 bg-sky-500 hover:bg-sky-400 text-slate-950
-                 shadow-md shadow-sky-500/40 transition-transform duration-150 active:scale-95"
-    >
-      <span>𝕏 / Twitter</span>
-    </button>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {/* X / Twitter */}
+                  <button
+                    type="button"
+                    onClick={() => handleShare("twitter")}
+                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold
+                               bg-sky-500 hover:bg-sky-400 text-slate-950
+                               shadow-md shadow-sky-500/40 transition-transform duration-150 active:scale-95"
+                  >
+                    <span>𝕏 / Twitter</span>
+                  </button>
 
-    {/* Facebook */}
-    <button
-      type="button"
-      onClick={() => handleShare("facebook")}
-      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold
-                 bg-blue-600 hover:bg-blue-500 text-white
-                 shadow-md shadow-blue-600/40 transition-transform duration-150 active:scale-95"
-    >
-      <span>Facebook</span>
-    </button>
+                  {/* Facebook */}
+                  <button
+                    type="button"
+                    onClick={() => handleShare("facebook")}
+                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold
+                               bg-blue-600 hover:bg-blue-500 text-white
+                               shadow-md shadow-blue-600/40 transition-transform duration-150 active:scale-95"
+                  >
+                    <span>Facebook</span>
+                  </button>
 
-    {/* Instagram */}
-    <button
-      type="button"
-      onClick={() => handleShare("instagram")}
-      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold
-                 bg-pink-500 hover:bg-pink-400 text-white
-                 shadow-md shadow-pink-500/40 transition-transform duration-150 active:scale-95"
-    >
-      <span>Instagram</span>
-    </button>
-  </div>
-</div>
+                  {/* Instagram */}
+                  <button
+                    type="button"
+                    onClick={() => handleShare("instagram")}
+                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold
+                               bg-pink-500 hover:bg-pink-400 text-white
+                               shadow-md shadow-pink-500/40 transition-transform duration-150 active:scale-95"
+                  >
+                    <span>Instagram</span>
+                  </button>
+                </div>
+              </div>
 
               {/* Legend + Play Again + bottom progress bar */}
               <div className="pt-3 space-y-3">
@@ -628,7 +621,10 @@ export function ResultsView({
                     <Button
                       type="button"
                       size="sm"
-                      onClick={handleImportNewListClick}
+                      onClick={() => {
+                        setShowSummary(false)
+                        handleImportNewListClick()
+                      }}
                       className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
                     >
                       Import New List
@@ -636,7 +632,7 @@ export function ResultsView({
 
                     <Button
                       onClick={() => {
-                        setShowRankModal(false)
+                        setShowSummary(false)
                         onRestart()
                       }}
                       size="sm"
