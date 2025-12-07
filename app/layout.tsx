@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "PrizeCheckDrillr.io",
+  title: "PrizeCheckr.io",
   description: "Prize mapping trainer for competitive Pokémon TCG",
 }
 

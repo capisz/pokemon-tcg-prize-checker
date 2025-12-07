@@ -10,7 +10,7 @@ export function SiteFooter() {
         {/* Left: title + links */}
         <div className="space-y-2">
           <p className="text-xs font-semibold tracking-[0.16em] uppercase text-emerald-900">
-            PrizeCheckDrillr.io
+            PrizeCheckr.io
           </p>
           <p className="text-xs text-emerald-900/80">
             Use this and the tools below to become a better player.

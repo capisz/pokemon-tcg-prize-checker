@@ -218,7 +218,7 @@ export function DeckImport(props: DeckImportProps) {
             />
             <div className="flex flex-col">
               <h1 className="text-2xl font-semibold text-emerald-300">
-                PrizeCheckDrillr.io
+                PrizeCheckr.io
               </h1>
               <p className="text-xs sm:text-sm text-slate-400">
                 Paste your deck list and test how well you remember your prizes.{" "}

@@ -110,7 +110,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$music$2d$playe
 ;
 ;
 const metadata = {
-    title: "PrizeCheckDrillr.io",
+    title: "PrizeCheckr.io",
     description: "Prize mapping trainer for competitive Pokémon TCG"
 };
 function RootLayout({ children }) {

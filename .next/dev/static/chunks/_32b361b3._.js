@@ -838,7 +838,7 @@ function DeckImport(props) {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                                                 className: "text-2xl font-semibold text-emerald-300",
-                                                children: "PrizeCheckDrillr.io"
+                                                children: "PrizeCheckr.io"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-import.tsx",
                                                 lineNumber: 220,
@@ -3951,7 +3951,7 @@ function SiteFooter() {
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: "text-xs font-semibold tracking-[0.16em] uppercase text-emerald-900",
-                            children: "PrizeCheckDrillr.io"
+                            children: "PrizeCheckr.io"
                         }, void 0, false, {
                             fileName: "[project]/components/site-footer.tsx",
                             lineNumber: 12,
