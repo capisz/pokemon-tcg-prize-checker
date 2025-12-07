@@ -58,8 +58,8 @@ export function DeckImport(props: DeckImportProps) {
   const [error, setError] = useState<string | null>(null)
   const [hasAutoImported, setHasAutoImported] = useState(false)
 
-  // Help overlay state
-  const [showHelpOverlay, setShowHelpOverlay] = useState(false)
+  // Help overlay state – open by default on first load
+  const [showHelpOverlay, setShowHelpOverlay] = useState(true)
 
   // Keep textarea in sync with parent-provided initialText
   useEffect(() => {
@@ -211,9 +211,10 @@ export function DeckImport(props: DeckImportProps) {
               src="/sprite1_vector.svg"
               alt="PrizeCheckDrill mascot"
               className="
-                   h-24 w-30 md:h-12 md:w-18
-                   mascot-bob                                     
-                  drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]"
+                h-24 w-30 md:h-12 md:w-18
+                mascot-bob
+                drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]
+              "
               style={{ imageRendering: "pixelated" }}
             />
             <div className="flex flex-col">
@@ -237,33 +238,29 @@ export function DeckImport(props: DeckImportProps) {
             </div>
           </div>
 
-          {/* Right: Import button + ? icon */}
-          <div className="flex items-center gap-3">
-            <Button
-              size="sm"
-              onClick={handleImport}
-              disabled={isLoading || !rawText.trim()}
-              className="rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
-            >
-              {isLoading ? "Importing…" : "Import Deck"}
-            </Button>
+       {/* Right: help icon + Import button */}
+<div className="flex items-center gap-3">
+ <button
+  type="button"
+  onClick={() => setShowHelpOverlay(true)}
+  className="text-slate-400 hover:text-emerald-300 transition-transform duration-150 hover:scale-110 focus:outline-none"
+  aria-label="How to use PrizeCheckDrillr.io"
+>
+  <HelpCircle className="h-5 w-5" />
+</button>
 
-            {/* icon-only help button (no outer border circle) */}
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              aria-label="How to use PrizeCheckDrillr"
-              onClick={() => setShowHelpOverlay(true)}
-              className={cn(
-                "border-none bg-transparent shadow-none",
-                "hover:bg-transparent",
-                "text-emerald-300 hover:text-emerald-100"
-              )}
-            >
-              <HelpCircle className="h-5 w-5" />
-            </Button>
-          </div>
+
+  <Button
+    size="sm"
+    onClick={handleImport}
+    disabled={isLoading || !rawText.trim()}
+    className="rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
+  >
+    {isLoading ? "Importing…" : "Import Deck"}
+  </Button>
+</div>
+
+
         </div>
 
         {/* Text area */}
@@ -388,108 +385,151 @@ export function DeckImport(props: DeckImportProps) {
       </div>
 
       {/* Help overlay */}
-{showHelpOverlay && (
-  <div
-    className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-    onClick={() => setShowHelpOverlay(false)}
-  >
-    <Card
-      className="relative w-full max-w-lg mx-4 rounded-3xl bg-slate-950/95 border border-emerald-500/50 shadow-[0_24px_60px_rgba(0,0,0,0.9)] px-6 py-5 text-slate-50"
-      onClick={(e) => e.stopPropagation()}
-    >
-      {/* Close button */}
-      <button
-        type="button"
-        onClick={() => setShowHelpOverlay(false)}
-        className="absolute right-3 top-3 text-slate-400 hover:text-slate-100"
-        aria-label="Close help"
-      >
-        <X className="h-4 w-4" />
-      </button>
+      {showHelpOverlay && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          onClick={() => setShowHelpOverlay(false)}
+        >
+          <Card
+            className="relative w-full max-w-lg mx-4 rounded-3xl bg-slate-950/95 border border-emerald-500/50 shadow-[0_24px_60px_rgba(0,0,0,0.9)] px-6 py-5 text-slate-50"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setShowHelpOverlay(false)}
+              className="absolute right-3 top-3 text-slate-400 hover:text-slate-100"
+              aria-label="Close help"
+            >
+              <X className="h-4 w-4" />
+            </button>
 
-      <div className="flex items-center gap-2 mb-3">
-        <HelpCircle className="h-5 w-5 text-emerald-300" />
-        <h2 className="text-lg font-semibold">
-          <span className="text-emerald-300">How to use</span>{" "}
-          <span className="text-emerald-100">PrizeCheckDrillr</span>
-        </h2>
-      </div>
+            <div className="flex items-center gap-2 mb-3">
+              <HelpCircle className="h-5 w-5 text-emerald-300" />
+              <h2 className="text-lg font-semibold">
+                <span className="text-emerald-300">How to use</span>{" "}
+                <span className="text-emerald-100">PrizeCheckDrillr</span>
+              </h2>
+            </div>
 
-      <div className="space-y-3 text-sm leading-relaxed">
-        <p className="text-slate-300">
-          This tool simulates a real game: we{" "}
-          <span className="text-emerald-200 font-medium">shuffle your deck</span>,{" "}
-          <span className="text-emerald-200 font-medium">draw an opening hand</span>, set aside{" "}
-          <span className="text-emerald-200 font-medium">6 prize cards</span>, then ask you
-          to figure out what&apos;s missing.
-        </p>
+            <div className="space-y-3 text-sm leading-relaxed">
+              <p className="text-slate-300">
+                This tool simulates a real game: we{" "}
+                <span className="text-emerald-200 font-medium">
+                  shuffle your deck
+                </span>
+                ,{" "}
+                <span className="text-emerald-200 font-medium">
+                  draw an opening hand
+                </span>
+                , set aside{" "}
+                <span className="text-emerald-200 font-medium">
+                  6 prize cards
+                </span>
+                , then ask you to figure out what&apos;s missing.
+              </p>
 
-        <p>
-          <span className="font-semibold text-emerald-300">1. Import a deck</span>
-          <br />
-          Copy a deck&apos;s text export from{" "}
-          <span className="text-sky-300 font-semibold" >LimitlessTCG</span> or  <span className="text-sky-300 font-semibold">PTCGL</span> and paste it into
-          the box above, then click{" "}
-          <span className="font-semibold text-emerald-200">Import Deck</span>.
-        </p>
+              <p>
+                <span className="font-semibold text-emerald-300">
+                  1. Import a deck
+                </span>
+                <br />
+                Copy a deck&apos;s text export from{" "}
+                <span className="text-sky-300 font-semibold">
+                  LimitlessTCG
+                </span>{" "}
+                or <span className="text-sky-300 font-semibold">PTCGL</span> and
+                paste it into the box above, then click{" "}
+                <span className="font-semibold text-emerald-200">
+                  Import Deck
+                </span>
+                .
+              </p>
 
-        <p>
-          <span className="font-semibold text-emerald-300">2. Start the drill</span>
-          <br />
-          When the list looks correct, hit{" "}
-          <span className="font-semibold text-emerald-200">Start Game</span>. The app{" "}
-          <span className="text-emerald-200">shuffles</span>, draws your{" "}
-          <span className="text-emerald-200">starting hand</span>, and chooses{" "}
-          <span className="text-emerald-200">6 prizes</span>.
-        </p>
+              <p>
+                <span className="font-semibold text-emerald-300">
+                  2. Start the drill
+                </span>
+                <br />
+                When the list looks correct, hit{" "}
+                <span className="font-semibold text-emerald-200">
+                  Start Game
+                </span>
+                . The app{" "}
+                <span className="text-emerald-200">shuffles</span>, draws your{" "}
+                <span className="text-emerald-200">starting hand</span>, and
+                chooses{" "}
+                <span className="text-emerald-200">6 prizes</span>.
+              </p>
 
-        <p>
-          <span className="font-semibold text-emerald-300">3. Scan your deck</span>
-          <br />
-          On the game screen, scroll through your deck and mentally track what should be
-          there. Try to spot patterns of what might be in your prizes. Reorganize your
-          cards using{" "}
-          <span className="font-semibold text-emerald-200">keys</span> or{" "}
-          <span className="font-semibold text-emerald-200">clicking</span> to help visually.
-        </p>
+              <p>
+                <span className="font-semibold text-emerald-300">
+                  3. Scan your deck
+                </span>
+                <br />
+                On the game screen, scroll through your deck and mentally track
+                what should be there. Try to spot patterns of what might be in
+                your prizes. Reorganize your cards using{" "}
+                <span className="font-semibold text-emerald-200">keys</span> or{" "}
+                <span className="font-semibold text-emerald-200">clicking</span>{" "}
+                to help visually.
+              </p>
 
-        <p>
-          <span className="font-semibold text-emerald-300">4. Guess your prizes</span>
-          <br />
-          When the timer ends or you click{" "}
-          <span className="font-semibold text-emerald-200">Guess Prizes</span>, select the{" "}
-          <span className="font-semibold text-emerald-200">6 cards</span> you think are prized.
-          The results screen shows your{" "}
-          <span className="text-emerald-200">accuracy</span>,{" "}
-          <span className="text-emerald-200">score</span>, and{" "}
-          <span className="text-emerald-200">rank progress</span>.
-        </p>
+              <p>
+                <span className="font-semibold text-emerald-300">
+                  4. Guess your prizes
+                </span>
+                <br />
+                When the timer ends or you click{" "}
+                <span className="font-semibold text-emerald-200">
+                  Guess Prizes
+                </span>
+                , select the{" "}
+                <span className="font-semibold text-emerald-200">
+                  6 cards
+                </span>{" "}
+                you think are prized. The results screen shows your{" "}
+                <span className="text-emerald-200">accuracy</span>,{" "}
+                <span className="text-emerald-200">score</span>, and{" "}
+                <span className="text-emerald-200">rank progress</span>.
+              </p>
 
-        <div className="mt-2 border-t border-slate-800 pt-3 text-xs text-slate-300 space-y-1">
-          <p className="font-semibold text-emerald-300">Controls (in game):</p>
-          <p>
-            • <span className="font-semibold text-emerald-200">Arrow keys / mouse wheel</span>:{" "}
-            move through the deck
-          </p>
-          <p>
-            • <span className="font-semibold text-emerald-200">Left click / A</span>: bring a
-            card to the front
-          </p>
-          <p>
-            • <span className="font-semibold text-emerald-200">Right click / D</span>: send a
-            card to the back
-          </p>
+              <div className="mt-2 border-t border-slate-800 pt-3 text-xs text-slate-300 space-y-1">
+                <p className="font-semibold text-emerald-300">
+                  Controls (in game):
+                </p>
+                <p>
+                  •{" "}
+                  <span className="font-semibold text-emerald-200">
+                    Arrow keys / mouse wheel
+                  </span>
+                  : move through the deck
+                </p>
+                <p>
+                  •{" "}
+                  <span className="font-semibold text-emerald-200">
+                    Left click / A
+                  </span>
+                  : bring a card to the front
+                </p>
+                <p>
+                  •{" "}
+                  <span className="font-semibold text-emerald-200">
+                    Right click / D
+                  </span>
+                  : send a card to the back
+                </p>
+              </div>
+
+              <p className="pt-2 text-[11px] text-slate-400">
+                <span className="text-emerald-300 font-semibold">Tip:</span>{" "}
+                Don&apos;t write anything down so you can build your deck
+                memorization and visualization skills.
+              </p>
+            </div>
+          </Card>
         </div>
-
-        <p className="pt-2 text-[11px] text-slate-400">
-          <span className="text-emerald-300 font-semibold">Tip:</span>{" "}
-          Don&apos;t write anything down so you can build your deck memorization and visualization skills.
-        </p>
-      </div>
-    </Card>
-  </div>
-)}
-
+      )}
     </div>
   )
 }

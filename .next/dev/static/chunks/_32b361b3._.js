@@ -688,8 +688,8 @@ function DeckImport(props) {
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [hasAutoImported, setHasAutoImported] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    // Help overlay state
-    const [showHelpOverlay, setShowHelpOverlay] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Help overlay state – open by default on first load
+    const [showHelpOverlay, setShowHelpOverlay] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     // Keep textarea in sync with parent-provided initialText
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "DeckImport.useEffect": ()=>{
@@ -824,7 +824,7 @@ function DeckImport(props) {
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                                         src: "/sprite1_vector.svg",
                                         alt: "PrizeCheckDrill mascot",
-                                        className: " h-24 w-30 md:h-12 md:w-18 mascot-bob                                      drop-shadow-[0_0_8px_rgba(52,211,153,0.6)]",
+                                        className: " h-24 w-30 md:h-12 md:w-18 mascot-bob drop-shadow-[0_0_8px_rgba(52,211,153,0.6)] ",
                                         style: {
                                             imageRendering: "pixelated"
                                         }
@@ -841,7 +841,7 @@ function DeckImport(props) {
                                                 children: "PrizeCheckr.io"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 220,
+                                                lineNumber: 221,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -860,20 +860,20 @@ function DeckImport(props) {
                                                         children: "LimitlessTCG"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/deck-import.tsx",
-                                                        lineNumber: 226,
+                                                        lineNumber: 227,
                                                         columnNumber: 17
                                                     }, this),
                                                     "."
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 223,
+                                                lineNumber: 224,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 219,
+                                        lineNumber: 220,
                                         columnNumber: 13
                                     }, this)
                                 ]
@@ -885,41 +885,39 @@ function DeckImport(props) {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex items-center gap-3",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                        size: "sm",
-                                        onClick: handleImport,
-                                        disabled: isLoading || !rawText.trim(),
-                                        className: "rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
-                                        children: isLoading ? "Importing…" : "Import Deck"
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 242,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
-                                        size: "icon",
-                                        variant: "ghost",
-                                        "aria-label": "How to use PrizeCheckDrillr",
                                         onClick: ()=>setShowHelpOverlay(true),
-                                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("border-none bg-transparent shadow-none", "hover:bg-transparent", "text-emerald-300 hover:text-emerald-100"),
+                                        className: "text-slate-400 hover:text-emerald-300 transition-transform duration-150 hover:scale-110 focus:outline-none",
+                                        "aria-label": "How to use PrizeCheckDrillr.io",
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$help$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__HelpCircle$3e$__["HelpCircle"], {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 264,
-                                            columnNumber: 15
+                                            lineNumber: 249,
+                                            columnNumber: 3
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 252,
-                                        columnNumber: 13
+                                        lineNumber: 243,
+                                        columnNumber: 2
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                        size: "sm",
+                                        onClick: handleImport,
+                                        disabled: isLoading || !rawText.trim(),
+                                        className: "rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95",
+                                        children: isLoading ? "Importing…" : "Import Deck"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/deck-import.tsx",
+                                        lineNumber: 253,
+                                        columnNumber: 3
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 241,
-                                columnNumber: 11
+                                lineNumber: 242,
+                                columnNumber: 1
                             }, this)
                         ]
                     }, void 0, true, {
@@ -945,7 +943,7 @@ function DeckImport(props) {
 ...`
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 272,
+                                    lineNumber: 269,
                                     columnNumber: 13
                                 }, this),
                                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -953,23 +951,23 @@ function DeckImport(props) {
                                     children: error
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 285,
+                                    lineNumber: 282,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/deck-import.tsx",
-                            lineNumber: 271,
+                            lineNumber: 268,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/deck-import.tsx",
-                        lineNumber: 270,
+                        lineNumber: 267,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$featured$2d$deck$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FeaturedDeckSection"], {}, void 0, false, {
                         fileName: "[project]/components/deck-import.tsx",
-                        lineNumber: 291,
+                        lineNumber: 288,
                         columnNumber: 9
                     }, this),
                     previewCards.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -993,18 +991,18 @@ function DeckImport(props) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 303,
+                                                    lineNumber: 300,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 300,
+                                            lineNumber: 297,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 299,
+                                        lineNumber: 296,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1031,7 +1029,7 @@ function DeckImport(props) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/deck-import.tsx",
-                                                                lineNumber: 333,
+                                                                lineNumber: 330,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1039,13 +1037,13 @@ function DeckImport(props) {
                                                                 children: card.name
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/deck-import.tsx",
-                                                                lineNumber: 336,
+                                                                lineNumber: 333,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/deck-import.tsx",
-                                                        lineNumber: 332,
+                                                        lineNumber: 329,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1057,25 +1055,25 @@ function DeckImport(props) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/deck-import.tsx",
-                                                        lineNumber: 338,
+                                                        lineNumber: 335,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, card.id, true, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 320,
+                                                lineNumber: 317,
                                                 columnNumber: 21
                                             }, this);
                                         })
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 312,
+                                        lineNumber: 309,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 297,
+                                lineNumber: 294,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1089,7 +1087,7 @@ function DeckImport(props) {
                                         children: "Start Game"
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 350,
+                                        lineNumber: 347,
                                         columnNumber: 17
                                     }, this),
                                     hoveredCard ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1103,19 +1101,19 @@ function DeckImport(props) {
                                                     className: "w-full h-full object-cover"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 365,
+                                                    lineNumber: 362,
                                                     columnNumber: 23
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "w-full h-full flex items-center justify-center text-xs text-slate-400",
                                                     children: hoveredCard.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 371,
+                                                    lineNumber: 368,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 362,
+                                                lineNumber: 359,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1123,7 +1121,7 @@ function DeckImport(props) {
                                                 children: hoveredCard.name
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 376,
+                                                lineNumber: 373,
                                                 columnNumber: 19
                                             }, this)
                                         ]
@@ -1132,19 +1130,19 @@ function DeckImport(props) {
                                         children: "Hover a card in the list to preview it."
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 381,
+                                        lineNumber: 378,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 348,
+                                lineNumber: 345,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/deck-import.tsx",
-                        lineNumber: 295,
+                        lineNumber: 292,
                         columnNumber: 11
                     }, this)
                 ]
@@ -1169,13 +1167,13 @@ function DeckImport(props) {
                                 className: "h-4 w-4"
                             }, void 0, false, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 407,
-                                columnNumber: 9
+                                lineNumber: 404,
+                                columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/deck-import.tsx",
-                            lineNumber: 401,
-                            columnNumber: 7
+                            lineNumber: 398,
+                            columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "flex items-center gap-2 mb-3",
@@ -1184,8 +1182,8 @@ function DeckImport(props) {
                                     className: "h-5 w-5 text-emerald-300"
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 411,
-                                    columnNumber: 9
+                                    lineNumber: 408,
+                                    columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                     className: "text-lg font-semibold",
@@ -1195,8 +1193,8 @@ function DeckImport(props) {
                                             children: "How to use"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 413,
-                                            columnNumber: 11
+                                            lineNumber: 410,
+                                            columnNumber: 17
                                         }, this),
                                         " ",
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1204,20 +1202,20 @@ function DeckImport(props) {
                                             children: "PrizeCheckDrillr"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 414,
-                                            columnNumber: 11
+                                            lineNumber: 411,
+                                            columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 412,
-                                    columnNumber: 9
+                                    lineNumber: 409,
+                                    columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/deck-import.tsx",
-                            lineNumber: 410,
-                            columnNumber: 7
+                            lineNumber: 407,
+                            columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-3 text-sm leading-relaxed",
@@ -1232,8 +1230,8 @@ function DeckImport(props) {
                                             children: "shuffle your deck"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 421,
-                                            columnNumber: 11
+                                            lineNumber: 418,
+                                            columnNumber: 17
                                         }, this),
                                         ",",
                                         " ",
@@ -1243,7 +1241,7 @@ function DeckImport(props) {
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
                                             lineNumber: 422,
-                                            columnNumber: 11
+                                            columnNumber: 17
                                         }, this),
                                         ", set aside",
                                         " ",
@@ -1252,15 +1250,15 @@ function DeckImport(props) {
                                             children: "6 prize cards"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 423,
-                                            columnNumber: 11
+                                            lineNumber: 426,
+                                            columnNumber: 17
                                         }, this),
                                         ", then ask you to figure out what's missing."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 419,
-                                    columnNumber: 9
+                                    lineNumber: 416,
+                                    columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: [
@@ -1269,13 +1267,13 @@ function DeckImport(props) {
                                             children: "1. Import a deck"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 428,
-                                            columnNumber: 11
+                                            lineNumber: 433,
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 429,
-                                            columnNumber: 11
+                                            lineNumber: 436,
+                                            columnNumber: 17
                                         }, this),
                                         "Copy a deck's text export from",
                                         " ",
@@ -1284,17 +1282,18 @@ function DeckImport(props) {
                                             children: "LimitlessTCG"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 431,
-                                            columnNumber: 11
+                                            lineNumber: 438,
+                                            columnNumber: 17
                                         }, this),
-                                        " or  ",
+                                        " ",
+                                        "or ",
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "text-sky-300 font-semibold",
                                             children: "PTCGL"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 431,
-                                            columnNumber: 81
+                                            lineNumber: 441,
+                                            columnNumber: 20
                                         }, this),
                                         " and paste it into the box above, then click",
                                         " ",
@@ -1303,15 +1302,15 @@ function DeckImport(props) {
                                             children: "Import Deck"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 433,
-                                            columnNumber: 11
+                                            lineNumber: 443,
+                                            columnNumber: 17
                                         }, this),
                                         "."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 427,
-                                    columnNumber: 9
+                                    lineNumber: 432,
+                                    columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: [
@@ -1320,13 +1319,13 @@ function DeckImport(props) {
                                             children: "2. Start the drill"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 437,
-                                            columnNumber: 11
+                                            lineNumber: 450,
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 438,
-                                            columnNumber: 11
+                                            lineNumber: 453,
+                                            columnNumber: 17
                                         }, this),
                                         "When the list looks correct, hit",
                                         " ",
@@ -1335,8 +1334,8 @@ function DeckImport(props) {
                                             children: "Start Game"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 440,
-                                            columnNumber: 11
+                                            lineNumber: 455,
+                                            columnNumber: 17
                                         }, this),
                                         ". The app",
                                         " ",
@@ -1345,8 +1344,8 @@ function DeckImport(props) {
                                             children: "shuffles"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 441,
-                                            columnNumber: 11
+                                            lineNumber: 459,
+                                            columnNumber: 17
                                         }, this),
                                         ", draws your",
                                         " ",
@@ -1355,8 +1354,8 @@ function DeckImport(props) {
                                             children: "starting hand"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 442,
-                                            columnNumber: 11
+                                            lineNumber: 460,
+                                            columnNumber: 17
                                         }, this),
                                         ", and chooses",
                                         " ",
@@ -1365,15 +1364,15 @@ function DeckImport(props) {
                                             children: "6 prizes"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 443,
-                                            columnNumber: 11
+                                            lineNumber: 462,
+                                            columnNumber: 17
                                         }, this),
                                         "."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 436,
-                                    columnNumber: 9
+                                    lineNumber: 449,
+                                    columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: [
@@ -1382,13 +1381,13 @@ function DeckImport(props) {
                                             children: "3. Scan your deck"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 447,
-                                            columnNumber: 11
+                                            lineNumber: 466,
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 448,
-                                            columnNumber: 11
+                                            lineNumber: 469,
+                                            columnNumber: 17
                                         }, this),
                                         "On the game screen, scroll through your deck and mentally track what should be there. Try to spot patterns of what might be in your prizes. Reorganize your cards using",
                                         " ",
@@ -1397,8 +1396,8 @@ function DeckImport(props) {
                                             children: "keys"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 452,
-                                            columnNumber: 11
+                                            lineNumber: 473,
+                                            columnNumber: 17
                                         }, this),
                                         " or",
                                         " ",
@@ -1407,15 +1406,16 @@ function DeckImport(props) {
                                             children: "clicking"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 453,
-                                            columnNumber: 11
+                                            lineNumber: 474,
+                                            columnNumber: 17
                                         }, this),
-                                        " to help visually."
+                                        " ",
+                                        "to help visually."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 446,
-                                    columnNumber: 9
+                                    lineNumber: 465,
+                                    columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: [
@@ -1424,13 +1424,13 @@ function DeckImport(props) {
                                             children: "4. Guess your prizes"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 457,
-                                            columnNumber: 11
+                                            lineNumber: 479,
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 458,
-                                            columnNumber: 11
+                                            lineNumber: 482,
+                                            columnNumber: 17
                                         }, this),
                                         "When the timer ends or you click",
                                         " ",
@@ -1439,8 +1439,8 @@ function DeckImport(props) {
                                             children: "Guess Prizes"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 460,
-                                            columnNumber: 11
+                                            lineNumber: 484,
+                                            columnNumber: 17
                                         }, this),
                                         ", select the",
                                         " ",
@@ -1449,18 +1449,19 @@ function DeckImport(props) {
                                             children: "6 cards"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 461,
-                                            columnNumber: 11
+                                            lineNumber: 488,
+                                            columnNumber: 17
                                         }, this),
-                                        " you think are prized. The results screen shows your",
+                                        " ",
+                                        "you think are prized. The results screen shows your",
                                         " ",
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "text-emerald-200",
                                             children: "accuracy"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 463,
-                                            columnNumber: 11
+                                            lineNumber: 492,
+                                            columnNumber: 17
                                         }, this),
                                         ",",
                                         " ",
@@ -1469,8 +1470,8 @@ function DeckImport(props) {
                                             children: "score"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 464,
-                                            columnNumber: 11
+                                            lineNumber: 493,
+                                            columnNumber: 17
                                         }, this),
                                         ", and",
                                         " ",
@@ -1479,15 +1480,15 @@ function DeckImport(props) {
                                             children: "rank progress"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 465,
-                                            columnNumber: 11
+                                            lineNumber: 494,
+                                            columnNumber: 17
                                         }, this),
                                         "."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 456,
-                                    columnNumber: 9
+                                    lineNumber: 478,
+                                    columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "mt-2 border-t border-slate-800 pt-3 text-xs text-slate-300 space-y-1",
@@ -1497,70 +1498,71 @@ function DeckImport(props) {
                                             children: "Controls (in game):"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 469,
-                                            columnNumber: 11
+                                            lineNumber: 498,
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: [
-                                                "• ",
+                                                "•",
+                                                " ",
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "font-semibold text-emerald-200",
                                                     children: "Arrow keys / mouse wheel"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 471,
-                                                    columnNumber: 15
+                                                    lineNumber: 503,
+                                                    columnNumber: 19
                                                 }, this),
-                                                ":",
-                                                " ",
-                                                "move through the deck"
+                                                ": move through the deck"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 470,
-                                            columnNumber: 11
+                                            lineNumber: 501,
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: [
-                                                "• ",
+                                                "•",
+                                                " ",
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "font-semibold text-emerald-200",
                                                     children: "Left click / A"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 475,
-                                                    columnNumber: 15
+                                                    lineNumber: 510,
+                                                    columnNumber: 19
                                                 }, this),
                                                 ": bring a card to the front"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 474,
-                                            columnNumber: 11
+                                            lineNumber: 508,
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: [
-                                                "• ",
+                                                "•",
+                                                " ",
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     className: "font-semibold text-emerald-200",
                                                     children: "Right click / D"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 479,
-                                                    columnNumber: 15
+                                                    lineNumber: 517,
+                                                    columnNumber: 19
                                                 }, this),
                                                 ": send a card to the back"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 478,
-                                            columnNumber: 11
+                                            lineNumber: 515,
+                                            columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 468,
-                                    columnNumber: 9
+                                    lineNumber: 497,
+                                    columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "pt-2 text-[11px] text-slate-400",
@@ -1570,33 +1572,33 @@ function DeckImport(props) {
                                             children: "Tip:"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 485,
-                                            columnNumber: 11
+                                            lineNumber: 525,
+                                            columnNumber: 17
                                         }, this),
                                         " ",
                                         "Don't write anything down so you can build your deck memorization and visualization skills."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 484,
-                                    columnNumber: 9
+                                    lineNumber: 524,
+                                    columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/deck-import.tsx",
-                            lineNumber: 418,
-                            columnNumber: 7
+                            lineNumber: 415,
+                            columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/deck-import.tsx",
-                    lineNumber: 396,
-                    columnNumber: 5
+                    lineNumber: 393,
+                    columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/deck-import.tsx",
-                lineNumber: 392,
-                columnNumber: 3
+                lineNumber: 389,
+                columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
@@ -1605,7 +1607,7 @@ function DeckImport(props) {
         columnNumber: 5
     }, this);
 }
-_s(DeckImport, "r0Qg5/BDMePGzxd8VCv4lQ+ImXc=");
+_s(DeckImport, "xL/rq/lbqq4HgfPVK6ekwwEpJXI=");
 _c = DeckImport;
 var _c;
 __turbopack_context__.k.register(_c, "DeckImport");
@@ -2632,7 +2634,6 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/card.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/button.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/badge.tsx [app-client] (ecmascript)");
@@ -2641,13 +2642,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__XCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/circle-x.js [app-client] (ecmascript) <export default as XCircle>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/rotate-ccw.js [app-client] (ecmascript) <export default as RotateCcw>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$timer$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Timer$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/timer.js [app-client] (ecmascript) <export default as Timer>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$rank$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/rank.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$rank$2d$display$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/rank-display.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
-;
 ;
 ;
 ;
@@ -2690,17 +2691,16 @@ function computeProgressDelta(previous, current) {
 const resultsPanelClasses = "rounded-3xl border-0 ring-1 ring-emerald-500/30 " + "bg-emerald-900/75 shadow-[0_20px_45px_rgba(0,0,0,0.9)]";
 // Neutral dark container behind the card grid (no green tint)
 const gridPanelClasses = "rounded-3xl bg-slate-950/85 border border-slate-800/80 " + "shadow-[0_18px_40px_rgba(0,0,0,0.9)]";
-function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
+function ResultsView({ allCards, prizeCards, onRestart, onImportNewList, timeLeft, totalTime }) {
     _s();
-    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const [selectedCards, setSelectedCards] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(new Set());
     const [showResults, setShowResults] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [personalBest, setPersonalBest] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    // NEW: whether the summary overlay is open
-    const [isSummaryOpen, setIsSummaryOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     // Rank state
     const [rank, setRank] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [previousRank, setPreviousRank] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    // Rank modal (summary popup)
+    const [showRankModal, setShowRankModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const totalPrizes = prizeCards.length || 6;
     // Load personal best once
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
@@ -2849,16 +2849,20 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
     ]);
     const handleSubmit = ()=>{
         setShowResults(true);
-        setIsSummaryOpen(true); // open overlay when results first appear
     };
-    const handleImportNewList = ()=>{
-        if ("TURBOPACK compile-time truthy", 1) {
-            window.location.href = "/";
+    // When we first show results, automatically open the rank modal
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "ResultsView.useEffect": ()=>{
+            if (showResults) {
+                setShowRankModal(true);
+            }
         }
-    };
+    }["ResultsView.useEffect"], [
+        showResults
+    ]);
     const accuracy = totalPrizes > 0 ? Math.round(correctGuesses / totalPrizes * 100) : 0;
-    // If timeLeft is null for some reason, assume they used the full timer
-    const usedTime = timeLeft == null ? totalTime : Math.max(0, totalTime - timeLeft);
+    // If timeLeft is null, assume 0 seconds used (fastest case)
+    const usedTime = timeLeft == null ? 0 : Math.max(0, totalTime - timeLeft);
     const timePercent = totalTime === 0 ? 0 : Math.max(0, Math.min(1, (totalTime - usedTime) / totalTime));
     // scoring: 70% accuracy, 30% speed, scaled to 0–1000
     const score = (()=>{
@@ -2922,15 +2926,15 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
     })();
     const scoreBadgeBg = (()=>{
         if (score >= 800) {
-            return "bg-emerald-600/60 border-emerald-900 ";
+            return "bg-emerald-600/60 border-emerald-900";
         }
         if (score >= 600) {
-            return "bg-lime-600/60 border-lime-900 ";
+            return "bg-lime-600/60 border-lime-900";
         }
         if (score >= 400) {
-            return "bg-amber-600/60 border-amber-900 ";
+            return "bg-amber-600/60 border-amber-900";
         }
-        return "bg-rose-600/60 border-rose-900 ";
+        return "bg-rose-600/60 border-rose-900";
     })();
     const getCardStatus = (cardId)=>{
         if (!showResults) {
@@ -2942,6 +2946,41 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}:${secs.toString().padStart(2, "0")}`;
+    };
+    const handleImportNewListClick = ()=>{
+        if (onImportNewList) {
+            onImportNewList();
+        } else if ("TURBOPACK compile-time truthy", 1) {
+            window.location.href = "/";
+        }
+    };
+    // ----- Social share handlers -----
+    const shareTextBase = `I scored ${score} points in PrizeCheckDrillr guessing my prize cards!`;
+    const handleShareTwitter = ()=>{
+        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+        ;
+        const url = encodeURIComponent(window.location.href);
+        const text = encodeURIComponent(shareTextBase);
+        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank", "noopener,noreferrer");
+    };
+    const handleShareFacebook = ()=>{
+        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+        ;
+        const url = encodeURIComponent(window.location.href);
+        const quote = encodeURIComponent(shareTextBase);
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, "_blank", "noopener,noreferrer");
+    };
+    const handleShareInstagram = async ()=>{
+        if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+        ;
+        const shareText = `${shareTextBase} Try it here: ${window.location.href}`;
+        try {
+            await navigator.clipboard.writeText(shareText);
+            // Quick, non-fancy feedback – you can swap to a toast later
+            alert("Share text copied! Open Instagram and paste it into your post or story.");
+        } catch  {
+            window.prompt("Copy this text and share it on Instagram:", shareText);
+        }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "container mx-auto max-w-7xl p-6 space-y-6 text-slate-50",
@@ -2957,7 +2996,7 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                 children: "Select the Prize Cards"
                             }, void 0, false, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 366,
+                                lineNumber: 401,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2965,16 +3004,16 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                 children: showResults ? "Here are your results." : "Select the 6 cards you believe were prizes."
                             }, void 0, false, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 374,
+                                lineNumber: 409,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/results-view.tsx",
-                        lineNumber: 365,
+                        lineNumber: 400,
                         columnNumber: 9
                     }, this),
-                    !showResults && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    !showResults ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex items-center justify-center sm:justify-end gap-3",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2987,7 +3026,7 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                         children: selectedCards.size
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 385,
+                                        lineNumber: 420,
                                         columnNumber: 15
                                     }, this),
                                     " ",
@@ -2998,13 +3037,13 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                         children: totalPrizes
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 389,
+                                        lineNumber: 424,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 383,
+                                lineNumber: 418,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -3015,537 +3054,623 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                 children: "Submit Guesses"
                             }, void 0, false, {
                                 fileName: "[project]/components/results-view.tsx",
-                                lineNumber: 393,
+                                lineNumber: 428,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/results-view.tsx",
-                        lineNumber: 382,
+                        lineNumber: 417,
+                        columnNumber: 11
+                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center justify-center sm:justify-end",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                            type: "button",
+                            size: "sm",
+                            onClick: ()=>setShowRankModal(true),
+                            className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
+                            children: "View Summary"
+                        }, void 0, false, {
+                            fileName: "[project]/components/results-view.tsx",
+                            lineNumber: 439,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/components/results-view.tsx",
+                        lineNumber: 438,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/results-view.tsx",
-                lineNumber: 364,
+                lineNumber: 399,
                 columnNumber: 7
             }, this),
-            showResults && !isSummaryOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex justify-center mt-1",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                    type: "button",
-                    size: "sm",
-                    onClick: ()=>setIsSummaryOpen(true),
-                    className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
-                    children: "View summary"
-                }, void 0, false, {
-                    fileName: "[project]/components/results-view.tsx",
-                    lineNumber: 408,
-                    columnNumber: 5
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/components/results-view.tsx",
-                lineNumber: 407,
-                columnNumber: 3
-            }, this),
-            showResults && isSummaryOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "fixed inset-0 z-40 flex items-center justify-center bg-slate-950/70 backdrop-blur-md",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative w-[min(960px,100%-2rem)] max-h-[80vh] overflow-y-auto px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4", resultsPanelClasses),
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            type: "button",
-                            onClick: ()=>setIsSummaryOpen(false),
-                            className: "absolute right-4 top-4 text-slate-400 hover:text-slate-100",
-                            "aria-label": "Close summary",
-                            children: "✕"
-                        }, void 0, false, {
-                            fileName: "[project]/components/results-view.tsx",
-                            lineNumber: 430,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mt-4",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center gap-4",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex items-center gap-3 rounded-2xl px-4 py-2 border", scoreBadgeBg),
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trophy$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trophy$3e$__["Trophy"], {
-                                                    className: "h-6 w-6 text-amber-300"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 449,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex flex-col items-start",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("text-2xl sm:text-3xl font-semibold", scoreColor),
-                                                            children: score
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 451,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "text-[11px] uppercase tracking-wide text-slate-300",
-                                                            children: "Overall score"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 459,
-                                                            columnNumber: 21
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 450,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 443,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-col gap-1 text-xs sm:text-sm text-slate-300",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex items-center gap-2",
+            showResults && showRankModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "relative w-full max-w-3xl mx-4",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
+                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4", resultsPanelClasses),
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "button",
+                                onClick: ()=>setShowRankModal(false),
+                                className: "absolute right-5 top-5 text-slate-400 hover:text-emerald-300 transition-colors",
+                                "aria-label": "Close summary",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                    className: "h-4 w-4"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/results-view.tsx",
+                                    lineNumber: 468,
+                                    columnNumber: 17
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/results-view.tsx",
+                                lineNumber: 462,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center gap-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("flex items-center gap-3 rounded-2xl px-4 py-2 border", scoreBadgeBg),
                                                 children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        className: "text-slate-400",
-                                                        children: "Personal Best:"
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trophy$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trophy$3e$__["Trophy"], {
+                                                        className: "h-6 w-6 text-amber-300"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 467,
+                                                        lineNumber: 481,
                                                         columnNumber: 21
                                                     }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        className: "font-semibold",
-                                                        children: personalBest ?? "—"
-                                                    }, void 0, false, {
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex flex-col items-start",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("text-2xl sm:text-3xl font-semibold", scoreColor),
+                                                                children: score
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 483,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-[11px] uppercase tracking-wide text-slate-300",
+                                                                children: "Overall score"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 491,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 468,
+                                                        lineNumber: 482,
                                                         columnNumber: 21
-                                                    }, this),
-                                                    isNewPB && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
-                                                        className: "bg-emerald-500 text-white text-[10px] uppercase tracking-wide",
-                                                        children: "New PB"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 472,
-                                                        columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 466,
+                                                lineNumber: 475,
                                                 columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex flex-col gap-1 text-xs sm:text-sm text-slate-300",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex items-center gap-2",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "text-slate-400",
+                                                            children: "Personal Best:"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/results-view.tsx",
+                                                            lineNumber: 499,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "font-semibold",
+                                                            children: personalBest ?? "—"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/results-view.tsx",
+                                                            lineNumber: 500,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        isNewPB && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
+                                                            className: "bg-emerald-500 text-white text-[10px] uppercase tracking-wide",
+                                                            children: "New PB"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/results-view.tsx",
+                                                            lineNumber: 504,
+                                                            columnNumber: 25
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/results-view.tsx",
+                                                    lineNumber: 498,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 497,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/results-view.tsx",
+                                        lineNumber: 474,
+                                        columnNumber: 17
+                                    }, this),
+                                    rank && previousRank && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex justify-center flex-1 mt-4 lg:mt-2",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "scale-[1.3] drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$rank$2d$display$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RankDisplay"], {
+                                                previous: previousRank,
+                                                current: rank,
+                                                maxScore: 1000,
+                                                lastScore: score
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 516,
+                                                columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 465,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 442,
-                                    columnNumber: 15
-                                }, this),
-                                rank && previousRank && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex justify-center flex-1 mt-4 lg:mt-2",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "scale-[1.3] drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$rank$2d$display$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RankDisplay"], {
-                                            previous: previousRank,
-                                            current: rank,
-                                            maxScore: 1000,
-                                            lastScore: score
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 484,
+                                            lineNumber: 515,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 483,
+                                        lineNumber: 514,
                                         columnNumber: 19
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 482,
-                                    columnNumber: 17
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex flex-wrap gap-4 text-xs sm:text-sm text-slate-300 justify-end",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-col items-start",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "font-semibold flex items-center gap-1",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__["CheckCircle2"], {
-                                                            className: "h-4 w-4 text-emerald-400"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 498,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        correctGuesses,
-                                                        " / ",
-                                                        totalPrizes
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 497,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-slate-400",
-                                                    children: [
-                                                        "Correct (",
-                                                        accuracy,
-                                                        "%)"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 501,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 496,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-col items-start",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "font-semibold flex items-center gap-1",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__XCircle$3e$__["XCircle"], {
-                                                            className: "h-4 w-4 text-rose-400"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 508,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        incorrectGuesses
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 507,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-slate-400",
-                                                    children: "Wrong"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 511,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 506,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-col items-start",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "font-semibold flex items-center gap-1",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__XCircle$3e$__["XCircle"], {
-                                                            className: "h-4 w-4 text-orange-400"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 516,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        missedPrizes
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 515,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-slate-400",
-                                                    children: "Missed"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 519,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 514,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-col items-start",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "font-semibold flex items-center gap-1",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$timer$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Timer$3e$__["Timer"], {
-                                                            className: "h-4 w-4 text-sky-400"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 524,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        formatTime(usedTime)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 523,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-slate-400",
-                                                    children: [
-                                                        "of ",
-                                                        formatTime(totalTime),
-                                                        " used"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 527,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 522,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 495,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/results-view.tsx",
-                            lineNumber: 440,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "pt-3 space-y-3 mb-1",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex flex-wrap items-center justify-between gap-4",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex items-center gap-2",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "w-4 h-4 rounded border-4 border-emerald-400"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 539,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            children: "Correct guess"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 540,
-                                                            columnNumber: 21
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 538,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex items-center gap-2",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "w-4 h-4 rounded border-4 border-rose-500"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 543,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            children: "Wrong guess"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 544,
-                                                            columnNumber: 21
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 542,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex items-center gap-2",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "w-4 h-4 rounded border-4 border-orange-400"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 547,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            children: "Missed prize"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 548,
-                                                            columnNumber: 21
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 546,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 537,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex gap-2",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                                    type: "button",
-                                                    size: "sm",
-                                                    onClick: handleImportNewList,
-                                                    className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
-                                                    children: "Import New List"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 554,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                                    onClick: ()=>{
-                                                        setIsSummaryOpen(false); // close overlay
-                                                        onRestart(); // restart game
-                                                    },
-                                                    size: "sm",
-                                                    className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__["RotateCcw"], {
-                                                            className: "mr-2 h-4 w-4"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 571,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        "Play Again"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 563,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 553,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 536,
-                                    columnNumber: 15
-                                }, this),
-                                rank && rank.tier !== "masterball" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "w-full",
-                                    children: (()=>{
-                                        const clamped = Math.max(0, Math.min(100, rank.progress ?? 0));
-                                        const toNext = Math.max(0, 100 - clamped);
-                                        const delta = computeProgressDelta(previousRank, rank);
-                                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "w-full h-1 rounded-full bg-slate-800 overflow-hidden",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("h-full transition-all duration-800", RANK_BAR_COLOR[rank.tier]),
-                                                        style: {
-                                                            width: `${clamped}%`
-                                                        }
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex flex-wrap gap-4 text-xs sm:text-sm text-slate-300 justify-end",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex flex-col items-start",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "font-semibold flex items-center gap-1",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__["CheckCircle2"], {
+                                                                className: "h-4 w-4 text-emerald-400"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 530,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            correctGuesses,
+                                                            " / ",
+                                                            totalPrizes
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 529,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-slate-400",
+                                                        children: [
+                                                            "Correct (",
+                                                            accuracy,
+                                                            "%)"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 533,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 528,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex flex-col items-start",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "font-semibold flex items-center gap-1",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__XCircle$3e$__["XCircle"], {
+                                                                className: "h-4 w-4 text-rose-400"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 540,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            incorrectGuesses
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 539,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-slate-400",
+                                                        children: "Wrong"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/results-view.tsx",
-                                                        lineNumber: 594,
-                                                        columnNumber: 27
+                                                        lineNumber: 543,
+                                                        columnNumber: 21
                                                     }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 538,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex flex-col items-start",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "font-semibold flex items-center gap-1",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__XCircle$3e$__["XCircle"], {
+                                                                className: "h-4 w-4 text-orange-400"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 548,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            missedPrizes
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 547,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-slate-400",
+                                                        children: "Missed"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 551,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 546,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex flex-col items-start",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "font-semibold flex items-center gap-1",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$timer$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Timer$3e$__["Timer"], {
+                                                                className: "h-4 w-4 text-sky-400"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 556,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            formatTime(usedTime)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 555,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-slate-400",
+                                                        children: [
+                                                            "of ",
+                                                            formatTime(totalTime),
+                                                            " used"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 559,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 554,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/results-view.tsx",
+                                        lineNumber: 527,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/results-view.tsx",
+                                lineNumber: 472,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex flex-col items-center gap-2 pt-2",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-sm text-slate-200",
+                                        children: "Share your score with friends:"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/results-view.tsx",
+                                        lineNumber: 568,
+                                        columnNumber: 3
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex flex-wrap justify-center gap-3",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "button",
+                                                onClick: ()=>handleShare("twitter"),
+                                                className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold bg-sky-500 hover:bg-sky-400 text-slate-950 shadow-md shadow-sky-500/40 transition-transform duration-150 active:scale-95",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    children: "𝕏 / Twitter"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 593,
-                                                    columnNumber: 25
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "mt-1 text-center text-[11px] text-slate-400",
-                                                    children: [
-                                                        toNext,
-                                                        "% to next rank",
-                                                        delta !== null && delta !== 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("ml-1", delta > 0 ? "text-emerald-400" : "text-rose-400"),
-                                                            children: [
-                                                                "(",
-                                                                delta > 0 ? "+" : "",
-                                                                Math.round(delta),
-                                                                ")"
-                                                            ]
-                                                        }, void 0, true, {
+                                                    lineNumber: 581,
+                                                    columnNumber: 7
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 574,
+                                                columnNumber: 5
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "button",
+                                                onClick: ()=>handleShare("facebook"),
+                                                className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/40 transition-transform duration-150 active:scale-95",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    children: "Facebook"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/results-view.tsx",
+                                                    lineNumber: 592,
+                                                    columnNumber: 7
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 585,
+                                                columnNumber: 5
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "button",
+                                                onClick: ()=>handleShare("instagram"),
+                                                className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold bg-pink-500 hover:bg-pink-400 text-white shadow-md shadow-pink-500/40 transition-transform duration-150 active:scale-95",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    children: "Instagram"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/results-view.tsx",
+                                                    lineNumber: 603,
+                                                    columnNumber: 7
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 596,
+                                                columnNumber: 5
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/results-view.tsx",
+                                        lineNumber: 572,
+                                        columnNumber: 3
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/results-view.tsx",
+                                lineNumber: 567,
+                                columnNumber: 1
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "pt-3 space-y-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex flex-wrap items-center justify-between gap-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-200",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex items-center gap-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "w-4 h-4 rounded border-4 border-emerald-400"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 613,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                children: "Correct guess"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 614,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 612,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex items-center gap-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "w-4 h-4 rounded border-4 border-rose-500"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 617,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                children: "Wrong guess"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 618,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 616,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex items-center gap-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "w-4 h-4 rounded border-4 border-orange-400"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 621,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                children: "Missed prize"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 622,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 620,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 611,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex gap-2",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                                        type: "button",
+                                                        size: "sm",
+                                                        onClick: handleImportNewListClick,
+                                                        className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
+                                                        children: "Import New List"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 628,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                                        onClick: ()=>{
+                                                            setShowRankModal(false);
+                                                            onRestart();
+                                                        },
+                                                        size: "sm",
+                                                        className: "rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__["RotateCcw"], {
+                                                                className: "mr-2 h-4 w-4"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 645,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            "Play Again"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 637,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/results-view.tsx",
+                                                lineNumber: 627,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/results-view.tsx",
+                                        lineNumber: 610,
+                                        columnNumber: 17
+                                    }, this),
+                                    rank && rank.tier !== "masterball" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-full",
+                                        children: (()=>{
+                                            const clamped = Math.max(0, Math.min(100, rank.progress ?? 0));
+                                            const toNext = Math.max(0, 100 - clamped);
+                                            const delta = computeProgressDelta(previousRank, rank);
+                                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "w-full h-1 rounded-full bg-slate-800 overflow-hidden",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("h-full transition-all duration-800", RANK_BAR_COLOR[rank.tier]),
+                                                            style: {
+                                                                width: `${clamped}%`
+                                                            }
+                                                        }, void 0, false, {
                                                             fileName: "[project]/components/results-view.tsx",
-                                                            lineNumber: 605,
+                                                            lineNumber: 665,
                                                             columnNumber: 29
                                                         }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/results-view.tsx",
-                                                    lineNumber: 602,
-                                                    columnNumber: 25
-                                                }, this)
-                                            ]
-                                        }, void 0, true);
-                                    })()
-                                }, void 0, false, {
-                                    fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 579,
-                                    columnNumber: 17
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/results-view.tsx",
-                            lineNumber: 535,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 664,
+                                                        columnNumber: 27
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "mt-1 text-center text-[11px] text-slate-400",
+                                                        children: [
+                                                            toNext,
+                                                            "% to next rank",
+                                                            delta !== null && delta !== 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("ml-1", delta > 0 ? "text-emerald-400" : "text-rose-400"),
+                                                                children: [
+                                                                    "(",
+                                                                    delta > 0 ? "+" : "",
+                                                                    Math.round(delta),
+                                                                    ")"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/components/results-view.tsx",
+                                                                lineNumber: 676,
+                                                                columnNumber: 31
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/results-view.tsx",
+                                                        lineNumber: 673,
+                                                        columnNumber: 27
+                                                    }, this)
+                                                ]
+                                            }, void 0, true);
+                                        })()
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/results-view.tsx",
+                                        lineNumber: 653,
+                                        columnNumber: 19
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/results-view.tsx",
+                                lineNumber: 609,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/results-view.tsx",
+                        lineNumber: 455,
+                        columnNumber: 13
+                    }, this)
+                }, void 0, false, {
                     fileName: "[project]/components/results-view.tsx",
-                    lineNumber: 423,
+                    lineNumber: 454,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/results-view.tsx",
-                lineNumber: 422,
+                lineNumber: 453,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -3566,7 +3691,7 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                     className: "w-full h-full object-cover"
                                 }, void 0, false, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 662,
+                                    lineNumber: 730,
                                     columnNumber: 19
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "w-full h-full bg-slate-800 flex items-center justify-center p-2",
@@ -3575,12 +3700,12 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                         children: card.name
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 669,
+                                        lineNumber: 737,
                                         columnNumber: 21
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 668,
+                                    lineNumber: 736,
                                     columnNumber: 19
                                 }, this),
                                 showResults && status !== "normal" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3592,12 +3717,12 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                                 className: "h-3 w-3"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 680,
+                                                lineNumber: 748,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 679,
+                                            lineNumber: 747,
                                             columnNumber: 23
                                         }, this),
                                         status === "incorrect" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -3606,12 +3731,12 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                                 className: "h-3 w-3"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 685,
+                                                lineNumber: 753,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 684,
+                                            lineNumber: 752,
                                             columnNumber: 23
                                         }, this),
                                         status === "missed" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -3619,13 +3744,13 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                             children: "Prize"
                                         }, void 0, false, {
                                             fileName: "[project]/components/results-view.tsx",
-                                            lineNumber: 689,
+                                            lineNumber: 757,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 677,
+                                    lineNumber: 745,
                                     columnNumber: 19
                                 }, this),
                                 !showResults && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3642,7 +3767,7 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 708,
+                                                lineNumber: 776,
                                                 columnNumber: 25
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3650,56 +3775,52 @@ function ResultsView({ allCards, prizeCards, onRestart, timeLeft, totalTime }) {
                                                 children: "Selected"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/results-view.tsx",
-                                                lineNumber: 711,
+                                                lineNumber: 779,
                                                 columnNumber: 25
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 707,
+                                        lineNumber: 775,
                                         columnNumber: 23
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "text-xs text-white text-center font-medium",
                                         children: card.name
                                     }, void 0, false, {
                                         fileName: "[project]/components/results-view.tsx",
-                                        lineNumber: 716,
+                                        lineNumber: 784,
                                         columnNumber: 23
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/results-view.tsx",
-                                    lineNumber: 698,
+                                    lineNumber: 766,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, `${card.instanceId}-${index}`, true, {
                             fileName: "[project]/components/results-view.tsx",
-                            lineNumber: 642,
+                            lineNumber: 714,
                             columnNumber: 15
                         }, this);
                     })
                 }, void 0, false, {
                     fileName: "[project]/components/results-view.tsx",
-                    lineNumber: 636,
+                    lineNumber: 708,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/results-view.tsx",
-                lineNumber: 629,
+                lineNumber: 701,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/results-view.tsx",
-        lineNumber: 362,
+        lineNumber: 397,
         columnNumber: 5
     }, this);
 }
-_s(ResultsView, "jhgqUsHssCFNHKthxA5qAkpkVdo=", false, function() {
-    return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
-    ];
-});
+_s(ResultsView, "dPo30cCm7aRyU34SrI6aOMN+hHQ=");
 _c = ResultsView;
 var _c;
 __turbopack_context__.k.register(_c, "ResultsView");
