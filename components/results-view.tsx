@@ -462,99 +462,82 @@ export function ResultsView({
               </button>
 
               {/* Top row: Score + Rank + Stats */}
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                {/* Left: Score + PB */}
-                <div className="flex items-center gap-4">
-                  <div
-                    className={cn(
-                      "flex items-center gap-3 rounded-2xl px-4 py-2 border",
-                      scoreBadgeBg,
-                    )}
-                  >
-                    <Trophy className="h-6 w-6 text-amber-300" />
-                    <div className="flex flex-col items-start">
-                      <span
-                        className={cn(
-                          "text-2xl sm:text-3xl font-semibold",
-                          scoreColor,
-                        )}
-                      >
-                        {score}
-                      </span>
-                      <span className="text-[11px] uppercase tracking-wide text-slate-300">
-                        Overall score
-                      </span>
-                    </div>
-                  </div>
+            {/* Top row: Score + Rank + Stats */}
+<div className="flex flex-col gap-4 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center">
+  {/* Left: Score + PB (stacked inside the badge) */}
+  <div className="flex items-center gap-4 justify-center lg:justify-start">
+    <div
+      className={cn(
+        "flex items-center gap-3 rounded-2xl px-4 py-2 border",
+        scoreBadgeBg,
+      )}
+    >
+      <Trophy className="h-6 w-6 text-amber-300" />
+      <div className="flex flex-col items-start">
+        <span
+          className={cn(
+            "text-2xl sm:text-3xl font-semibold",
+            scoreColor,
+          )}
+        >
+          {score}
+        </span>
+        <span className="text-[11px] uppercase tracking-wide text-slate-300">
+          Overall score
+        </span>
 
-                  <div className="flex flex-col gap-1 text-xs sm:text-sm text-slate-300">
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-400">Personal Best:</span>
-                      <span className="font-semibold">
-                        {personalBest ?? "—"}
-                      </span>
-                      {isNewPB && (
-                        <Badge className="bg-emerald-500 text-white text-[10px] uppercase tracking-wide">
-                          New PB
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </div>
+        {/* Personal best under the score */}
+        <div className="mt-1 flex items-center gap-2 text-[11px] sm:text-xs text-slate-200">
+          <span className="text-slate-300">Personal Best:</span>
+          <span className="font-semibold">{personalBest ?? "—"}</span>
+          {isNewPB && (
+            <Badge className="bg-emerald-500 text-white text-[10px] uppercase tracking-wide">
+              New PB
+            </Badge>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
 
-                {/* Center: Rank */}
-                {rank && previousRank && (
-                  <div className="flex justify-center flex-1 mt-4 lg:mt-2">
-                    <div className="w-32 sm:w-40 aspect-square flex items-center justify-center drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]">
-                      <RankDisplay
-                        previous={previousRank}
-                        current={rank}
-                        maxScore={1000}
-                        lastScore={score}
-                      />
-                    </div>
-                  </div>
-                )}
+  {/* Center: Rank – */}
+  {rank && previousRank && (
+    <div className="flex justify-center mt-2 lg:mt-0">
+      <div className="w-32 sm:w-40 aspect-square flex items-center justify-center drop-shadow-[0_0_16px_rgba(16,185,129,0.4)]">
+        <RankDisplay
+          previous={previousRank}
+          current={rank}
+          maxScore={1000}
+          lastScore={score}
+        />
+      </div>
+    </div>
+  )}
 
-                {/* Right: Stats */}
-                <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-slate-300 justify-end">
-                  <div className="flex flex-col items-start">
-                    <span className="font-semibold flex items-center gap-1">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                      {correctGuesses} / {totalPrizes}
-                    </span>
-                    <span className="text-slate-400">
-                      Correct ({accuracy}%)
-                    </span>
-                  </div>
+  {/* Right: only Correct + Timer */}
+  <div className="flex flex-wrap gap-4 text-xs sm:text-sm text-slate-300 justify-center lg:justify-end">
+    <div className="flex flex-col items-start">
+      <span className="font-semibold flex items-center gap-1">
+        <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+        {correctGuesses} / {totalPrizes}
+      </span>
+      <span className="text-slate-400">
+        Correct ({accuracy}%)
+      </span>
+    </div>
 
-                  <div className="flex flex-col items-start">
-                    <span className="font-semibold flex items-center gap-1">
-                      <XCircle className="h-4 w-4 text-rose-400" />
-                      {incorrectGuesses}
-                    </span>
-                    <span className="text-slate-400">Wrong</span>
-                  </div>
+    <div className="flex flex-col items-start">
+      <span className="font-semibold flex items-center gap-1">
+        <Timer className="h-4 w-4 text-sky-400" />
+        {formatTime(usedTime)}
+      </span>
+      <span className="text-slate-400">
+        of {formatTime(totalTime)} used
+      </span>
+    </div>
+  </div>
+</div>
 
-                  <div className="flex flex-col items-start">
-                    <span className="font-semibold flex items-center gap-1">
-                      <XCircle className="h-4 w-4 text-orange-400" />
-                      {missedPrizes}
-                    </span>
-                    <span className="text-slate-400">Missed</span>
-                  </div>
-
-                  <div className="flex flex-col items-start">
-                    <span className="font-semibold flex items-center gap-1">
-                      <Timer className="h-4 w-4 text-sky-400" />
-                      {formatTime(usedTime)}
-                    </span>
-                    <span className="text-slate-400">
-                      of {formatTime(totalTime)} used
-                    </span>
-                  </div>
-                </div>
-              </div>
 
               {/* Share row */}
               <div className="flex flex-col items-center gap-2 pt-2">

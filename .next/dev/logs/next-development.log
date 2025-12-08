@@ -1,251 +1,130 @@
-[00:00:00.561] Server  LOG      ✓ Ready in 382ms
-[00:00:00.684] Browser ERROR   {}
-[00:00:00.684] Browser ERROR   FeaturedDeckSection error: {}
-[00:00:00.688] Browser ERROR   {}
-[00:00:00.688] Browser ERROR   FeaturedDeckSection error: {}
-[00:00:02.101] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:02.199] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:02.361] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.362] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.362] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.362] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.363] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.363] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.363] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.363] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.364] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.364] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.364] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.364] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.365] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.366] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.366] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.366] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.367] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.367] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.367] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.368] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.368] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.368] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.368] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.369] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.369] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.369] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.370] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.370] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.370] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.371] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.371] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.371] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.371] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.372] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.372] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.374] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.374] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.375] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.375] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.375] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.376] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.376] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.377] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.377] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.377] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.377] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.378] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.378] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.378] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.379] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.379] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.379] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.379] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.380] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.380] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.380] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.380] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.381] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.381] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.381] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.382] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.383] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.383] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.384] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.384] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.385] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.385] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.385] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.386] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.386] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.386] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.386] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.387] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.387] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.387] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.388] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.388] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.388] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.388] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.389] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.389] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.389] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.390] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.391] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.391] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.391] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.392] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.392] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.392] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.393] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.393] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.393] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.393] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.394] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.394] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.394] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.395] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.395] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.395] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.395] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.396] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.396] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.396] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.397] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.397] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.397] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.397] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.398] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.400] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.400] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.400] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.400] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.401] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.401] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.401] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.402] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.402] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.402] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.402] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:02.403] Server  LOG     Loaded 137 set code mappings from sets/en.json
-[00:00:25.127] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.139] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.142] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.150] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.160] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.215] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.258] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.283] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.289] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.303] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.311] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.324] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.342] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.346] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.362] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.365] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.371] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.378] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.386] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.390] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.400] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.410] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.412] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.415] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.425] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.427] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.431] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.436] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.446] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.450] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.453] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.457] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.460] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.466] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.468] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.471] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.474] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.478] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.482] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.486] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.502] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.510] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.513] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.519] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.521] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.525] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.527] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.531] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.535] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.537] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.539] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.542] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.544] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.547] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.549] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.552] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.555] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.557] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.560] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.563] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.564] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.569] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.571] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.574] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.578] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.580] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.591] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.595] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.599] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.601] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.603] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.606] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.610] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.612] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.616] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.620] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.623] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.626] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.629] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.632] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.633] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.636] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.638] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.639] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.644] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.646] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.651] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.653] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.657] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.660] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.664] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.667] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.669] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.671] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.674] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.679] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.683] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.686] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.691] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.695] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.697] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.704] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.706] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.710] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.729] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.733] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.737] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.742] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.749] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.753] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.756] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.759] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.763] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.767] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.770] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.772] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.776] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.779] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.783] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:00:25.788] Server  LOG     Loaded 19783 cards from local data (170 files)
-[00:01:46.955] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:58.510] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:04.368] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:27.437] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:00.737] Server  LOG      ✓ Ready in 511ms
+[00:00:05.554] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:05.759] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.760] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.760] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.760] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.761] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.761] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.761] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.762] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.762] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.763] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.763] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.764] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.764] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.764] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.765] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.765] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.765] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.766] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.766] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.766] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.766] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.767] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.767] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.768] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.768] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.768] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.769] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.770] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.771] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.771] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.773] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.774] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.775] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.775] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.776] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.777] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.778] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.779] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.780] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.781] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.783] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.784] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.785] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.786] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.788] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.790] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.791] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.791] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.791] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.792] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.792] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.792] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.793] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.793] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.793] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.793] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.794] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.794] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.795] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:05.795] Server  LOG     Loaded 137 set code mappings from sets/en.json
+[00:00:13.697] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.702] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.709] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.736] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.742] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.757] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.761] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.767] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.770] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.775] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.778] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.783] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.786] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.788] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.792] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.795] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.798] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.800] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.803] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.807] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.810] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.813] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.816] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.819] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.824] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.827] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.830] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.833] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.834] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.837] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.840] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.842] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.844] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.846] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.850] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.866] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.868] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.879] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.886] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.894] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.902] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.907] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.911] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.916] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.919] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.923] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.933] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.940] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.942] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.951] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.954] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.957] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.967] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.976] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.977] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.980] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.987] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.991] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.992] Server  LOG     Loaded 19783 cards from local data (170 files)
+[00:00:13.996] Server  LOG     Loaded 19783 cards from local data (170 files)
+[02:04:18.228] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:04:20.876] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:04:31.048] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:04:33.735] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:15:40.050] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:17:11.340] Server  LOG      ✓ Compiled in 109ms
+[02:17:16.231] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:22:54.546] Server  LOG      ✓ Compiled in 188ms
