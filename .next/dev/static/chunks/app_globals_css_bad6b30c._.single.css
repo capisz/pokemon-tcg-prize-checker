@@ -130,10 +130,8 @@
     --color-violet-200: #ddd6ff;
     --color-violet-400: #a685ff;
     --color-violet-500: #8d54ff;
-    --color-pink-400: #fb64b6;
     --color-pink-500: #f6339a;
     --color-pink-700: #c4005c;
-    --color-pink-900: #861043;
     --color-rose-400: #ff667f;
     --color-rose-500: #ff2357;
     --color-rose-600: #e70044;
@@ -241,10 +239,8 @@
       --color-violet-200: lab(87.0888% 8.53688 -19.4189);
       --color-violet-400: lab(62.8239% 34.9159 -60.0512);
       --color-violet-500: lab(49.9355% 55.1776 -81.8963);
-      --color-pink-400: lab(64.5597% 64.3615 -12.7988);
       --color-pink-500: lab(56.9303% 76.8162 -8.07021);
       --color-pink-700: lab(42.1737% 71.8009 7.42233);
-      --color-pink-900: lab(29.4367% 49.3962 3.35757);
       --color-rose-400: lab(64.4125% 63.0291 19.2068);
       --color-rose-500: lab(56.101% 79.4328 31.4532);
       --color-rose-600: lab(49.1882% 81.577 36.0311);
@@ -2367,14 +2363,6 @@
     background-color: var(--color-orange-500);
   }
 
-  .bg-pink-500 {
-    background-color: var(--color-pink-500);
-  }
-
-  .bg-pink-700 {
-    background-color: var(--color-pink-700);
-  }
-
   .bg-pink-700\/90 {
     background-color: #c4005ce6;
   }
@@ -2383,10 +2371,6 @@
     .bg-pink-700\/90 {
       background-color: color-mix(in oklab, var(--color-pink-700) 90%, transparent);
     }
-  }
-
-  .bg-pink-900 {
-    background-color: var(--color-pink-900);
   }
 
   .bg-popover {
@@ -2471,10 +2455,6 @@
     }
   }
 
-  .bg-sky-500 {
-    background-color: var(--color-sky-500);
-  }
-
   .bg-sky-500\/25 {
     background-color: #00a5ef40;
   }
@@ -2485,16 +2465,6 @@
     }
   }
 
-  .bg-sky-500\/40 {
-    background-color: #00a5ef66;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-sky-500\/40 {
-      background-color: color-mix(in oklab, var(--color-sky-500) 40%, transparent);
-    }
-  }
-
   .bg-sky-500\/70 {
     background-color: #00a5efb3;
   }
@@ -2502,16 +2472,6 @@
   @supports (color: color-mix(in lab, red, red)) {
     .bg-sky-500\/70 {
       background-color: color-mix(in oklab, var(--color-sky-500) 70%, transparent);
-    }
-  }
-
-  .bg-sky-500\/90 {
-    background-color: #00a5efe6;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-sky-500\/90 {
-      background-color: color-mix(in oklab, var(--color-sky-500) 90%, transparent);
     }
   }
 
@@ -4369,38 +4329,8 @@
   }
 
   @media (hover: hover) {
-    .hover\:bg-pink-400:hover {
-      background-color: var(--color-pink-400);
-    }
-  }
-
-  @media (hover: hover) {
     .hover\:bg-pink-700:hover {
       background-color: var(--color-pink-700);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-pink-700\/20:hover {
-      background-color: #c4005c33;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .hover\:bg-pink-700\/20:hover {
-        background-color: color-mix(in oklab, var(--color-pink-700) 20%, transparent);
-      }
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-pink-700\/90:hover {
-      background-color: #c4005ce6;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .hover\:bg-pink-700\/90:hover {
-        background-color: color-mix(in oklab, var(--color-pink-700) 90%, transparent);
-      }
     }
   }
 

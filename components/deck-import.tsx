@@ -470,7 +470,7 @@ export function DeckImport(props: DeckImportProps) {
                 On the game screen, scroll through your deck and mentally track
                 what should be there. Try to spot patterns of what might be in
                 your prizes. Reorganize your cards using{" "}
-                <span className="font-semibold text-emerald-200">keys</span> or{" "}
+                <span className="font-semibold text-emerald-200">keys (A/D)</span> or{" "}
                 <span className="font-semibold text-emerald-200">clicking</span>{" "}
                 to help visually.
               </p>
