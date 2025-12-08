@@ -495,12 +495,8 @@ export function ResultsView({
         {/* Personal best under the score */}
         <div className="mt-1 flex items-center gap-2 text-[11px] sm:text-xs text-slate-200">
           <span className="text-slate-300">Personal Best:</span>
-          <span className="font-semibold">{personalBest ?? "—"}</span>
-          {isNewPB && (
-            <Badge className="bg-emerald-500 text-white text-[10px] uppercase tracking-wide">
-              New PB
-            </Badge>
-          )}
+          <span className="font-semibold text-emerald-200/100">{personalBest ?? "—"}</span>
+         
         </div>
       </div>
     </div>
