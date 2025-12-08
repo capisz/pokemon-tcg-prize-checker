@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Copy } from "lucide-react"
+import { stylizeEx } from "@/lib/text"   // 👈 NEW
 
 type ImportedCard = {
   id: string
@@ -28,7 +29,7 @@ const MAX_FEATURED_CARDS = 5
 
 /** Temporary fallback deck until the API is wired up */
 const FALLBACK_DECK: FeaturedDeckApi = {
-  title: "Charizard ex / Pidgeot ex — Regional Stuttgart Champion",
+  title: "Charizard ex / Pidgeot ex — Regional Stuttgart Champion", // ASCII-only
   sourceUrl: "https://limitlesstcg.com/decks/lists",
   importText: `Pokémon: 26
 2 Charmander PAF 7
@@ -220,21 +221,20 @@ export function FeaturedDeckSection() {
         {/* LEFT: text + button */}
         <div className="flex-1 min-w-[0]">
           <div
-  className={cn(
-    "flex flex-col gap-3 h-full",
-    // use both opacity + transform so it "glides" from above
-    "transition-all duration-700 ease-out",
-    revealed
-      ? "opacity-100 translate-y-0"
-      : "opacity-0 -translate-y-3"
-  )}
->
+            className={cn(
+              "flex flex-col gap-3 h-full",
+              "transition-all duration-700 ease-out",
+              revealed
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 -translate-y-3",
+            )}
+          >
             <div className="space-y-1">
               <p className="text-[12px] uppercase tracking-[0.22em] text-emerald-300">
                 Featured Deck
               </p>
               <h2 className="text-lg sm:text-l font-semibold text-emerald-100">
-                {deckTitle}
+                {stylizeEx(deckTitle)} {/* 👈 fancy 𝘦𝘹 here */}
               </h2>
             </div>
 
@@ -263,17 +263,12 @@ export function FeaturedDeckSection() {
                   }
                 }}
                 className={cn(
-                  // base shape + shadow
                   "rounded-full h-9 px-5 font-semibold shadow-md shadow-emerald-500/40",
-                  // emerald color system
                   "bg-emerald-500 text-slate-950 hover:bg-emerald-400",
-                 "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
-                  // interaction + animation
+                  "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]",
                   "transition-colors transition-transform duration-150",
                   "active:scale-95 active:translate-y-[1px]",
-                  // override the default blue focus ring
                   "focus-visible:ring-emerald-300 focus-visible:ring-offset-emerald-950",
-                  // copied override (keeps same emerald family)
                   copied && "bg-emerald-400",
                 )}
               >
@@ -320,7 +315,7 @@ export function FeaturedDeckSection() {
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-[10px] px-2 text-slate-300">
-                        {card.name}
+                        {stylizeEx(card.name)} {/* 👈 stylize here too */}
                       </div>
                     )}
                   </div>

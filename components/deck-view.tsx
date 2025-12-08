@@ -141,9 +141,6 @@ export function DeckView({
   }
 
   const handleRestartClick = () => {
-    setTimeRemaining(GAME_DURATION)
-    setCenterIndex(0)
-    setDeckOrder(deck)
     onRestartGame?.()
   }
 

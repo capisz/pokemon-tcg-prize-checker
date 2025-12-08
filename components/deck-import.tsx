@@ -58,8 +58,8 @@ export function DeckImport(props: DeckImportProps) {
   const [error, setError] = useState<string | null>(null)
   const [hasAutoImported, setHasAutoImported] = useState(false)
 
-  // Help overlay state – open by default on first load
-  const [showHelpOverlay, setShowHelpOverlay] = useState(true)
+// Help overlay state – default closed; we'll auto-open based on localStorage
+const [showHelpOverlay, setShowHelpOverlay] = useState(false)
 
   // Keep textarea in sync with parent-provided initialText
   useEffect(() => {
@@ -183,6 +183,19 @@ export function DeckImport(props: DeckImportProps) {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+  if (typeof window === "undefined") return
+
+  const hasSeenHelp = window.localStorage.getItem("pcd_has_seen_help")
+
+  // If they've never seen it, show once and mark as seen
+  if (!hasSeenHelp) {
+    setShowHelpOverlay(true)
+    window.localStorage.setItem("pcd_has_seen_help", "true")
+  }
+}, [])
+
 
   // Auto-import once on mount when you want the featured list preloaded
   useEffect(() => {

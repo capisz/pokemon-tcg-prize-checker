@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server"
 
 const FEATURED_DECK_TITLE =
-  " Charizard 𝘦𝘹 / Pidgeot 𝘦𝘹 — Regional Stuttgart Champion" // change as needed
+  "Charizard ex / Pidgeot ex — Regional Stuttgart Champion" // ASCII-only
 const FEATURED_DECK_URL = "https://limitlesstcg.com/decks/list/22011"
 
 // Paste the FULL PTCGL import text for that deck between the backticks.
-// You can grab it from the Limitless "Copy / Export" area for that list.
 const FEATURED_DECK_IMPORT_TEXT = `
 Pokémon: 4
 2 Charmander PAF 7
@@ -18,8 +17,6 @@ Trainer: 4
 Energy: 4
 4 Fire Energy SVE 2
 `.trim()
-// ^^^ Replace the above with the REAL list from Limitless later.
-// This sample is just to prove the feature works.
 
 export async function GET() {
   if (!FEATURED_DECK_IMPORT_TEXT) {

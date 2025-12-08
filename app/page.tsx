@@ -150,18 +150,23 @@ export default function HomePage() {
     setStage("results")
   }
 
-  // Restart the game from the same full deck
-  const handleRestartGame = () => {
-    if (fullDeck.length === 0) {
-      setStage("import")
-      return
-    }
-
-    setupNewGameFromDeck(fullDeck)
-    setTimeLeft(null)
-    startShuffleAnimation()
-    startPreGameCountdown()
+ // Restart the game from the same full deck
+const handleRestartGame = () => {
+  if (fullDeck.length === 0) {
+    setStage("import")
+    return
   }
+
+  // Deal a fresh game
+  setupNewGameFromDeck(fullDeck)
+
+  // Reset timer state for results view
+  setTimeLeft(null)
+
+  // 🔹 Only show the Pidgeot countdown — no shuffle overlay
+  startPreGameCountdown()
+}
+
 
   return (
     <div
