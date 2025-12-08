@@ -11,6 +11,7 @@ import { CountdownOverlay } from "@/components/countdown-overlay"
 import { SiteFooter } from "@/components/site-footer"
 import { FloatingGameVolume } from "@/components/music-player"
 import { cn } from "@/lib/utils"
+import type { Metadata } from "next"
 
 type Stage = "import" | "game" | "results"
 
