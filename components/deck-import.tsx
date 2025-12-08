@@ -411,7 +411,7 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
             <button
               type="button"
               onClick={() => setShowHelpOverlay(false)}
-              className="absolute right-3 top-3 text-slate-400 hover:text-slate-100"
+              className="absolute right-3 top-3 text-slate-400 hover:text-emerald-300"
               aria-label="Close help"
             >
               <X className="h-4 w-4" />

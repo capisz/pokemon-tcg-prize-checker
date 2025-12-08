@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 import type { PokemonCard } from "@/lib/types"
 import { cn } from "@/lib/utils"
-
+import Image from "next/image"
 import type { RankState } from "@/lib/rank"
 import { initialRankState, updateRank } from "@/lib/rank"
 import { RankDisplay } from "@/components/rank-display"
@@ -467,13 +467,19 @@ export function ResultsView({
   {/* Left: Score + PB (stacked inside the badge) */}
   <div className="flex items-center gap-4 justify-center lg:justify-start">
     <div
-      className={cn(
-        "flex items-center gap-3 rounded-2xl px-4 py-2 border",
-        scoreBadgeBg,
-      )}
-    >
-      <Trophy className="h-6 w-6 text-amber-300" />
-      <div className="flex flex-col items-start">
+  className={cn(
+    "flex items-center gap-3 rounded-2xl px-4 py-2 border",
+    scoreBadgeBg,
+  )}
+>
+  <Image
+    src="/pokeballtrophy.png"
+    alt="Overall score trophy"
+    width={56}
+    height={56}
+    className="object-contain drop-shadow-[0_0_10px_rgba(250,204,21,0.75)]"
+  />
+  <div className="flex flex-col items-start">
         <span
           className={cn(
             "text-2xl sm:text-3xl font-semibold",
