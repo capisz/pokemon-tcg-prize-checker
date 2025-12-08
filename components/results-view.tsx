@@ -475,8 +475,8 @@ export function ResultsView({
   <Image
     src="/pokeballtrophy.png"
     alt="Overall score trophy"
-    width={56}
-    height={56}
+    width={42}
+    height={42}
     className="object-contain drop-shadow-[0_0_10px_rgba(250,204,21,0.75)]"
   />
   <div className="flex flex-col items-start">
