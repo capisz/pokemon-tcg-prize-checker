@@ -38,7 +38,10 @@ export function SiteFooter() {
             >
               LimitlessTCG (Deck Database)
             </Link>
-             <Link href="mailto:chriszcodes@gmail.com" className="hover:underline">
+            <Link href="/privacy" className="hover:underline">
+              Privacy
+            </Link>
+            <Link href="mailto:chriszcodes@gmail.com" className="hover:underline">
               Contact
             </Link>
           </nav>

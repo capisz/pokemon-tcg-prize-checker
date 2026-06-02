@@ -354,6 +354,10 @@ export function DeckImport(props: DeckImportProps) {
   const currentFeaturedDeckId = currentFeaturedDeck?.id
   const currentFeaturedCards =
     currentFeaturedDeckId ? featuredDeckCards[currentFeaturedDeckId] ?? [] : []
+  const shouldShowFeaturedLoading =
+    featuredDecks.length > 0 &&
+    !hasHydratedFeaturedDecks &&
+    !currentFeaturedCards.length
   const currentFeaturedExpandedDeck =
     currentFeaturedDeckId ? featuredDeckExpandedDecks[currentFeaturedDeckId] ?? [] : []
   const displayedCards =
@@ -488,7 +492,10 @@ export function DeckImport(props: DeckImportProps) {
           importText={currentFeaturedDeck?.importText ?? rawText}
           playedBy={currentFeaturedDeck?.playedBy}
           cards={currentFeaturedCards}
-          loading={isFeaturedLoading && !currentFeaturedCards.length}
+          loading={
+            !currentFeaturedCards.length &&
+            (isFeaturedLoading || shouldShowFeaturedLoading)
+          }
         />
 
         {/* Deck list + hover preview */}
