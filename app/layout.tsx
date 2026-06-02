@@ -12,6 +12,9 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "PrizeCheckDrillr.io",
   description: "Practice guessing your prize cards like a tournament grinder.",
+  other: {
+    "google-adsense-account": "ca-pub-7765754071910029",
+  },
   openGraph: {
     title: "PrizeCheckDrillr.io",
     description: "Practice guessing your prize cards like a tournament grinder.",
