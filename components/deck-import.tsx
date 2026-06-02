@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { FeaturedDeckSection } from "@/components/featured-deck"
 import { HelpCircle, X } from "lucide-react"
+import type { FeaturedDeckDefinition } from "@/lib/featured-decks"
 
 type ImportedCard = {
   id: string
@@ -17,10 +18,24 @@ type ImportedCard = {
   number: string | number
 }
 
+type FeaturedCard = ImportedCard & {
+  count: number
+}
+
+type DeckSection = "pokemon" | "trainer" | "energy" | "unknown"
+
+type ParsedDeckText = {
+  fullIds: string[]
+  uniqueIds: string[]
+  counts: Map<string, number>
+  totalCount: number
+  sectionCounts: Record<DeckSection, number>
+}
+
 interface DeckImportProps {
   onDeckImported?: (cards: ImportedCard[]) => void
   onImportComplete?: (cards: ImportedCard[]) => void
-  initialText?: string
+  onFeaturedDeckSelected?: (cards: ImportedCard[]) => void
   onTextChange?: (value: string) => void
   onStartGame?: () => void
   canStartGame?: boolean
@@ -29,54 +44,75 @@ interface DeckImportProps {
   deckTitle?: string
   deckPlayer?: string
 
-  /** Optional: if true, auto-imports when the page first loads (using initialText) */
-  autoImportOnMount?: boolean
+  featuredDecks?: FeaturedDeckDefinition[]
 }
 
 export function DeckImport(props: DeckImportProps) {
   const {
     onDeckImported,
     onImportComplete,
-    initialText,
+    onFeaturedDeckSelected,
     onTextChange,
     onStartGame,
     canStartGame,
     deckTitle,
     deckPlayer,
-    autoImportOnMount,
+    featuredDecks = [],
   } = props
 
   // Fallbacks until wired to Limitless/API
-  const effectiveDeckTitle = deckTitle ?? "Charizard Noctowl"
-  const effectiveDeckPlayer = deckPlayer ?? "Nicolai Stiborg"
+  const effectiveDeckTitle = deckTitle ?? "Imported Deck"
+  const effectiveDeckPlayer = deckPlayer ?? ""
 
-  const [rawText, setRawText] = useState(initialText ?? "")
-  const [previewCards, setPreviewCards] = useState<ImportedCard[]>([])
-  const [cardCounts, setCardCounts] = useState<Record<string, number>>({})
+  const [rawText, setRawText] = useState("")
+  const [previewCards, setPreviewCards] = useState<FeaturedCard[]>([])
   const [hoveredCard, setHoveredCard] = useState<ImportedCard | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isFeaturedLoading, setIsFeaturedLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [hasAutoImported, setHasAutoImported] = useState(false)
+  const [hasValidImport, setHasValidImport] = useState(false)
+  const [hasHydratedFeaturedDecks, setHasHydratedFeaturedDecks] = useState(false)
+  const [activeListMode, setActiveListMode] = useState<"featured" | "custom">("featured")
+  const [featuredDeckIndex, setFeaturedDeckIndex] = useState(0)
+  const [featuredDeckCards, setFeaturedDeckCards] = useState<Record<string, FeaturedCard[]>>({})
+  const [featuredDeckExpandedDecks, setFeaturedDeckExpandedDecks] = useState<Record<string, ImportedCard[]>>({})
+  const selectedFeaturedDeckRef = React.useRef<string | null>(null)
 
 // Help overlay state – default closed; we'll auto-open based on localStorage
-const [showHelpOverlay, setShowHelpOverlay] = useState(false)
+  const [showHelpOverlay, setShowHelpOverlay] = useState(false)
 
-  // Keep textarea in sync with parent-provided initialText
-  useEffect(() => {
-    if (typeof initialText === "string") {
-      setRawText(initialText)
-    }
-  }, [initialText])
-
-  function parseIdsFromText(text: string) {
+  function parseIdsFromText(text: string): ParsedDeckText {
     const fullIds: string[] = []
     const counts = new Map<string, number>()
+    const sectionCounts: Record<DeckSection, number> = {
+      pokemon: 0,
+      trainer: 0,
+      energy: 0,
+      unknown: 0,
+    }
+    let currentSection: DeckSection = "unknown"
+    let totalCount = 0
 
     const lines = text.split(/\r?\n/)
 
     for (const line of lines) {
       const trimmed = line.trim()
       if (!trimmed) continue
+
+      if (/^pok(?:e|é)mon\s*:/i.test(trimmed)) {
+        currentSection = "pokemon"
+        continue
+      }
+
+      if (/^trainer\s*:/i.test(trimmed)) {
+        currentSection = "trainer"
+        continue
+      }
+
+      if (/^energy\s*:/i.test(trimmed)) {
+        currentSection = "energy"
+        continue
+      }
 
       const lineMatch = trimmed.match(
         /^\s*(\d+)\s+.+\b([A-Z]{2,4})\s+(\d{1,3}[A-Z]?)\b/,
@@ -87,6 +123,9 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
         const setCode = lineMatch[2].toLowerCase()
         const num = lineMatch[3].toLowerCase()
         const cardId = `${setCode}-${num}`
+
+        totalCount += count
+        sectionCounts[currentSection] += count
 
         for (let i = 0; i < count; i++) {
           fullIds.push(cardId)
@@ -103,6 +142,8 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
         const setCode = fallbackMatch[1].toLowerCase()
         const num = fallbackMatch[2].toLowerCase()
         const cardId = `${setCode}-${num}`
+        totalCount += 1
+        sectionCounts[currentSection] += 1
         fullIds.push(cardId)
         counts.set(cardId, (counts.get(cardId) || 0) + 1)
       }
@@ -114,70 +155,162 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
       fullIds,
       uniqueIds,
       counts,
+      totalCount,
+      sectionCounts,
+    }
+  }
+
+  function getDeckValidationError(parsed: ParsedDeckText) {
+    if (!parsed.uniqueIds.length) {
+      return "Couldn't find any card IDs like PAF 7 / OBF 162 in the text. Make sure lines look like '4 Charmander PAF 7'."
+    }
+
+    if (parsed.sectionCounts.pokemon < 1) {
+      return "Deck list must include at least 1 Pokemon."
+    }
+
+    if (parsed.sectionCounts.energy < 1) {
+      return "Deck list must include at least 1 Energy card."
+    }
+
+    if (parsed.totalCount !== 60) {
+      return `Deck list must total exactly 60 cards. This list currently totals ${parsed.totalCount}.`
+    }
+
+    return null
+  }
+
+  function buildCardById(cards: ImportedCard[]) {
+    const cardById = new Map<string, ImportedCard>()
+    for (const card of cards) {
+      cardById.set(card.id.toLowerCase(), card)
+    }
+    return cardById
+  }
+
+  function getFallbackCard(id: string, index?: number): ImportedCard {
+    const [setCode, num] = id.split("-")
+    return {
+      id: index == null ? id : `${id}#${index}`,
+      name: `Card ${setCode.toUpperCase()} ${num.toUpperCase()}`,
+      set: setCode.toUpperCase(),
+      number: num.toUpperCase(),
+    }
+  }
+
+  function buildExpandedDeck(fullIds: string[], cardById: Map<string, ImportedCard>) {
+    return fullIds.map((id, index) => {
+      const base = cardById.get(id.toLowerCase())
+      if (base) {
+        return {
+          ...base,
+          id: `${base.id}#${index}`,
+        }
+      }
+
+      return getFallbackCard(id, index)
+    })
+  }
+
+  function buildPreviewCards(
+    uniqueIds: string[],
+    counts: Map<string, number>,
+    cardById: Map<string, ImportedCard>,
+  ): FeaturedCard[] {
+    return uniqueIds.map((id) => ({
+      ...(cardById.get(id.toLowerCase()) ?? getFallbackCard(id)),
+      count: counts.get(id) ?? 1,
+    }))
+  }
+
+  async function fetchCardsByIds(ids: string[]) {
+    const response = await fetch("/api/cards", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
+    })
+
+    if (!response.ok) throw new Error("Failed to fetch cards")
+
+    const data = await response.json()
+    return Array.isArray(data.cards) ? (data.cards as ImportedCard[]) : []
+  }
+
+  async function hydrateFeaturedDecks() {
+    if (!featuredDecks.length || hasHydratedFeaturedDecks || isFeaturedLoading) return
+
+    setIsFeaturedLoading(true)
+
+    try {
+      const parsedFeaturedDecks = featuredDecks.map((deck) => ({
+        deck,
+        parsed: parseIdsFromText(deck.importText),
+      }))
+
+      const requestIds = Array.from(
+        new Set(parsedFeaturedDecks.flatMap(({ parsed }) => parsed.uniqueIds)),
+      )
+
+      const fetchedCards = await fetchCardsByIds(requestIds)
+      const cardById = buildCardById(fetchedCards)
+      const nextFeaturedCards: Record<string, FeaturedCard[]> = {}
+      const nextFeaturedExpandedDecks: Record<string, ImportedCard[]> = {}
+
+      for (const { deck, parsed } of parsedFeaturedDecks) {
+        nextFeaturedCards[deck.id] = buildPreviewCards(
+          parsed.uniqueIds,
+          parsed.counts,
+          cardById,
+        )
+        nextFeaturedExpandedDecks[deck.id] = buildExpandedDeck(
+          parsed.fullIds,
+          cardById,
+        )
+      }
+
+      setFeaturedDeckCards(nextFeaturedCards)
+      setFeaturedDeckExpandedDecks(nextFeaturedExpandedDecks)
+      setHasHydratedFeaturedDecks(true)
+    } catch (err: any) {
+      console.error(err)
+      setError(err.message ?? "Something went wrong loading featured decks.")
+    } finally {
+      setIsFeaturedLoading(false)
     }
   }
 
   async function handleImport() {
     setError(null)
 
-    const { fullIds, uniqueIds, counts } = parseIdsFromText(rawText)
+    const parsed = parseIdsFromText(rawText)
+    const validationError = getDeckValidationError(parsed)
 
-    if (!uniqueIds.length) {
+    if (validationError) {
       setPreviewCards([])
-      setCardCounts({})
-      setError(
-        "Couldn't find any card IDs like PAF 7 / OBF 162 in the text. Make sure lines look like '4 Charmander PAF 7'.",
-      )
+      setHasValidImport(false)
+      setError(validationError)
       return
     }
 
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/cards", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids: uniqueIds }),
-      })
+      const fetchedCards = await fetchCardsByIds(parsed.uniqueIds)
+      const cardById = buildCardById(fetchedCards)
+      const expandedDeck = buildExpandedDeck(parsed.fullIds, cardById)
+      const preview = buildPreviewCards(parsed.uniqueIds, parsed.counts, cardById)
 
-      if (!response.ok) throw new Error("Failed to fetch cards")
-
-      const data = await response.json()
-      const fetchedCards: ImportedCard[] = Array.isArray(data.cards)
-        ? data.cards
-        : []
-
-      const cardById = new Map<string, ImportedCard>()
-      for (const card of fetchedCards) {
-        cardById.set(card.id.toLowerCase(), card)
-      }
-
-      const expandedDeck: ImportedCard[] = fullIds.map((id, index) => {
-        const base = cardById.get(id.toLowerCase())
-        if (base) {
-          return {
-            ...base,
-            id: `${base.id}#${index}`,
-          }
-        }
-
-        const [setCode, num] = id.split("-")
-        return {
-          id: `${id}#${index}`,
-          name: `Card ${setCode.toUpperCase()} ${num.toUpperCase()}`,
-          set: setCode.toUpperCase(),
-          number: num.toUpperCase(),
-        }
-      })
-
-      setPreviewCards(fetchedCards)
-      setCardCounts(Object.fromEntries(counts))
-      setHoveredCard(fetchedCards[0] ?? null)
+      setPreviewCards(preview)
+      setHoveredCard(preview[0] ?? null)
+      setActiveListMode("custom")
+      setHasValidImport(true)
+      selectedFeaturedDeckRef.current = null
 
       onDeckImported?.(expandedDeck)
       onImportComplete?.(expandedDeck)
     } catch (err: any) {
       console.error(err)
+      setHasValidImport(false)
       setError(err.message ?? "Something went wrong importing the deck.")
     } finally {
       setIsLoading(false)
@@ -194,24 +327,64 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
     setShowHelpOverlay(true)
     window.localStorage.setItem("pcd_has_seen_help", "true")
   }
-}, [])
+  }, [])
 
-
-  // Auto-import once on mount when you want the featured list preloaded
   useEffect(() => {
-    if (!autoImportOnMount) return
-    if (hasAutoImported) return
-    if (!rawText.trim()) return
-
-    setHasAutoImported(true)
-    void handleImport()
+    void hydrateFeaturedDecks()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoImportOnMount, hasAutoImported, rawText])
+  }, [featuredDecks.length])
+
+  useEffect(() => {
+    if (featuredDecks.length <= 1) return
+
+    const timer = window.setInterval(() => {
+      setFeaturedDeckIndex((current) => (current + 1) % featuredDecks.length)
+    }, 10000)
+
+    return () => window.clearInterval(timer)
+  }, [featuredDecks.length])
 
   const handleTextChange = (value: string) => {
     setRawText(value)
+    setHasValidImport(false)
     onTextChange?.(value)
   }
+
+  const currentFeaturedDeck = featuredDecks[featuredDeckIndex]
+  const currentFeaturedDeckId = currentFeaturedDeck?.id
+  const currentFeaturedCards =
+    currentFeaturedDeckId ? featuredDeckCards[currentFeaturedDeckId] ?? [] : []
+  const currentFeaturedExpandedDeck =
+    currentFeaturedDeckId ? featuredDeckExpandedDecks[currentFeaturedDeckId] ?? [] : []
+  const displayedCards =
+    activeListMode === "custom" ? previewCards : currentFeaturedCards
+  const displayedDeckTitle =
+    activeListMode === "custom"
+      ? effectiveDeckTitle
+      : currentFeaturedDeck?.title ?? effectiveDeckTitle
+  const displayedDeckPlayer =
+    activeListMode === "custom"
+      ? effectiveDeckPlayer
+      : currentFeaturedDeck?.player ?? effectiveDeckPlayer
+  const displayedDeckKey =
+    activeListMode === "custom" ? "custom" : currentFeaturedDeckId ?? "featured"
+
+  useEffect(() => {
+    if (activeListMode !== "featured") return
+    if (!currentFeaturedDeckId || !currentFeaturedExpandedDeck.length) return
+
+    setHoveredCard(currentFeaturedCards[0] ?? null)
+
+    if (selectedFeaturedDeckRef.current === currentFeaturedDeckId) return
+    selectedFeaturedDeckRef.current = currentFeaturedDeckId
+    onFeaturedDeckSelected?.(currentFeaturedExpandedDeck)
+  }, [
+    activeListMode,
+    currentFeaturedDeckId,
+    currentFeaturedCards,
+    currentFeaturedExpandedDeck,
+    onFeaturedDeckSelected,
+  ])
 
   return (
     <div className="flex flex-col items-center px-4 py-10 text-slate-50">
@@ -232,7 +405,7 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
             />
             <div className="flex flex-col">
               <h1 className="text-2xl font-semibold text-emerald-300">
-                PrizeCheckr.io
+                PrizeCheck.us
               </h1>
               <p className="text-xs sm:text-sm text-slate-400">
                 Paste your deck list and test how well you remember your prizes.{" "}
@@ -265,7 +438,7 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
 
   <Button
     size="sm"
-    onClick={handleImport}
+    onClick={() => void handleImport()}
     disabled={isLoading || !rawText.trim()}
     className="rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
   >
@@ -277,42 +450,63 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
         </div>
 
         {/* Text area */}
-        <Card className="bg-slate-800/45 border border-emerald-900/40 shadow-[0_0_16px_rgba(16,185,129,0.35)]">
-          <div className="p-4">
+        <Card
+          className={cn(
+            "relative bg-slate-900/35 border py-0 transition-all duration-300",
+            hasValidImport
+              ? "border-emerald-400/80 shadow-[0_0_20px_rgba(52,211,153,0.45)]"
+              : "border-emerald-900/25 shadow-[0_0_10px_rgba(16,185,129,0.18)]",
+          )}
+        >
+          <div className={cn("p-3", hasValidImport && "pb-6")}>
             <Textarea
-              rows={6}
+              rows={5}
               value={rawText}
               onChange={(e) => handleTextChange(e.target.value)}
               className="bg-transparent border-0 focus-visible:ring-0 text-sm font-mono text-slate-100 resize-none"
-              placeholder={`Pokémon: 26
-2 Charmander PAF 7
-1 Charmander PFL 11
-1 Charmeleon PFL 12
-2 Charizard ex OBF 125
-...`}
+              placeholder="Paste deck list here..."
             />
             {error && (
               <p className="mt-2 text-xs text-rose-400">{error}</p>
             )}
           </div>
+          {hasValidImport && !error && (
+            <p
+              aria-live="polite"
+              className="pointer-events-none absolute bottom-2 right-3 text-[11px] font-medium text-emerald-300"
+            >
+              valid deck import
+            </p>
+          )}
         </Card>
 
         {/* Featured deck banner */}
-        <FeaturedDeckSection />
+        <FeaturedDeckSection
+          deckId={currentFeaturedDeck?.id ?? "custom"}
+          title={currentFeaturedDeck?.title ?? effectiveDeckTitle}
+          sourceUrl={currentFeaturedDeck?.sourceUrl ?? "https://limitlesstcg.com/decks/lists"}
+          importText={currentFeaturedDeck?.importText ?? rawText}
+          playedBy={currentFeaturedDeck?.playedBy}
+          cards={currentFeaturedCards}
+          loading={isFeaturedLoading && !currentFeaturedCards.length}
+        />
 
         {/* Deck list + hover preview */}
-        {previewCards.length > 0 && (
-          <div className="flex flex-col md:flex-row gap-6 mt-2 outer-glow-emerald-900 border-emerald-500/50">
+        {displayedCards.length > 0 && (
+          <div
+            key={displayedDeckKey}
+            className="deck-list-fade-in flex flex-col md:flex-row gap-6 mt-2 outer-glow-emerald-900 border-emerald-500/50"
+          >
             {/* LIST: now has its own dark-green title bar INSIDE the card */}
             <div className="flex-1 max-h-[420px] rounded-lg border border-slate-800 bg-slate-900/70 flex flex-col">
               {/* Title bar that feels like part of the list */}
               <div className="px-4 py-2 border-b border-slate-800 bg-emerald-300/35 rounded-t-lg">
                 <p className="text-xs sm:text-sm font-semibold text-emerald-100">
-                  {effectiveDeckTitle}
-                  {effectiveDeckPlayer && (
+                  {displayedDeckTitle}
+                  {displayedDeckPlayer && (
                     <span className="font-normal text-emerald-300">
                       {" "}
-                      by {effectiveDeckPlayer}
+                      by {displayedDeckPlayer}
                     </span>
                   )}
                 </p>
@@ -320,9 +514,8 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
 
               {/* Scrollable list body */}
               <div className="flex-1 overflow-y-auto">
-                {previewCards.map((card, index) => {
-                  const baseId = card.id.toLowerCase()
-                  const count = cardCounts[baseId] ?? 1
+                {displayedCards.map((card, index) => {
+                  const count = card.count
                   const isHovered = hoveredCard?.id === card.id
                   const isEvenRow = index % 2 === 0
 
@@ -356,15 +549,35 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
 
             {/* Hover preview on the right */}
             <div className="w-full md:w-64 shrink-0 flex flex-col items-center justify-start">
-              {canStartGame && onStartGame && (
-                <Button
-                  type="button"
-                  size="sm"
-                  className="mb-4 rounded-full px-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
-                  onClick={onStartGame}
-                >
-                  Start Game
-                </Button>
+              {onStartGame && (
+                <div className="group relative mb-4">
+                  <Button
+                    type="button"
+                    size="sm"
+                    aria-disabled={!canStartGame}
+                    className={cn(
+                      "rounded-full px-7 font-semibold transition-all",
+                      canStartGame
+                        ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md shadow-emerald-500/30 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]"
+                        : "bg-emerald-950/80 text-emerald-200/80 border border-emerald-500/35 shadow-[0_0_14px_rgba(16,185,129,0.2)] cursor-not-allowed hover:bg-emerald-900/80 hover:text-emerald-100 hover:shadow-[0_0_18px_rgba(16,185,129,0.32)]",
+                    )}
+                    onClick={(event) => {
+                      if (!canStartGame) {
+                        event.preventDefault()
+                        return
+                      }
+
+                      onStartGame()
+                    }}
+                  >
+                    Start Game
+                  </Button>
+                  {!canStartGame && (
+                    <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-max max-w-[220px] -translate-x-1/2 translate-y-1 rounded-md border border-emerald-500/30 bg-slate-950/95 px-3 py-1.5 text-[11px] font-medium text-emerald-100 opacity-0 shadow-lg shadow-black/40 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                      Import a valid deck to start
+                    </div>
+                  )}
+                </div>
               )}
 
               {hoveredCard ? (
@@ -421,7 +634,7 @@ const [showHelpOverlay, setShowHelpOverlay] = useState(false)
               <HelpCircle className="h-5 w-5 text-emerald-300" />
               <h2 className="text-lg font-semibold">
                 <span className="text-emerald-300">How to use</span>{" "}
-                <span className="text-emerald-100">PrizeCheckr.io</span>
+                <span className="text-emerald-100">PrizeCheck.us</span>
               </h2>
             </div>
 

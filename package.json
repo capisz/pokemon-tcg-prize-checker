@@ -5,7 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "sync:tcg-data": "node scripts/sync-tcg-data.mjs",
+    "build:card-index": "node scripts/build-card-index.mjs",
+    "refresh:tcg-data": "npm run sync:tcg-data && npm run build:card-index",
+    "smoke:data": "node scripts/smoke-card-index.mjs"
   },
   "dependencies": {
     "@radix-ui/react-progress": "latest",

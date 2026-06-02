@@ -100,98 +100,112 @@
   --sidebar-ring: oklch(0.6 0.22 250);
 }
 
-/* Softer, multi-color holographic glitter */
+/* Soft card-like holographic foil for ex cards */
 .holo-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  overflow: hidden;
   mix-blend-mode: screen;
+  opacity: 0.62;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.34), transparent 18%),
+    radial-gradient(circle at 82% 74%, rgba(56, 189, 248, 0.24), transparent 20%),
+    linear-gradient(
+      115deg,
+      rgba(244, 114, 182, 0.18),
+      rgba(250, 204, 21, 0.14) 28%,
+      rgba(52, 211, 153, 0.16) 48%,
+      rgba(56, 189, 248, 0.2) 68%,
+      rgba(168, 85, 247, 0.18)
+    );
 }
 
-/* Main sparkle layer */
 .holo-overlay::before {
   content: "";
   position: absolute;
-  inset: -10%;
+  inset: -35%;
   pointer-events: none;
-
-  /* More colors, but lower alpha */
   background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.55) 0, transparent 55%),
-    radial-gradient(circle, rgba(56, 189, 248, 0.55) 0, transparent 55%),   /* cyan */
-    radial-gradient(circle, rgba(244, 114, 182, 0.55) 0, transparent 55%),  /* pink */
-    radial-gradient(circle, rgba(250, 204, 21, 0.55) 0, transparent 55%),   /* yellow */
-    radial-gradient(circle, rgba(52, 211, 153, 0.55) 0, transparent 55%),   /* teal */
-    radial-gradient(circle, rgba(129, 140, 248, 0.55) 0, transparent 55%);  /* indigo */
-  background-size:
-    18px 18px,
-    22px 22px,
-    20px 20px,
-    26px 26px,
-    24px 24px,
-    30px 30px;
-  background-position:
-    0 0,
-    40px 60px,
-    80px 20px,
-    120px 90px,
-    30px 110px,
-    100px 140px;
-  background-repeat: repeat;
-
-  /* Much softer overall */
-  filter: blur(0.2px) drop-shadow(0 0 3px rgba(255, 255, 255, 0.549));
-  opacity: 0.22; /* main intensity knob */
-
-  animation: holo-twinkle 4s ease-in-out infinite alternate;
+    repeating-linear-gradient(
+      112deg,
+      rgba(255, 255, 255, 0.18) 0,
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 2px,
+      transparent 9px
+    ),
+    linear-gradient(
+      125deg,
+      rgba(59, 130, 246, 0.18),
+      rgba(236, 72, 153, 0.2) 28%,
+      rgba(250, 204, 21, 0.18) 50%,
+      rgba(20, 184, 166, 0.2) 72%,
+      rgba(129, 140, 248, 0.18)
+    );
+  background-size: 100% 100%, 220% 220%;
+  filter: saturate(1.35) contrast(1.08);
+  opacity: 0.36;
+  transform: rotate(0.001deg);
+  animation: holo-foil-drift 7s ease-in-out infinite alternate;
 }
 
-/* Subtle secondary shimmer */
 .holo-overlay::after {
   content: "";
   position: absolute;
-  inset: -15%;
+  top: -20%;
+  bottom: -20%;
+  left: -75%;
+  width: 46%;
   pointer-events: none;
-
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.35) 0, transparent 60%),
-    radial-gradient(circle, rgba(59, 130, 246, 0.3) 0, transparent 60%);
-  background-size: 42px 42px, 56px 56px;
-  background-position:
-    10px 20px,
-    70px 80px;
-  background-repeat: repeat;
-
-  filter: blur(0.2px);
-  opacity: 0.16;
-  animation: holo-twinkle-slow .6s ease-in-out infinite alternate;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 18%,
+    rgba(255, 255, 255, 0.42) 46%,
+    rgba(125, 211, 252, 0.26) 54%,
+    transparent 78%
+  );
+  filter: blur(0.4px);
+  opacity: 0.52;
+  transform: skewX(-18deg);
+  animation: holo-light-sweep 5.4s ease-in-out infinite;
 }
 
-@keyframes holo-twinkle {
+@keyframes holo-foil-drift {
   0% {
-    opacity: 0.08;
-    transform: translate3d(0, 0, 0);
+    background-position: 0 0, 0% 50%;
+    opacity: 0.24;
   }
   50% {
-    opacity: 0.35;
+    opacity: 0.42;
   }
   100% {
-    opacity: 0.15;
-    transform: translate3d(-24px, -25px, 0);
+    background-position: 18px 12px, 100% 50%;
+    opacity: 0.32;
   }
 }
 
-@keyframes holo-twinkle-slow {
+@keyframes holo-light-sweep {
   0% {
-    opacity: 0.08;
-    transform: translate3d(4px, -3px, 0);
+    transform: translateX(0) skewX(-18deg);
+    opacity: 0;
   }
-  50% {
-    opacity: 0.2;
+  28% {
+    opacity: 0;
+  }
+  52% {
+    opacity: 0.55;
   }
   100% {
-    opacity: 0.12;
-    transform: translate3d(-4px, 3px, 0);
+    transform: translateX(430%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-overlay::before,
+  .holo-overlay::after {
+    animation: none;
   }
 }
 
@@ -292,5 +306,90 @@ body {
   }
 }
 
+.deck-list-fade-in {
+  animation: deck-list-fade-in 0.7s ease-out both;
+}
 
+.featured-card-wipe {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateX(0) translateY(0) scale(1);
+  transition:
+    filter 0.48s ease,
+    opacity 0.48s ease,
+    transform 0.48s ease;
+  transition-delay: inherit;
+  will-change: filter, opacity, transform;
+}
 
+.featured-card-wipe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-conic-gradient(
+      from 45deg,
+      rgba(15, 23, 42, 0.86) 0 25%,
+      rgba(15, 23, 42, 0.18) 0 50%
+    )
+    0 0 / 8px 8px,
+    linear-gradient(
+      90deg,
+      rgba(16, 185, 129, 0.18),
+      rgba(14, 165, 233, 0.12),
+      rgba(15, 23, 42, 0)
+  );
+  opacity: 0;
+  transition: opacity 0.48s ease;
+  transition-delay: inherit;
+}
+
+.featured-card-wipe-entering {
+  filter: blur(2px) saturate(0.82);
+  opacity: 0.28;
+  transform: translateX(-12px) translateY(4px) scale(0.99);
+}
+
+.featured-card-wipe-entering::after {
+  opacity: 0.72;
+}
+
+.featured-card-wipe-shown {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateX(0) translateY(0) scale(1);
+}
+
+.featured-card-wipe-shown::after {
+  opacity: 0;
+}
+
+.featured-card-wipe-exiting {
+  filter: blur(2px) saturate(0.7);
+  opacity: 0.16;
+  transform: translateX(14px) translateY(-4px) scale(0.985);
+}
+
+.featured-card-wipe-exiting::after {
+  opacity: 0.58;
+}
+
+@keyframes deck-list-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-list-fade-in,
+  .featured-card-wipe {
+    animation: none;
+    transition: none;
+  }
+}

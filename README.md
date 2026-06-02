@@ -44,7 +44,9 @@ Paste a deck list, let the app simulate a real game (opening hand + 6 prizes), t
 - Paste a **text export** of a deck list (e.g. from LimitlessTCG).
 - Parser extracts counts + set codes + card numbers  
   (supports lines like `4 Charmander PAF 7`).
-- Calls an internal `/api/cards` endpoint to hydrate cards with:
+- Calls an internal `/api/cards` endpoint backed by a generated local card index.
+- No Pokémon TCG API call is required during normal app use.
+- Hydrates cards with:
   - Name
   - Set code
   - Card number
@@ -101,9 +103,10 @@ Paste a deck list, let the app simulate a real game (opening hand + 6 prizes), t
   - Progress bar shows % to next rank and change from last game.
 - Rank + personal best are stored in `localStorage`.
 
-### 🎧 Ambient audio & micro-interactions
+### ⚡ Local data & micro-interactions
 
-- Floating vertical **volume slider** on the game screen.
+- Pokémon TCG card data is stored locally under `data/pokemon-tcg`.
+- A generated `data/generated/card-index.json` keeps cold card lookups fast.
 - Subtle hover / press animations on all primary buttons:
   - Slight scale-up on hover.
   - Soft “press” effect on click.
@@ -124,7 +127,7 @@ There are three main stages in the app:
 
 1. **Import**
    - User pastes a deck list.
-   - App parses IDs and calls `/api/cards`.
+   - App parses IDs and calls `/api/cards`, which reads the generated local card index.
    - Featured deck can auto-load for first-time users.
 
 2. **Game**
@@ -175,6 +178,9 @@ There are three main stages in the app:
   - Custom card dealing & scoring helpers
 - **Storage:**
   - `localStorage` (personal best + rank state)
+- **Data:**
+  - Local JSON from `PokemonTCG/pokemon-tcg-data`
+  - Generated lookup index for fast `/api/cards` hydration
 - **Deployment:** Designed for Vercel (but can run anywhere that supports Next.js)
 
 ---
@@ -184,7 +190,7 @@ There are three main stages in the app:
 ### Prerequisites
 
 - **Node.js** `18+` (preferably `20.x`)
-- **npm** or **pnpm** or **yarn`
+- **npm**
 
 ### Setup
 
@@ -195,17 +201,20 @@ cd <your-repo>
 
 # 2. Install dependencies
 npm install
-# or
-pnpm install
 
-# 3. (Optional) Create environment file for APIs
-cp .env.local.example .env.local
-# then edit .env.local as needed
+# 3. Refresh local Pokémon TCG data from upstream master
+npm run refresh:tcg-data
 
-# 4. Run in development mode
+# 4. Verify the generated card index
+npm run smoke:data
+
+# 5. Run in development mode
 npm run dev
-# or
-pnpm dev
 
-# 5. Open in the browser
+# 6. Open in the browser
 # http://localhost:3000
+```
+
+### Data updates
+
+Use `npm run refresh:tcg-data` whenever new sets are added upstream. This downloads the current `master` data, rebuilds `data/generated/card-index.json`, and keeps runtime card lookup local and fast.

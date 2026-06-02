@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { FooterMusicControls } from "@/components/music-player" // or MusicControls if that's what you're using
 
 export function SiteFooter() {
   return (
@@ -10,7 +9,7 @@ export function SiteFooter() {
         {/* Left: title + links */}
         <div className="space-y-2">
           <p className="text-xs font-semibold tracking-[0.16em] uppercase text-emerald-900">
-            PrizeCheckr.io
+            PrizeCheck.us
           </p>
           <p className="text-xs text-emerald-900/80">
             Use this and the tools below to become a better player.
@@ -52,11 +51,6 @@ export function SiteFooter() {
           Game Freak, and/or Creatures. This website is not produced by, endorsed by, supported by,
           or affiliated with those companies.
         </p>
-
-        {/* Right: volume slider only */}
-        <div className="flex items-center justify-end gap-3">
-          <FooterMusicControls />
-        </div>
       </div>
     </footer>
   )

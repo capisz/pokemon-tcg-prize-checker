@@ -9,54 +9,17 @@ import { dealCards } from "@/lib/shuffle"
 import { LoadingOverlay } from "@/components/loading-overlay"
 import { CountdownOverlay } from "@/components/countdown-overlay"
 import { SiteFooter } from "@/components/site-footer"
-import { FloatingGameVolume } from "@/components/music-player"
 import { cn } from "@/lib/utils"
-import type { Metadata } from "next"
+import { FEATURED_DECKS } from "@/lib/featured-decks"
 
 type Stage = "import" | "game" | "results"
 
 const GAME_DURATION = 120 // seconds – keep in sync with DeckView
 
-// 🔹 Featured deck text that should be auto-imported on load
-const DEFAULT_FEATURED_DECK_TEXT = `Pokémon: 26
-2 Charmander PAF 7
-1 Charmander PFL 11
-1 Charmeleon PFL 12
-2 Charizard ex OBF 125
-3 Hoothoot SCR 114
-3 Noctowl SCR 115
-1 Pidgey MEW 16
-1 Pidgey OBF 162
-2 Pidgeot ex OBF 164
-2 Duskull PRE 35
-1 Dusclops PRE 36
-1 Dusknoir PRE 37
-2 Terapagos ex SCR 128
-2 Fan Rotom SCR 118
-1 Fezandipiti ex SFA 38
-1 Klefki SVI 96
-
-Trainer: 27
-4 Dawn PFL 87
-2 Iono PAL 185
-2 Boss's Orders MEG 114
-1 Briar SCR 132
-4 Buddy-Buddy Poffin TEF 144
-4 Nest Ball SVI 181
-4 Rare Candy MEG 125
-1 Ultra Ball MEG 131
-1 Super Rod PAL 188
-1 Night Stretcher SFA 61
-1 Prime Catcher TEF 157
-2 Area Zero Underdepths SCR 131
-
-Energy: 7
-5 Fire Energy MEE 2
-2 Jet Energy PAL 190`
-
 export default function HomePage() {
   const [stage, setStage] = useState<Stage>("import")
   const [hasSeenInitialImport, setHasSeenInitialImport] = useState(false)
+  const [hasImportedDeck, setHasImportedDeck] = useState(false)
 
   // how many seconds were left when the game ended
   const [timeLeft, setTimeLeft] = useState<number | null>(null)
@@ -128,6 +91,7 @@ export default function HomePage() {
 
   // When a deck is first imported from text
   const handleDeckImported = (importedFullDeck: PokemonCard[]) => {
+    setHasImportedDeck(true)
     setFullDeck(importedFullDeck)
     setupNewGameFromDeck(importedFullDeck)
 
@@ -139,8 +103,18 @@ export default function HomePage() {
     }
   }
 
+  const handleFeaturedDeckSelected = (featuredFullDeck: PokemonCard[]) => {
+    setFullDeck(featuredFullDeck)
+    setupNewGameFromDeck(featuredFullDeck)
+
+    if (!hasSeenInitialImport) {
+      setHasSeenInitialImport(true)
+    }
+  }
+
   // When user presses Start Game from the import screen
   const handleStartGame = () => {
+    if (!hasImportedDeck) return
     if (playDeck.length === 0) return
     startPreGameCountdown()
   }
@@ -193,12 +167,10 @@ const handleRestartGame = () => {
         {stage === "import" && (
           <DeckImport
             onDeckImported={handleDeckImported}
-            canStartGame={playDeck.length > 0}
+            onFeaturedDeckSelected={handleFeaturedDeckSelected}
+            canStartGame={hasImportedDeck && playDeck.length > 0}
             onStartGame={handleStartGame}
-            initialText={DEFAULT_FEATURED_DECK_TEXT}
-            autoImportOnMount
-            deckTitle="Charizard Noctowl"
-            deckPlayer="Nicolai Stiborg"
+            featuredDecks={FEATURED_DECKS}
           />
         )}
 
@@ -211,7 +183,6 @@ const handleRestartGame = () => {
               onEndEarly={handleGameFinished}
               onRestartGame={handleRestartGame}
             />
-            <FloatingGameVolume />
           </>
         )}
 

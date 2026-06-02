@@ -56,7 +56,6 @@ module.exports = mod;
 "[project]/app/api/cards/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-// app/api/cards/route.ts
 __turbopack_context__.s([
     "POST",
     ()=>POST,
@@ -70,98 +69,53 @@ var __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$
 ;
 ;
 const runtime = "nodejs";
-const CARDS_BASE_PATH = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(process.cwd(), "TCGData", "pokemon-tcg-data-master", "cards", "en");
-const SETS_FILE_PATH = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(process.cwd(), "TCGData", "pokemon-tcg-data-master", "sets", "en.json");
-// Caches so we don't re-read from disk every request
-let allCardsCache = null;
-let setCodeMapCache = null;
-async function loadSetCodeMap() {
-    if (setCodeMapCache) return setCodeMapCache;
-    try {
-        const raw = await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].readFile(SETS_FILE_PATH, "utf8");
-        const sets = JSON.parse(raw);
-        const map = {};
-        for (const set of sets){
-            const id = set.id;
-            const code = set.ptcgoCode;
-            if (!id || !code) continue;
-            // ptcgoCode (what Live exports use) -> internal set id
-            map[code.toLowerCase()] = id.toLowerCase();
-        }
-        setCodeMapCache = map;
-        console.log(`Loaded ${Object.keys(map).length} set code mappings from sets/en.json`);
-        return map;
-    } catch (err) {
-        console.error("Failed to load set code map from sets/en.json:", err);
-        // Fallback: empty map, so we just use the raw set code
-        setCodeMapCache = {};
-        return setCodeMapCache;
-    }
-}
-async function loadAllCards() {
-    if (allCardsCache) return allCardsCache;
-    const files = (await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].readdir(CARDS_BASE_PATH)).filter((f)=>f.endsWith(".json"));
-    const result = [];
-    for (const file of files){
-        const filePath = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(CARDS_BASE_PATH, file);
-        try {
-            const raw = await __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].readFile(filePath, "utf8");
-            const json = JSON.parse(raw);
-            const cards = Array.isArray(json) ? json : json.data ?? [];
-            result.push(...cards);
-        } catch (err) {
-            console.error(`Failed to read card file ${filePath}:`, err);
-        }
-    }
-    allCardsCache = result;
-    console.log(`Loaded ${result.length} cards from local data (${files.length} files)`);
-    return result;
+const CARD_INDEX_PATH = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(process.cwd(), "data", "generated", "card-index.json");
+let cardIndexPromise = null;
+function normalize(value) {
+    return String(value ?? "").trim().toLowerCase();
 }
 function buildId(setId, number) {
-    return `${setId.toLowerCase()}-${number.toLowerCase()}`;
+    return `${normalize(setId)}-${normalize(number)}`;
 }
-async function mapLiveSetCodeToInternalId(liveSetCode) {
-    const map = await loadSetCodeMap();
-    const lc = liveSetCode.toLowerCase();
-    // --- manual aliases for codes that aren't in sets/en.json yet ---
-    if (lc === "mee") {
-        // "Mega Energies" -> reuse Scarlet & Violet Energies images
-        return "sve";
+async function loadCardIndex() {
+    if (!cardIndexPromise) {
+        cardIndexPromise = __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["promises"].readFile(CARD_INDEX_PATH, "utf8").then((raw)=>JSON.parse(raw)).catch((error)=>{
+            cardIndexPromise = null;
+            throw error;
+        });
     }
-    // ----------------------------------------------------------------
-    // If we know this ptcgoCode (PFL, PAF, TEF, etc.), return the dataset id (me2, sv4pt5, sv5, ...)
-    return map[lc] ?? lc;
+    return cardIndexPromise;
 }
-async function getCardFromLocalId(rawId) {
+function resolveCard(rawId, index) {
     const [liveSetCode, cardNumber] = rawId.split("-");
     if (!liveSetCode || !cardNumber) return null;
-    const canonicalSetId = await mapLiveSetCodeToInternalId(liveSetCode);
-    const candidateIds = [
-        buildId(canonicalSetId, cardNumber),
-        buildId(liveSetCode, cardNumber)
-    ];
-    const cards = await loadAllCards();
-    // Try match by card.id
-    let match = cards.find((c)=>c.id && candidateIds.includes(c.id.toLowerCase())) ?? // Then by set.id + number
-    cards.find((c)=>{
-        const setId = c.set?.id;
-        const num = c.number;
-        if (!setId || !num) return false;
-        const cid = buildId(setId, num);
-        return candidateIds.includes(cid);
-    });
-    if (!match) {
-        console.warn(`No local card found for ${rawId}`);
-        return null;
-    }
-    const image = match.images?.small ?? match.imageUrl ?? match.imageUrlHiRes ?? undefined;
-    const setName = match.set?.name ?? liveSetCode.toUpperCase();
+    const code = normalize(liveSetCode);
+    const number = normalize(cardNumber);
+    const canonicalSetId = index.setCodeToId[code] ?? code;
+    const match = index.cardsById[buildId(canonicalSetId, number)] ?? index.cardsById[buildId(code, number)];
+    if (!match) return null;
     return {
         id: rawId,
-        name: match.name ?? `${liveSetCode.toUpperCase()} ${cardNumber}`,
-        image,
-        set: setName,
-        number: match.number ?? cardNumber
+        name: match.name,
+        image: match.image,
+        set: match.set,
+        number: match.number || cardNumber
+    };
+}
+function getSetDisplayName(setCode, index) {
+    if (!setCode) return "Unknown Set";
+    const code = normalize(setCode);
+    const canonicalSetId = index.setCodeToId[code] ?? code;
+    return index.setNameByCode?.[code] ?? index.setNameById?.[canonicalSetId] ?? canonicalSetId.toUpperCase();
+}
+function placeholderCard(rawId, index) {
+    const [setCode, number] = rawId.split("-");
+    return {
+        id: rawId,
+        name: `Card ${rawId.toUpperCase()}`,
+        image: undefined,
+        set: getSetDisplayName(setCode, index),
+        number: number?.toUpperCase() ?? "??"
     };
 }
 async function POST(req) {
@@ -175,19 +129,8 @@ async function POST(req) {
                 status: 200
             });
         }
-        const cards = await Promise.all(ids.map(async (rawId)=>{
-            const card = await getCardFromLocalId(rawId);
-            if (card) return card;
-            // Fallback: text-only placeholder if we can't find an image
-            const [setCode, num] = rawId.split("-");
-            return {
-                id: rawId,
-                name: `Card ${rawId.toUpperCase()}`,
-                image: undefined,
-                set: setCode?.toUpperCase() ?? "Unknown Set",
-                number: num ?? "??"
-            };
-        }));
+        const index = await loadCardIndex();
+        const cards = ids.map((rawId)=>resolveCard(rawId, index) ?? placeholderCard(rawId, index));
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             cards
         }, {
@@ -196,7 +139,7 @@ async function POST(req) {
     } catch (err) {
         console.error("Error in /api/cards:", err);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: "Failed to load cards"
+            error: "Failed to load cards. Run `npm run build:card-index` to regenerate the local card index."
         }, {
             status: 500
         });

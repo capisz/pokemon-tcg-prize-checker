@@ -284,7 +284,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/button.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$copy$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Copy$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/copy.js [app-client] (ecmascript) <export default as Copy>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/text.ts [app-client] (ecmascript)"); // 👈 NEW
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/text.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -295,203 +295,56 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 const MAX_FEATURED_CARDS = 5;
-/** Temporary fallback deck until the API is wired up */ const FALLBACK_DECK = {
-    title: "Charizard ex / Pidgeot ex — Regional Stuttgart Champion",
-    sourceUrl: "https://limitlesstcg.com/decks/lists",
-    importText: `Pokémon: 26
-2 Charmander PAF 7
-1 Charmander PFL 11
-1 Charmeleon PFL 12
-2 Charizard ex OBF 125
-3 Hoothoot SCR 114
-3 Noctowl SCR 115
-1 Pidgey MEW 16
-1 Pidgey OBF 162
-2 Pidgeot ex OBF 164
-2 Duskull PRE 35
-1 Dusclops PRE 36
-1 Dusknoir PRE 37
-2 Terapagos ex SCR 128
-2 Fan Rotom SCR 118
-1 Fezandipiti ex SFA 38
-1 Klefki SVI 96
-
-Trainer: 27
-4 Dawn PFL 87
-2 Iono PAL 185
-2 Boss's Orders MEG 114
-1 Briar SCR 132
-4 Buddy-Buddy Poffin TEF 144
-4 Nest Ball SVI 181
-4 Rare Candy MEG 125
-1 Ultra Ball MEG 131
-1 Super Rod PAL 188
-1 Night Stretcher SFA 61
-1 Prime Catcher TEF 157
-2 Area Zero Underdepths SCR 131
-
-Energy: 7
-5 Fire Energy MEE 2
-2 Jet Energy PAL 190`
-};
-/* --- same parser logic as DeckImport --- */ function parseIdsFromText(text) {
-    const fullIds = [];
-    const counts = new Map();
-    const lines = text.split(/\r?\n/);
-    for (const line of lines){
-        const trimmed = line.trim();
-        if (!trimmed) continue;
-        const lineMatch = trimmed.match(/^\s*(\d+)\s+.+\b([A-Z]{2,4})\s+(\d{1,3}[A-Z]?)\b/);
-        if (lineMatch) {
-            const count = Number(lineMatch[1]) || 1;
-            const setCode = lineMatch[2].toLowerCase();
-            const num = lineMatch[3].toLowerCase();
-            const cardId = `${setCode}-${num}`;
-            for(let i = 0; i < count; i++)fullIds.push(cardId);
-            counts.set(cardId, (counts.get(cardId) || 0) + count);
-            continue;
-        }
-        const fallbackMatch = trimmed.match(/\b([A-Z]{2,4})\s+(\d{1,3}[A-Z]?)\b/);
-        if (fallbackMatch) {
-            const setCode = fallbackMatch[1].toLowerCase();
-            const num = fallbackMatch[2].toLowerCase();
-            const cardId = `${setCode}-${num}`;
-            fullIds.push(cardId);
-            counts.set(cardId, (counts.get(cardId) || 0) + 1);
-        }
-    }
-    const uniqueIds = Array.from(new Set(fullIds));
-    return {
-        fullIds,
-        uniqueIds,
-        counts
-    };
-}
-function FeaturedDeckSection() {
+function FeaturedDeckSection({ title, sourceUrl, importText, cards, loading }) {
     _s();
-    const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
-    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [deckTitle, setDeckTitle] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(FALLBACK_DECK.title);
-    const [sourceUrl, setSourceUrl] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(FALLBACK_DECK.sourceUrl);
-    const [importText] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(FALLBACK_DECK.importText);
-    const [cards, setCards] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [revealed, setRevealed] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [copied, setCopied] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const visibleCards = cards.slice(0, MAX_FEATURED_CARDS);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "FeaturedDeckSection.useEffect": ()=>{
-            let cancelled = false;
-            async function loadFromFallback() {
-                try {
-                    setLoading(true);
-                    setError(null);
-                    const { uniqueIds, counts } = parseIdsFromText(FALLBACK_DECK.importText);
-                    if (!uniqueIds.length) {
-                        throw new Error("Could not parse any card IDs from the featured deck");
-                    }
-                    const cardsRes = await fetch("/api/cards", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            ids: uniqueIds
-                        })
-                    });
-                    if (!cardsRes.ok) throw new Error("Failed to fetch card details");
-                    const cardsData = await cardsRes.json();
-                    const fetched = Array.isArray(cardsData.cards) ? cardsData.cards : [];
-                    const cardById = new Map();
-                    for (const c of fetched){
-                        cardById.set(c.id.toLowerCase(), c);
-                    }
-                    const withCounts = uniqueIds.map({
-                        "FeaturedDeckSection.useEffect.loadFromFallback.withCounts": (id)=>{
-                            const base = cardById.get(id.toLowerCase());
-                            const count = counts.get(id) ?? 1;
-                            if (base) return {
-                                ...base,
-                                count
-                            };
-                            const [setCode, num] = id.split("-");
-                            return {
-                                id,
-                                name: `Card ${setCode.toUpperCase()} ${num.toUpperCase()}`,
-                                set: setCode.toUpperCase(),
-                                number: num.toUpperCase(),
-                                count
-                            };
-                        }
-                    }["FeaturedDeckSection.useEffect.loadFromFallback.withCounts"]);
-                    if (!cancelled) {
-                        setDeckTitle(FALLBACK_DECK.title);
-                        setSourceUrl(FALLBACK_DECK.sourceUrl);
-                        setCards(withCounts.slice(0, MAX_FEATURED_CARDS));
-                    }
-                } catch (err) {
-                    console.error("FeaturedDeckSection error:", err);
-                    if (!cancelled) setError(err.message ?? "Error loading featured deck");
-                } finally{
-                    if (!cancelled) {
-                        setLoading(false);
-                        setTimeout({
-                            "FeaturedDeckSection.useEffect.loadFromFallback": ()=>setRevealed(true)
-                        }["FeaturedDeckSection.useEffect.loadFromFallback"], 120);
-                    }
-                }
-            }
-            loadFromFallback();
+            setRevealed(false);
+            if (!visibleCards.length) return;
+            const timer = window.setTimeout({
+                "FeaturedDeckSection.useEffect.timer": ()=>setRevealed(true)
+            }["FeaturedDeckSection.useEffect.timer"], 120);
             return ({
-                "FeaturedDeckSection.useEffect": ()=>{
-                    cancelled = true;
-                }
+                "FeaturedDeckSection.useEffect": ()=>window.clearTimeout(timer)
             })["FeaturedDeckSection.useEffect"];
         }
-    }["FeaturedDeckSection.useEffect"], []);
+    }["FeaturedDeckSection.useEffect"], [
+        visibleCards.length
+    ]);
     if (loading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
             className: "mt-4 bg-slate-900/70 border border-slate-800/80",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "p-4 text-xs text-slate-400",
-                children: "Loading featured deck…"
+                children: "Loading featured deck..."
             }, void 0, false, {
                 fileName: "[project]/components/featured-deck.tsx",
-                lineNumber: 195,
+                lineNumber: 51,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/featured-deck.tsx",
-            lineNumber: 194,
+            lineNumber: 50,
             columnNumber: 7
         }, this);
     }
-    if (error || !cards.length) {
+    if (!visibleCards.length) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
             className: "mt-4 bg-slate-900/70 border border-slate-800/80",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "p-4 text-xs text-slate-400",
-                children: [
-                    "Featured Deck unavailable right now.",
-                    error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        className: "ml-1 text-slate-500",
-                        children: [
-                            "(",
-                            error,
-                            ")"
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/components/featured-deck.tsx",
-                        lineNumber: 205,
-                        columnNumber: 21
-                    }, this)
-                ]
-            }, void 0, true, {
+                children: "Import a deck to preview featured cards."
+            }, void 0, false, {
                 fileName: "[project]/components/featured-deck.tsx",
-                lineNumber: 203,
+                lineNumber: 59,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/featured-deck.tsx",
-            lineNumber: 202,
+            lineNumber: 58,
             columnNumber: 7
         }, this);
     }
@@ -513,24 +366,21 @@ function FeaturedDeckSection() {
                                         children: "Featured Deck"
                                     }, void 0, false, {
                                         fileName: "[project]/components/featured-deck.tsx",
-                                        lineNumber: 233,
+                                        lineNumber: 85,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                         className: "text-lg sm:text-l font-semibold text-emerald-100",
-                                        children: [
-                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["stylizeEx"])(deckTitle),
-                                            " "
-                                        ]
-                                    }, void 0, true, {
+                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["stylizeEx"])(title)
+                                    }, void 0, false, {
                                         fileName: "[project]/components/featured-deck.tsx",
-                                        lineNumber: 236,
+                                        lineNumber: 88,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/featured-deck.tsx",
-                                lineNumber: 232,
+                                lineNumber: 84,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -544,7 +394,7 @@ function FeaturedDeckSection() {
                                         children: "View on LimitlessTCG"
                                     }, void 0, false, {
                                         fileName: "[project]/components/featured-deck.tsx",
-                                        lineNumber: 243,
+                                        lineNumber: 95,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -556,7 +406,7 @@ function FeaturedDeckSection() {
                                                 setCopied(true);
                                                 window.setTimeout(()=>setCopied(false), 1500);
                                             } catch  {
-                                            // optional: toast later
+                                            // Clipboard access can be blocked by the browser.
                                             }
                                         },
                                         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("rounded-full h-9 px-5 font-semibold shadow-md shadow-emerald-500/40", "bg-emerald-500 text-slate-950 hover:bg-emerald-400", "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]", "transition-colors transition-transform duration-150", "active:scale-95 active:translate-y-[1px]", "focus-visible:ring-emerald-300 focus-visible:ring-offset-emerald-950", copied && "bg-emerald-400"),
@@ -565,104 +415,114 @@ function FeaturedDeckSection() {
                                                 className: "mr-2 h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/featured-deck.tsx",
-                                                lineNumber: 275,
+                                                lineNumber: 127,
                                                 columnNumber: 17
                                             }, this),
                                             copied ? "Copied!" : "Copy Decklist"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/featured-deck.tsx",
-                                        lineNumber: 253,
+                                        lineNumber: 105,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/featured-deck.tsx",
-                                lineNumber: 241,
+                                lineNumber: 93,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/featured-deck.tsx",
-                        lineNumber: 223,
+                        lineNumber: 77,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/featured-deck.tsx",
-                    lineNumber: 222,
+                    lineNumber: 76,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "flex-1 flex justify-end overflow-visible",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex gap-4 items-center min-h-[160px] overflow-visible",
-                        children: cards.map((card, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: visibleCards.map((card, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
                                     transitionDelay: revealed ? `${index * 140}ms` : "0ms"
                                 },
                                 className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("relative flex-shrink-0 w-24 sm:w-28 md:w-32", "transition-all duration-700 ease-out", revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"),
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("rounded-xl border border-slate-700/60 bg-slate-900/80", "shadow-sm shadow-emerald-500/20", "overflow-hidden", "transition-transform duration-160 ease-out", "hover:-translate-y-2 hover:shadow-[0_16px_34px_rgba(0,0,0,0.65)]"),
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "aspect-[2.5/3.5] w-full",
-                                        children: card.image ? // eslint-disable-next-line @next/next/no-img-element
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                            src: card.image,
-                                            alt: card.name,
-                                            className: "h-full w-full object-cover"
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cn"])("rounded-xl border border-slate-700/60 bg-slate-900/80", "shadow-sm shadow-emerald-500/20", "overflow-hidden", "transition-transform duration-160 ease-out", "hover:-translate-y-2 hover:shadow-[0_16px_34px_rgba(0,0,0,0.65)]"),
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "aspect-[2.5/3.5] w-full",
+                                            children: card.image ? // eslint-disable-next-line @next/next/no-img-element
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                                src: card.image,
+                                                alt: card.name,
+                                                className: "h-full w-full object-cover"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/featured-deck.tsx",
+                                                lineNumber: 160,
+                                                columnNumber: 23
+                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex h-full w-full items-center justify-center text-[10px] px-2 text-slate-300",
+                                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["stylizeEx"])(card.name)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/featured-deck.tsx",
+                                                lineNumber: 166,
+                                                columnNumber: 23
+                                            }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/featured-deck.tsx",
-                                            lineNumber: 311,
-                                            columnNumber: 23
-                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex h-full w-full items-center justify-center text-[10px] px-2 text-slate-300",
-                                            children: [
-                                                (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$text$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["stylizeEx"])(card.name),
-                                                " "
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/featured-deck.tsx",
-                                            lineNumber: 317,
-                                            columnNumber: 23
+                                            lineNumber: 157,
+                                            columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/featured-deck.tsx",
-                                        lineNumber: 308,
+                                        lineNumber: 148,
+                                        columnNumber: 17
+                                    }, this),
+                                    card.count > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "absolute -right-2 -top-2 rounded-full bg-emerald-400 px-2 py-0.5 text-[11px] font-bold text-slate-950 shadow-md shadow-emerald-500/30",
+                                        children: [
+                                            "x",
+                                            card.count
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/featured-deck.tsx",
+                                        lineNumber: 174,
                                         columnNumber: 19
                                     }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/components/featured-deck.tsx",
-                                    lineNumber: 299,
-                                    columnNumber: 17
-                                }, this)
-                            }, card.id, false, {
+                                ]
+                            }, card.id, true, {
                                 fileName: "[project]/components/featured-deck.tsx",
-                                lineNumber: 286,
+                                lineNumber: 137,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/components/featured-deck.tsx",
-                        lineNumber: 284,
+                        lineNumber: 135,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/featured-deck.tsx",
-                    lineNumber: 283,
+                    lineNumber: 134,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/featured-deck.tsx",
-            lineNumber: 220,
+            lineNumber: 75,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/featured-deck.tsx",
-        lineNumber: 212,
+        lineNumber: 67,
         columnNumber: 5
     }, this);
 }
-_s(FeaturedDeckSection, "HWM8v6BH4+YfFTE2DLlXft3DsTI=");
+_s(FeaturedDeckSection, "CeDU8ZbEDngDB1pIQGuCyppIwxU=");
 _c = FeaturedDeckSection;
 var _c;
 __turbopack_context__.k.register(_c, "FeaturedDeckSection");
@@ -696,6 +556,8 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
+const FEATURED_SOURCE_URL = "https://limitlesstcg.com/decks/lists";
 function DeckImport(props) {
     _s();
     const { onDeckImported, onImportComplete, initialText, onTextChange, onStartGame, canStartGame, deckTitle, deckPlayer, autoImportOnMount } = props;
@@ -711,6 +573,17 @@ function DeckImport(props) {
     const [hasAutoImported, setHasAutoImported] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     // Help overlay state – default closed; we'll auto-open based on localStorage
     const [showHelpOverlay, setShowHelpOverlay] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const featuredCards = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"]({
+        "DeckImport.useMemo[featuredCards]": ()=>previewCards.slice(0, 5).map({
+                "DeckImport.useMemo[featuredCards]": (card)=>({
+                        ...card,
+                        count: cardCounts[card.id.toLowerCase()] ?? 1
+                    })
+            }["DeckImport.useMemo[featuredCards]"])
+    }["DeckImport.useMemo[featuredCards]"], [
+        cardCounts,
+        previewCards
+    ]);
     // Keep textarea in sync with parent-provided initialText
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "DeckImport.useEffect": ()=>{
@@ -863,7 +736,7 @@ function DeckImport(props) {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 223,
+                                        lineNumber: 234,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -874,7 +747,7 @@ function DeckImport(props) {
                                                 children: "PrizeCheckr.io"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 234,
+                                                lineNumber: 245,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -893,26 +766,26 @@ function DeckImport(props) {
                                                         children: "LimitlessTCG"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/deck-import.tsx",
-                                                        lineNumber: 240,
+                                                        lineNumber: 251,
                                                         columnNumber: 17
                                                     }, this),
                                                     "."
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 237,
+                                                lineNumber: 248,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 233,
+                                        lineNumber: 244,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 222,
+                                lineNumber: 233,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -927,12 +800,12 @@ function DeckImport(props) {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 262,
+                                            lineNumber: 273,
                                             columnNumber: 3
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 256,
+                                        lineNumber: 267,
                                         columnNumber: 2
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -943,19 +816,19 @@ function DeckImport(props) {
                                         children: isLoading ? "Importing…" : "Import Deck"
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 266,
+                                        lineNumber: 277,
                                         columnNumber: 3
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 255,
+                                lineNumber: 266,
                                 columnNumber: 1
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/deck-import.tsx",
-                        lineNumber: 220,
+                        lineNumber: 231,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -976,7 +849,7 @@ function DeckImport(props) {
 ...`
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 282,
+                                    lineNumber: 293,
                                     columnNumber: 13
                                 }, this),
                                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -984,23 +857,29 @@ function DeckImport(props) {
                                     children: error
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 295,
+                                    lineNumber: 306,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/deck-import.tsx",
-                            lineNumber: 281,
+                            lineNumber: 292,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/deck-import.tsx",
-                        lineNumber: 280,
+                        lineNumber: 291,
                         columnNumber: 9
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$featured$2d$deck$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FeaturedDeckSection"], {}, void 0, false, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$featured$2d$deck$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FeaturedDeckSection"], {
+                        title: effectiveDeckTitle,
+                        sourceUrl: FEATURED_SOURCE_URL,
+                        importText: rawText,
+                        cards: featuredCards,
+                        loading: isLoading || Boolean(autoImportOnMount && !hasAutoImported && !previewCards.length)
+                    }, void 0, false, {
                         fileName: "[project]/components/deck-import.tsx",
-                        lineNumber: 301,
+                        lineNumber: 312,
                         columnNumber: 9
                     }, this),
                     previewCards.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1024,18 +903,18 @@ function DeckImport(props) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 313,
+                                                    lineNumber: 333,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 310,
+                                            lineNumber: 330,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 309,
+                                        lineNumber: 329,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1062,7 +941,7 @@ function DeckImport(props) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/deck-import.tsx",
-                                                                lineNumber: 343,
+                                                                lineNumber: 363,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1070,13 +949,13 @@ function DeckImport(props) {
                                                                 children: card.name
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/deck-import.tsx",
-                                                                lineNumber: 346,
+                                                                lineNumber: 366,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/deck-import.tsx",
-                                                        lineNumber: 342,
+                                                        lineNumber: 362,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1088,25 +967,25 @@ function DeckImport(props) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/deck-import.tsx",
-                                                        lineNumber: 348,
+                                                        lineNumber: 368,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, card.id, true, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 330,
+                                                lineNumber: 350,
                                                 columnNumber: 21
                                             }, this);
                                         })
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 322,
+                                        lineNumber: 342,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 307,
+                                lineNumber: 327,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1120,7 +999,7 @@ function DeckImport(props) {
                                         children: "Start Game"
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 360,
+                                        lineNumber: 380,
                                         columnNumber: 17
                                     }, this),
                                     hoveredCard ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1134,19 +1013,19 @@ function DeckImport(props) {
                                                     className: "w-full h-full object-cover"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 375,
+                                                    lineNumber: 395,
                                                     columnNumber: 23
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "w-full h-full flex items-center justify-center text-xs text-slate-400",
                                                     children: hoveredCard.name
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 381,
+                                                    lineNumber: 401,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 372,
+                                                lineNumber: 392,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1154,7 +1033,7 @@ function DeckImport(props) {
                                                 children: hoveredCard.name
                                             }, void 0, false, {
                                                 fileName: "[project]/components/deck-import.tsx",
-                                                lineNumber: 386,
+                                                lineNumber: 406,
                                                 columnNumber: 19
                                             }, this)
                                         ]
@@ -1163,25 +1042,25 @@ function DeckImport(props) {
                                         children: "Hover a card in the list to preview it."
                                     }, void 0, false, {
                                         fileName: "[project]/components/deck-import.tsx",
-                                        lineNumber: 391,
+                                        lineNumber: 411,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 358,
+                                lineNumber: 378,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/deck-import.tsx",
-                        lineNumber: 305,
+                        lineNumber: 325,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/deck-import.tsx",
-                lineNumber: 218,
+                lineNumber: 229,
                 columnNumber: 7
             }, this),
             showHelpOverlay && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1200,12 +1079,12 @@ function DeckImport(props) {
                                 className: "h-4 w-4"
                             }, void 0, false, {
                                 fileName: "[project]/components/deck-import.tsx",
-                                lineNumber: 417,
+                                lineNumber: 437,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/deck-import.tsx",
-                            lineNumber: 411,
+                            lineNumber: 431,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1215,7 +1094,7 @@ function DeckImport(props) {
                                     className: "h-5 w-5 text-emerald-300"
                                 }, void 0, false, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 421,
+                                    lineNumber: 441,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1226,7 +1105,7 @@ function DeckImport(props) {
                                             children: "How to use"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 423,
+                                            lineNumber: 443,
                                             columnNumber: 17
                                         }, this),
                                         " ",
@@ -1235,19 +1114,19 @@ function DeckImport(props) {
                                             children: "PrizeCheckr.io"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 424,
+                                            lineNumber: 444,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 422,
+                                    lineNumber: 442,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/deck-import.tsx",
-                            lineNumber: 420,
+                            lineNumber: 440,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1263,7 +1142,7 @@ function DeckImport(props) {
                                             children: "shuffle your deck"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 431,
+                                            lineNumber: 451,
                                             columnNumber: 17
                                         }, this),
                                         ",",
@@ -1273,7 +1152,7 @@ function DeckImport(props) {
                                             children: "draw an opening hand"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 435,
+                                            lineNumber: 455,
                                             columnNumber: 17
                                         }, this),
                                         ", set aside",
@@ -1283,14 +1162,14 @@ function DeckImport(props) {
                                             children: "6 prize cards"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 439,
+                                            lineNumber: 459,
                                             columnNumber: 17
                                         }, this),
                                         ", then ask you to figure out what's missing."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 429,
+                                    lineNumber: 449,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1300,12 +1179,12 @@ function DeckImport(props) {
                                             children: "1. Import a deck"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 446,
+                                            lineNumber: 466,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 449,
+                                            lineNumber: 469,
                                             columnNumber: 17
                                         }, this),
                                         "Copy a deck's text export from",
@@ -1315,7 +1194,7 @@ function DeckImport(props) {
                                             children: "LimitlessTCG"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 451,
+                                            lineNumber: 471,
                                             columnNumber: 17
                                         }, this),
                                         " ",
@@ -1325,7 +1204,7 @@ function DeckImport(props) {
                                             children: "PTCGL"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 454,
+                                            lineNumber: 474,
                                             columnNumber: 20
                                         }, this),
                                         " and paste it into the box above, then click",
@@ -1335,14 +1214,14 @@ function DeckImport(props) {
                                             children: "Import Deck"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 456,
+                                            lineNumber: 476,
                                             columnNumber: 17
                                         }, this),
                                         "."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 445,
+                                    lineNumber: 465,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1352,12 +1231,12 @@ function DeckImport(props) {
                                             children: "2. Start the drill"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 463,
+                                            lineNumber: 483,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 466,
+                                            lineNumber: 486,
                                             columnNumber: 17
                                         }, this),
                                         "When the list looks correct, hit",
@@ -1367,7 +1246,7 @@ function DeckImport(props) {
                                             children: "Start Game"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 468,
+                                            lineNumber: 488,
                                             columnNumber: 17
                                         }, this),
                                         ". The app",
@@ -1377,7 +1256,7 @@ function DeckImport(props) {
                                             children: "shuffles"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 472,
+                                            lineNumber: 492,
                                             columnNumber: 17
                                         }, this),
                                         ", draws your",
@@ -1387,7 +1266,7 @@ function DeckImport(props) {
                                             children: "starting hand"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 473,
+                                            lineNumber: 493,
                                             columnNumber: 17
                                         }, this),
                                         ", and chooses",
@@ -1397,14 +1276,14 @@ function DeckImport(props) {
                                             children: "6 prizes"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 475,
+                                            lineNumber: 495,
                                             columnNumber: 17
                                         }, this),
                                         "."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 462,
+                                    lineNumber: 482,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1414,12 +1293,12 @@ function DeckImport(props) {
                                             children: "3. Scan your deck"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 479,
+                                            lineNumber: 499,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 482,
+                                            lineNumber: 502,
                                             columnNumber: 17
                                         }, this),
                                         "On the game screen, scroll through your deck and mentally track what should be there. Try to spot patterns of what might be in your prizes. Reorganize your cards using",
@@ -1429,7 +1308,7 @@ function DeckImport(props) {
                                             children: "keys (A/D)"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 486,
+                                            lineNumber: 506,
                                             columnNumber: 17
                                         }, this),
                                         " or",
@@ -1439,7 +1318,7 @@ function DeckImport(props) {
                                             children: "clicking"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 487,
+                                            lineNumber: 507,
                                             columnNumber: 17
                                         }, this),
                                         " ",
@@ -1447,7 +1326,7 @@ function DeckImport(props) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 478,
+                                    lineNumber: 498,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1457,12 +1336,12 @@ function DeckImport(props) {
                                             children: "4. Guess your prizes"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 492,
+                                            lineNumber: 512,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 495,
+                                            lineNumber: 515,
                                             columnNumber: 17
                                         }, this),
                                         "When the timer ends or you click",
@@ -1472,7 +1351,7 @@ function DeckImport(props) {
                                             children: "Guess Prizes"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 497,
+                                            lineNumber: 517,
                                             columnNumber: 17
                                         }, this),
                                         ", select the",
@@ -1482,7 +1361,7 @@ function DeckImport(props) {
                                             children: "6 cards"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 501,
+                                            lineNumber: 521,
                                             columnNumber: 17
                                         }, this),
                                         " ",
@@ -1493,7 +1372,7 @@ function DeckImport(props) {
                                             children: "accuracy"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 505,
+                                            lineNumber: 525,
                                             columnNumber: 17
                                         }, this),
                                         ",",
@@ -1503,7 +1382,7 @@ function DeckImport(props) {
                                             children: "score"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 506,
+                                            lineNumber: 526,
                                             columnNumber: 17
                                         }, this),
                                         ", and",
@@ -1513,14 +1392,14 @@ function DeckImport(props) {
                                             children: "rank progress"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 507,
+                                            lineNumber: 527,
                                             columnNumber: 17
                                         }, this),
                                         "."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 491,
+                                    lineNumber: 511,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1531,7 +1410,7 @@ function DeckImport(props) {
                                             children: "Controls (in game):"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 511,
+                                            lineNumber: 531,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1543,14 +1422,14 @@ function DeckImport(props) {
                                                     children: "Arrow keys / mouse wheel"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 516,
+                                                    lineNumber: 536,
                                                     columnNumber: 19
                                                 }, this),
                                                 ": move through the deck"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 514,
+                                            lineNumber: 534,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1562,14 +1441,14 @@ function DeckImport(props) {
                                                     children: "Left click / A"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 523,
+                                                    lineNumber: 543,
                                                     columnNumber: 19
                                                 }, this),
                                                 ": bring a card to the front"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 521,
+                                            lineNumber: 541,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1581,20 +1460,20 @@ function DeckImport(props) {
                                                     children: "Right click / D"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/deck-import.tsx",
-                                                    lineNumber: 530,
+                                                    lineNumber: 550,
                                                     columnNumber: 19
                                                 }, this),
                                                 ": send a card to the back"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 528,
+                                            lineNumber: 548,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 510,
+                                    lineNumber: 530,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1605,7 +1484,7 @@ function DeckImport(props) {
                                             children: "Tip:"
                                         }, void 0, false, {
                                             fileName: "[project]/components/deck-import.tsx",
-                                            lineNumber: 538,
+                                            lineNumber: 558,
                                             columnNumber: 17
                                         }, this),
                                         " ",
@@ -1613,34 +1492,34 @@ function DeckImport(props) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/deck-import.tsx",
-                                    lineNumber: 537,
+                                    lineNumber: 557,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/deck-import.tsx",
-                            lineNumber: 428,
+                            lineNumber: 448,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/deck-import.tsx",
-                    lineNumber: 406,
+                    lineNumber: 426,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/deck-import.tsx",
-                lineNumber: 402,
+                lineNumber: 422,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/deck-import.tsx",
-        lineNumber: 217,
+        lineNumber: 228,
         columnNumber: 5
     }, this);
 }
-_s(DeckImport, "gMjT1KLpXaahGJVZwf28Wh1H11Q=");
+_s(DeckImport, "Ku8ITWWxc71g8Ew//64Wopiny10=");
 _c = DeckImport;
 var _c;
 __turbopack_context__.k.register(_c, "DeckImport");
@@ -3993,9 +3872,7 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$music$2d$player$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/music-player.tsx [app-client] (ecmascript)"); // or MusicControls if that's what you're using
 "use client";
-;
 ;
 ;
 function SiteFooter() {
@@ -4012,7 +3889,7 @@ function SiteFooter() {
                             children: "PrizeCheckr.io"
                         }, void 0, false, {
                             fileName: "[project]/components/site-footer.tsx",
-                            lineNumber: 12,
+                            lineNumber: 11,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4020,7 +3897,7 @@ function SiteFooter() {
                             children: "Use this and the tools below to become a better player."
                         }, void 0, false, {
                             fileName: "[project]/components/site-footer.tsx",
-                            lineNumber: 15,
+                            lineNumber: 14,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -4033,7 +3910,7 @@ function SiteFooter() {
                                     children: "Dragapultist (Pokémon TCG Analyzer)"
                                 }, void 0, false, {
                                     fileName: "[project]/components/site-footer.tsx",
-                                    lineNumber: 21,
+                                    lineNumber: 20,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -4043,7 +3920,7 @@ function SiteFooter() {
                                     children: "TCG Masters (Matchup Simulator)"
                                 }, void 0, false, {
                                     fileName: "[project]/components/site-footer.tsx",
-                                    lineNumber: 28,
+                                    lineNumber: 27,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -4053,7 +3930,7 @@ function SiteFooter() {
                                     children: "LimitlessTCG (Deck Database)"
                                 }, void 0, false, {
                                     fileName: "[project]/components/site-footer.tsx",
-                                    lineNumber: 35,
+                                    lineNumber: 34,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -4062,19 +3939,19 @@ function SiteFooter() {
                                     children: "Contact"
                                 }, void 0, false, {
                                     fileName: "[project]/components/site-footer.tsx",
-                                    lineNumber: 42,
+                                    lineNumber: 41,
                                     columnNumber: 14
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/site-footer.tsx",
-                            lineNumber: 19,
+                            lineNumber: 18,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/site-footer.tsx",
-                    lineNumber: 11,
+                    lineNumber: 10,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4082,30 +3959,18 @@ function SiteFooter() {
                     children: "The literal and graphical information presented on this website about the Pokémon Trading Card Game, including card images and text, is © The Pokémon Company, Nintendo, Game Freak, and/or Creatures. This website is not produced by, endorsed by, supported by, or affiliated with those companies."
                 }, void 0, false, {
                     fileName: "[project]/components/site-footer.tsx",
-                    lineNumber: 49,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center justify-end gap-3",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$music$2d$player$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FooterMusicControls"], {}, void 0, false, {
-                        fileName: "[project]/components/site-footer.tsx",
-                        lineNumber: 58,
-                        columnNumber: 11
-                    }, this)
-                }, void 0, false, {
-                    fileName: "[project]/components/site-footer.tsx",
-                    lineNumber: 57,
+                    lineNumber: 48,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/site-footer.tsx",
-            lineNumber: 9,
+            lineNumber: 8,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/site-footer.tsx",
-        lineNumber: 8,
+        lineNumber: 7,
         columnNumber: 5
     }, this);
 }
@@ -4132,12 +3997,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$shuffle$2e$ts__$5b$ap
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$loading$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/loading-overlay.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$countdown$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/countdown-overlay.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$site$2d$footer$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/site-footer.tsx [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$music$2d$player$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/music-player.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/utils.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
-;
 ;
 ;
 ;
@@ -4290,7 +4153,7 @@ function HomePage() {
                         message: "Shuffling & importing your deck"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 184,
+                        lineNumber: 182,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$countdown$2d$overlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CountdownOverlay"], {
@@ -4298,7 +4161,7 @@ function HomePage() {
                         count: preGameCount
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 191,
+                        lineNumber: 189,
                         columnNumber: 9
                     }, this),
                     stage === "import" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$deck$2d$import$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DeckImport"], {
@@ -4311,29 +4174,22 @@ function HomePage() {
                         deckPlayer: "Nicolai Stiborg"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 194,
+                        lineNumber: 192,
                         columnNumber: 11
                     }, this),
                     stage === "game" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$deck$2d$view$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DeckView"], {
-                                deck: playDeck,
-                                hand: hand,
-                                onTimeUp: handleGameFinished,
-                                onEndEarly: handleGameFinished,
-                                onRestartGame: handleRestartGame
-                            }, void 0, false, {
-                                fileName: "[project]/app/page.tsx",
-                                lineNumber: 207,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$music$2d$player$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FloatingGameVolume"], {}, void 0, false, {
-                                fileName: "[project]/app/page.tsx",
-                                lineNumber: 214,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true),
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$deck$2d$view$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DeckView"], {
+                            deck: playDeck,
+                            hand: hand,
+                            onTimeUp: handleGameFinished,
+                            onEndEarly: handleGameFinished,
+                            onRestartGame: handleRestartGame
+                        }, void 0, false, {
+                            fileName: "[project]/app/page.tsx",
+                            lineNumber: 205,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false),
                     stage === "results" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$results$2d$view$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ResultsView"], {
                         allCards: [
                             ...playDeck,
@@ -4346,24 +4202,24 @@ function HomePage() {
                         totalTime: GAME_DURATION
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 219,
+                        lineNumber: 216,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 182,
+                lineNumber: 180,
                 columnNumber: 7
             }, this),
             stage !== "game" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$site$2d$footer$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SiteFooter"], {}, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 230,
+                lineNumber: 227,
                 columnNumber: 28
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 173,
+        lineNumber: 171,
         columnNumber: 5
     }, this);
 }

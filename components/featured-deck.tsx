@@ -1,212 +1,137 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Copy } from "lucide-react"
-import { stylizeEx } from "@/lib/text"   // 👈 NEW
+import { stylizeEx } from "@/lib/text"
 
-type ImportedCard = {
+type FeaturedCard = {
   id: string
   name: string
   image?: string
   set: string
   number: string | number
-}
-
-type FeaturedCard = ImportedCard & {
   count: number
 }
 
-type FeaturedDeckApi = {
+type FeaturedDeckSectionProps = {
+  deckId: string
   title: string
   sourceUrl: string
   importText: string
+  playedBy?: string
+  cards: FeaturedCard[]
+  loading?: boolean
 }
 
 const MAX_FEATURED_CARDS = 5
+const EXIT_DURATION_MS = 420
+const ENTER_DELAY_MS = 80
 
-/** Temporary fallback deck until the API is wired up */
-const FALLBACK_DECK: FeaturedDeckApi = {
-  title: "Charizard ex / Pidgeot ex — Regional Stuttgart Champion", // ASCII-only
-  sourceUrl: "https://limitlesstcg.com/decks/lists",
-  importText: `Pokémon: 26
-2 Charmander PAF 7
-1 Charmander PFL 11
-1 Charmeleon PFL 12
-2 Charizard ex OBF 125
-3 Hoothoot SCR 114
-3 Noctowl SCR 115
-1 Pidgey MEW 16
-1 Pidgey OBF 162
-2 Pidgeot ex OBF 164
-2 Duskull PRE 35
-1 Dusclops PRE 36
-1 Dusknoir PRE 37
-2 Terapagos ex SCR 128
-2 Fan Rotom SCR 118
-1 Fezandipiti ex SFA 38
-1 Klefki SVI 96
-
-Trainer: 27
-4 Dawn PFL 87
-2 Iono PAL 185
-2 Boss's Orders MEG 114
-1 Briar SCR 132
-4 Buddy-Buddy Poffin TEF 144
-4 Nest Ball SVI 181
-4 Rare Candy MEG 125
-1 Ultra Ball MEG 131
-1 Super Rod PAL 188
-1 Night Stretcher SFA 61
-1 Prime Catcher TEF 157
-2 Area Zero Underdepths SCR 131
-
-Energy: 7
-5 Fire Energy MEE 2
-2 Jet Energy PAL 190`,
+type DisplayedFeaturedDeck = {
+  deckId: string
+  title: string
+  sourceUrl: string
+  importText: string
+  playedBy?: string
+  cards: FeaturedCard[]
 }
 
-/* --- same parser logic as DeckImport --- */
-function parseIdsFromText(text: string) {
-  const fullIds: string[] = []
-  const counts = new Map<string, number>()
-  const lines = text.split(/\r?\n/)
+type TransitionPhase = "entering" | "shown" | "exiting"
 
-  for (const line of lines) {
-    const trimmed = line.trim()
-    if (!trimmed) continue
-
-    const lineMatch = trimmed.match(
-      /^\s*(\d+)\s+.+\b([A-Z]{2,4})\s+(\d{1,3}[A-Z]?)\b/,
-    )
-
-    if (lineMatch) {
-      const count = Number(lineMatch[1]) || 1
-      const setCode = lineMatch[2].toLowerCase()
-      const num = lineMatch[3].toLowerCase()
-      const cardId = `${setCode}-${num}`
-
-      for (let i = 0; i < count; i++) fullIds.push(cardId)
-      counts.set(cardId, (counts.get(cardId) || 0) + count)
-      continue
-    }
-
-    const fallbackMatch = trimmed.match(
-      /\b([A-Z]{2,4})\s+(\d{1,3}[A-Z]?)\b/,
-    )
-
-    if (fallbackMatch) {
-      const setCode = fallbackMatch[1].toLowerCase()
-      const num = fallbackMatch[2].toLowerCase()
-      const cardId = `${setCode}-${num}`
-      fullIds.push(cardId)
-      counts.set(cardId, (counts.get(cardId) || 0) + 1)
-    }
-  }
-
-  const uniqueIds = Array.from(new Set(fullIds))
-  return { fullIds, uniqueIds, counts }
-}
-
-export function FeaturedDeckSection() {
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [deckTitle, setDeckTitle] = useState(FALLBACK_DECK.title)
-  const [sourceUrl, setSourceUrl] = useState(FALLBACK_DECK.sourceUrl)
-  const [importText] = useState(FALLBACK_DECK.importText)
-  const [cards, setCards] = useState<FeaturedCard[]>([])
-  const [revealed, setRevealed] = useState(false)
+export function FeaturedDeckSection({
+  deckId,
+  title,
+  sourceUrl,
+  importText,
+  playedBy,
+  cards,
+  loading,
+}: FeaturedDeckSectionProps) {
   const [copied, setCopied] = useState(false)
+  const [displayedDeck, setDisplayedDeck] = useState<DisplayedFeaturedDeck | null>(null)
+  const [transitionPhase, setTransitionPhase] = useState<TransitionPhase>("entering")
+  const displayedDeckIdRef = useRef<string | null>(null)
 
   useEffect(() => {
-    let cancelled = false
+    if (loading) return
 
-    async function loadFromFallback() {
-      try {
-        setLoading(true)
-        setError(null)
+    const nextCards = cards.slice(0, MAX_FEATURED_CARDS)
+    if (!nextCards.length) {
+      displayedDeckIdRef.current = null
+      setDisplayedDeck(null)
+      setTransitionPhase("entering")
+      return
+    }
 
-        const { uniqueIds, counts } = parseIdsFromText(FALLBACK_DECK.importText)
-        if (!uniqueIds.length) {
-          throw new Error("Could not parse any card IDs from the featured deck")
-        }
+    const nextDeck: DisplayedFeaturedDeck = {
+      deckId,
+      title,
+      sourceUrl,
+      importText,
+      playedBy,
+      cards: nextCards,
+    }
 
-        const cardsRes = await fetch("/api/cards", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: uniqueIds }),
-        })
+    let exitTimer: number | undefined
+    let enterTimer: number | undefined
 
-        if (!cardsRes.ok) throw new Error("Failed to fetch card details")
+    if (!displayedDeckIdRef.current) {
+      displayedDeckIdRef.current = deckId
+      setDisplayedDeck(nextDeck)
+      setTransitionPhase("entering")
+      enterTimer = window.setTimeout(() => {
+        setTransitionPhase("shown")
+      }, ENTER_DELAY_MS)
 
-        const cardsData = await cardsRes.json()
-        const fetched: ImportedCard[] = Array.isArray(cardsData.cards)
-          ? cardsData.cards
-          : []
-
-        const cardById = new Map<string, ImportedCard>()
-        for (const c of fetched) {
-          cardById.set(c.id.toLowerCase(), c)
-        }
-
-        const withCounts: FeaturedCard[] = uniqueIds.map((id) => {
-          const base = cardById.get(id.toLowerCase())
-          const count = counts.get(id) ?? 1
-
-          if (base) return { ...base, count }
-
-          const [setCode, num] = id.split("-")
-          return {
-            id,
-            name: `Card ${setCode.toUpperCase()} ${num.toUpperCase()}`,
-            set: setCode.toUpperCase(),
-            number: num.toUpperCase(),
-            count,
-          }
-        })
-
-        if (!cancelled) {
-          setDeckTitle(FALLBACK_DECK.title)
-          setSourceUrl(FALLBACK_DECK.sourceUrl)
-          setCards(withCounts.slice(0, MAX_FEATURED_CARDS))
-        }
-      } catch (err: any) {
-        console.error("FeaturedDeckSection error:", err)
-        if (!cancelled) setError(err.message ?? "Error loading featured deck")
-      } finally {
-        if (!cancelled) {
-          setLoading(false)
-          setTimeout(() => setRevealed(true), 120)
-        }
+      return () => {
+        if (enterTimer) window.clearTimeout(enterTimer)
       }
     }
 
-    loadFromFallback()
-    return () => {
-      cancelled = true
+    if (displayedDeckIdRef.current === deckId) {
+      setDisplayedDeck(nextDeck)
+      return
     }
-  }, [])
 
-  if (loading) {
+    setTransitionPhase("exiting")
+    exitTimer = window.setTimeout(() => {
+      displayedDeckIdRef.current = deckId
+      setDisplayedDeck(nextDeck)
+      setTransitionPhase("entering")
+      enterTimer = window.setTimeout(() => {
+        setTransitionPhase("shown")
+      }, ENTER_DELAY_MS)
+    }, EXIT_DURATION_MS)
+
+    return () => {
+      if (exitTimer) window.clearTimeout(exitTimer)
+      if (enterTimer) window.clearTimeout(enterTimer)
+    }
+  }, [cards, deckId, importText, loading, playedBy, sourceUrl, title])
+
+  if (loading && !displayedDeck) {
     return (
       <Card className="mt-4 bg-slate-900/70 border border-slate-800/80">
-        <div className="p-4 text-xs text-slate-400">Loading featured deck…</div>
+        <div className="p-4 text-xs text-slate-400">Loading featured deck...</div>
       </Card>
     )
   }
 
-  if (error || !cards.length) {
+  if (!displayedDeck?.cards.length) {
     return (
       <Card className="mt-4 bg-slate-900/70 border border-slate-800/80">
         <div className="p-4 text-xs text-slate-400">
-          Featured Deck unavailable right now.
-          {error && <span className="ml-1 text-slate-500">({error})</span>}
+          Import a deck to preview featured cards.
         </div>
       </Card>
     )
   }
+
+  const isShown = transitionPhase === "shown"
+  const isExiting = transitionPhase === "exiting"
 
   return (
     <Card
@@ -218,15 +143,14 @@ export function FeaturedDeckSection() {
       )}
     >
       <div className="flex items-center gap-6 px-6 py-3 md:px-8 md:py-3">
-        {/* LEFT: text + button */}
         <div className="flex-1 min-w-[0]">
           <div
             className={cn(
               "flex flex-col gap-3 h-full",
-              "transition-all duration-700 ease-out",
-              revealed
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 -translate-y-3",
+              "transition-all duration-500 ease-out will-change-transform",
+              isShown && "opacity-100 translate-y-0 blur-0",
+              transitionPhase === "entering" && "opacity-0 -translate-y-4 blur-[2px]",
+              isExiting && "opacity-0 translate-y-3 blur-[2px]",
             )}
           >
             <div className="space-y-1">
@@ -234,14 +158,22 @@ export function FeaturedDeckSection() {
                 Featured Deck
               </p>
               <h2 className="text-lg sm:text-l font-semibold text-emerald-100">
-                {stylizeEx(deckTitle)} {/* 👈 fancy 𝘦𝘹 here */}
+                {stylizeEx(displayedDeck.title)}
               </h2>
+              {displayedDeck.playedBy && (
+                <div className="pt-1 text-[11px] leading-snug text-emerald-100/75">
+                  <p className="uppercase tracking-[0.18em] text-emerald-300/80">
+                    Decklist played by
+                  </p>
+                  <p>{displayedDeck.playedBy}</p>
+                </div>
+              )}
             </div>
 
             <div className="mt-1 flex items-center gap-4">
-              {sourceUrl && (
+              {displayedDeck.sourceUrl && (
                 <a
-                  href={sourceUrl}
+                  href={displayedDeck.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[13px] text-emerald-100/80 hover:text-emerald-200 underline-offset-2 hover:underline"
@@ -255,11 +187,11 @@ export function FeaturedDeckSection() {
                 size="sm"
                 onClick={async () => {
                   try {
-                    await navigator.clipboard.writeText(importText)
+                    await navigator.clipboard.writeText(displayedDeck.importText)
                     setCopied(true)
                     window.setTimeout(() => setCopied(false), 1500)
                   } catch {
-                    // optional: toast later
+                    // Clipboard access can be blocked by the browser.
                   }
                 }}
                 className={cn(
@@ -279,30 +211,38 @@ export function FeaturedDeckSection() {
           </div>
         </div>
 
-        {/* RIGHT: card strip */}
         <div className="flex-1 flex justify-end overflow-visible">
           <div className="flex gap-4 items-center min-h-[160px] overflow-visible">
-            {cards.map((card, index) => (
+            {displayedDeck.cards.map((card, index) => (
               <div
                 key={card.id}
                 style={{
-                  transitionDelay: revealed ? `${index * 140}ms` : "0ms",
+                  transitionDelay: isExiting
+                    ? `${(displayedDeck.cards.length - index - 1) * 55}ms`
+                    : isShown
+                      ? `${index * 120}ms`
+                      : "0ms",
                 }}
                 className={cn(
                   "relative flex-shrink-0 w-24 sm:w-28 md:w-32",
-                  "transition-all duration-700 ease-out",
-                  revealed
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-3",
+                  "transition-all duration-500 ease-out will-change-transform",
+                  isShown && "opacity-100 translate-x-0 translate-y-0 scale-100",
+                  transitionPhase === "entering" &&
+                    "opacity-0 -translate-x-3 translate-y-1 scale-[0.99]",
+                  isExiting && "opacity-0 translate-x-4 -translate-y-1 scale-[0.985]",
                 )}
               >
                 <div
                   className={cn(
-                    "rounded-xl border border-slate-700/60 bg-slate-900/80",
+                    "relative rounded-xl border border-slate-700/60 bg-slate-900/80",
                     "shadow-sm shadow-emerald-500/20",
                     "overflow-hidden",
-                    "transition-transform duration-160 ease-out",
-                    "hover:-translate-y-2 hover:shadow-[0_16px_34px_rgba(0,0,0,0.65)]",
+                    "transition-all duration-300 ease-out",
+                    "hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(0,0,0,0.48)]",
+                    "featured-card-wipe",
+                    isShown && "featured-card-wipe-shown",
+                    transitionPhase === "entering" && "featured-card-wipe-entering",
+                    isExiting && "featured-card-wipe-exiting",
                   )}
                 >
                   <div className="aspect-[2.5/3.5] w-full">
@@ -315,11 +255,17 @@ export function FeaturedDeckSection() {
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-[10px] px-2 text-slate-300">
-                        {stylizeEx(card.name)} {/* 👈 stylize here too */}
+                        {stylizeEx(card.name)}
                       </div>
                     )}
                   </div>
                 </div>
+
+                {card.count > 1 && (
+                  <span className="absolute -right-2 -top-2 rounded-full bg-emerald-400 px-2 py-0.5 text-[11px] font-bold text-slate-950 shadow-md shadow-emerald-500/30">
+                    {card.count}
+                  </span>
+                )}
               </div>
             ))}
           </div>
