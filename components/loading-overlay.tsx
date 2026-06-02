@@ -71,7 +71,7 @@ export function LoadingOverlay({ visible, progress, message }: LoadingOverlayPro
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300",
+        "fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 transition-opacity duration-300 transform-gpu",
         visible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
       )}
     >

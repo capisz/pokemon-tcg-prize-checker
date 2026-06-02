@@ -372,6 +372,8 @@ export function DeckImport(props: DeckImportProps) {
       : currentFeaturedDeck?.player ?? effectiveDeckPlayer
   const displayedDeckKey =
     activeListMode === "custom" ? "custom" : currentFeaturedDeckId ?? "featured"
+  const needsDeckText = rawText.trim().length === 0
+  const canAttemptImport = !needsDeckText && !isLoading
 
   useEffect(() => {
     if (activeListMode !== "featured") return
@@ -440,14 +442,33 @@ export function DeckImport(props: DeckImportProps) {
 </button>
 
 
-  <Button
-    size="sm"
-    onClick={() => void handleImport()}
-    disabled={isLoading || !rawText.trim()}
-    className="rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95"
-  >
-    {isLoading ? "Importing…" : "Import Deck"}
-  </Button>
+  <div className="group relative">
+    <Button
+      size="sm"
+      aria-disabled={!canAttemptImport}
+      onClick={(event) => {
+        if (!canAttemptImport) {
+          event.preventDefault()
+          return
+        }
+
+        void handleImport()
+      }}
+      className={cn(
+        "rounded-full font-semibold shadow-md transition-transform duration-150 active:scale-95",
+        canAttemptImport
+          ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/30"
+          : "bg-emerald-950/80 text-emerald-200/80 border border-emerald-500/35 shadow-[0_0_14px_rgba(16,185,129,0.2)] cursor-not-allowed hover:bg-emerald-900/80 hover:text-emerald-100 hover:shadow-[0_0_18px_rgba(16,185,129,0.32)]",
+      )}
+    >
+      {isLoading ? "Importing..." : "Import Deck"}
+    </Button>
+    {needsDeckText && (
+      <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-max max-w-[220px] -translate-x-1/2 translate-y-1 rounded-md border border-emerald-500/30 bg-slate-950/95 px-3 py-1.5 text-[11px] font-medium text-emerald-100 opacity-0 shadow-lg shadow-black/40 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+        Put a valid deck list in the box first
+      </div>
+    )}
+  </div>
 </div>
 
 
@@ -620,7 +641,7 @@ export function DeckImport(props: DeckImportProps) {
       {/* Help overlay */}
       {showHelpOverlay && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75"
           onClick={() => setShowHelpOverlay(false)}
         >
           <Card

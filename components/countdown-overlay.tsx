@@ -10,7 +10,21 @@ interface CountdownOverlayProps {
 }
 
 export function CountdownOverlay({ visible, count }: CountdownOverlayProps) {
+  const [shouldRender, setShouldRender] = useState(visible)
   const [isPulsing, setIsPulsing] = useState(false)
+
+  useEffect(() => {
+    if (visible) {
+      setShouldRender(true)
+      return
+    }
+
+    const timeout = window.setTimeout(() => {
+      setShouldRender(false)
+    }, 300)
+
+    return () => window.clearTimeout(timeout)
+  }, [visible])
 
   useEffect(() => {
     if (count == null) return
@@ -24,10 +38,12 @@ export function CountdownOverlay({ visible, count }: CountdownOverlayProps) {
     return () => clearTimeout(timeout)
   }, [count])
 
+  if (!shouldRender) return null
+
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300",
+        "fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 transition-opacity duration-300 transform-gpu",
         visible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
       )}
     >
