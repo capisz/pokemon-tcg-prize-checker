@@ -29,6 +29,10 @@ const CARD_INDEX_PATH = path.join(
 
 let cardIndexPromise: Promise<CardIndex> | null = null
 
+const MAX_REQUEST_BODY_LENGTH = 20_000
+const MAX_CARD_IDS = 256
+const CARD_ID_PATTERN = /^[a-z0-9]{2,10}-\d{1,3}[a-z]?$/i
+
 function normalize(value: string | number | undefined | null) {
   return String(value ?? "").trim().toLowerCase()
 }
@@ -101,17 +105,53 @@ function placeholderCard(rawId: string, index: CardIndex) {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const ids: string[] = Array.isArray(body.ids) ? body.ids : []
+    const declaredLength = Number(req.headers.get("content-length") ?? 0)
+    if (declaredLength > MAX_REQUEST_BODY_LENGTH) {
+      return NextResponse.json({ error: "Request is too large." }, { status: 413 })
+    }
+
+    const rawBody = await req.text()
+    if (rawBody.length > MAX_REQUEST_BODY_LENGTH) {
+      return NextResponse.json({ error: "Request is too large." }, { status: 413 })
+    }
+
+    let body: unknown
+    try {
+      body = JSON.parse(rawBody)
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON request." }, { status: 400 })
+    }
+
+    if (!body || typeof body !== "object" || !Array.isArray((body as { ids?: unknown }).ids)) {
+      return NextResponse.json({ error: "Request must include an ids array." }, { status: 400 })
+    }
+
+    const rawIds = (body as { ids: unknown[] }).ids
+    if (rawIds.length > MAX_CARD_IDS) {
+      return NextResponse.json({ error: "Too many card IDs." }, { status: 413 })
+    }
+
+    if (rawIds.some((id) => typeof id !== "string" || !CARD_ID_PATTERN.test(id))) {
+      return NextResponse.json({ error: "Request contains an invalid card ID." }, { status: 400 })
+    }
+
+    const ids = rawIds.map((id) => normalize(id as string))
 
     if (!ids.length) {
       return NextResponse.json({ cards: [] }, { status: 200 })
     }
 
     const index = await loadCardIndex()
-    const cards = ids.map((rawId) => resolveCard(rawId, index) ?? placeholderCard(rawId, index))
+    const missingIds: string[] = []
+    const cards = ids.map((rawId) => {
+      const card = resolveCard(rawId, index)
+      if (card) return card
 
-    return NextResponse.json({ cards }, { status: 200 })
+      missingIds.push(rawId)
+      return placeholderCard(rawId, index)
+    })
+
+    return NextResponse.json({ cards, missingIds }, { status: 200 })
   } catch (err) {
     console.error("Error in /api/cards:", err)
     return NextResponse.json(

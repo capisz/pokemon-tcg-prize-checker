@@ -9,6 +9,13 @@ import { cn } from "@/lib/utils"
 import { FeaturedDeckSection } from "@/components/featured-deck"
 import { HelpCircle, X } from "lucide-react"
 import type { FeaturedDeckDefinition } from "@/lib/featured-decks"
+import {
+  getDeckImportSecurityError,
+  MAX_DECK_TEXT_LENGTH,
+  parseDeckCardLine,
+  parseDeckSectionHeading,
+  type DeckSection,
+} from "@/lib/deck-import-security"
 
 type ImportedCard = {
   id: string
@@ -22,7 +29,10 @@ type FeaturedCard = ImportedCard & {
   count: number
 }
 
-type DeckSection = "pokemon" | "trainer" | "energy" | "unknown"
+type CardLookupResult = {
+  cards: ImportedCard[]
+  missingIds: string[]
+}
 
 type ParsedDeckText = {
   fullIds: string[]
@@ -99,53 +109,23 @@ export function DeckImport(props: DeckImportProps) {
       const trimmed = line.trim()
       if (!trimmed) continue
 
-      if (/^pok(?:e|é)mon\s*:/i.test(trimmed)) {
-        currentSection = "pokemon"
+      const nextSection = parseDeckSectionHeading(trimmed)
+      if (nextSection) {
+        currentSection = nextSection
         continue
       }
 
-      if (/^trainer\s*:/i.test(trimmed)) {
-        currentSection = "trainer"
-        continue
-      }
+      const cardLine = parseDeckCardLine(trimmed)
+      if (cardLine) {
+        const cardId = `${cardLine.setCode}-${cardLine.number}`
 
-      if (/^energy\s*:/i.test(trimmed)) {
-        currentSection = "energy"
-        continue
-      }
+        totalCount += cardLine.count
+        sectionCounts[currentSection] += cardLine.count
 
-      const lineMatch = trimmed.match(
-        /^\s*(\d+)\s+.+\b([A-Z]{2,4})\s+(\d{1,3}[A-Z]?)\b/,
-      )
-
-      if (lineMatch) {
-        const count = Number(lineMatch[1]) || 1
-        const setCode = lineMatch[2].toLowerCase()
-        const num = lineMatch[3].toLowerCase()
-        const cardId = `${setCode}-${num}`
-
-        totalCount += count
-        sectionCounts[currentSection] += count
-
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < cardLine.count; i++) {
           fullIds.push(cardId)
         }
-        counts.set(cardId, (counts.get(cardId) || 0) + count)
-        continue
-      }
-
-      const fallbackMatch = trimmed.match(
-        /\b([A-Z]{2,4})\s+(\d{1,3}[A-Z]?)\b/,
-      )
-
-      if (fallbackMatch) {
-        const setCode = fallbackMatch[1].toLowerCase()
-        const num = fallbackMatch[2].toLowerCase()
-        const cardId = `${setCode}-${num}`
-        totalCount += 1
-        sectionCounts[currentSection] += 1
-        fullIds.push(cardId)
-        counts.set(cardId, (counts.get(cardId) || 0) + 1)
+        counts.set(cardId, (counts.get(cardId) || 0) + cardLine.count)
       }
     }
 
@@ -163,6 +143,10 @@ export function DeckImport(props: DeckImportProps) {
   function getDeckValidationError(parsed: ParsedDeckText) {
     if (!parsed.uniqueIds.length) {
       return "Couldn't find any card IDs like PAF 7 / OBF 162 in the text. Make sure lines look like '4 Charmander PAF 7'."
+    }
+
+    if (parsed.sectionCounts.unknown > 0) {
+      return "Every card must appear under a Pokemon, Trainer, or Energy heading."
     }
 
     if (parsed.sectionCounts.pokemon < 1) {
@@ -223,7 +207,7 @@ export function DeckImport(props: DeckImportProps) {
     }))
   }
 
-  async function fetchCardsByIds(ids: string[]) {
+  async function fetchCardsByIds(ids: string[]): Promise<CardLookupResult> {
     const response = await fetch("/api/cards", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -233,7 +217,12 @@ export function DeckImport(props: DeckImportProps) {
     if (!response.ok) throw new Error("Failed to fetch cards")
 
     const data = await response.json()
-    return Array.isArray(data.cards) ? (data.cards as ImportedCard[]) : []
+    return {
+      cards: Array.isArray(data.cards) ? (data.cards as ImportedCard[]) : [],
+      missingIds: Array.isArray(data.missingIds)
+        ? data.missingIds.filter((id: unknown): id is string => typeof id === "string")
+        : [],
+    }
   }
 
   async function hydrateFeaturedDecks() {
@@ -251,7 +240,10 @@ export function DeckImport(props: DeckImportProps) {
         new Set(parsedFeaturedDecks.flatMap(({ parsed }) => parsed.uniqueIds)),
       )
 
-      const fetchedCards = await fetchCardsByIds(requestIds)
+      const { cards: fetchedCards, missingIds } = await fetchCardsByIds(requestIds)
+      if (missingIds.length) {
+        throw new Error("Featured deck data contains unrecognized card IDs.")
+      }
       const cardById = buildCardById(fetchedCards)
       const nextFeaturedCards: Record<string, FeaturedCard[]> = {}
       const nextFeaturedExpandedDecks: Record<string, ImportedCard[]> = {}
@@ -282,6 +274,14 @@ export function DeckImport(props: DeckImportProps) {
   async function handleImport() {
     setError(null)
 
+    const securityError = getDeckImportSecurityError(rawText)
+    if (securityError) {
+      setPreviewCards([])
+      setHasValidImport(false)
+      setError(securityError)
+      return
+    }
+
     const parsed = parseIdsFromText(rawText)
     const validationError = getDeckValidationError(parsed)
 
@@ -295,7 +295,10 @@ export function DeckImport(props: DeckImportProps) {
     setIsLoading(true)
 
     try {
-      const fetchedCards = await fetchCardsByIds(parsed.uniqueIds)
+      const { cards: fetchedCards, missingIds } = await fetchCardsByIds(parsed.uniqueIds)
+      if (missingIds.length) {
+        throw new Error(`Unrecognized card codes: ${missingIds.join(", ").toUpperCase()}`)
+      }
       const cardById = buildCardById(fetchedCards)
       const expandedDeck = buildExpandedDeck(parsed.fullIds, cardById)
       const preview = buildPreviewCards(parsed.uniqueIds, parsed.counts, cardById)
@@ -345,9 +348,10 @@ export function DeckImport(props: DeckImportProps) {
   }, [featuredDecks.length])
 
   const handleTextChange = (value: string) => {
-    setRawText(value)
+    const nextValue = value.slice(0, MAX_DECK_TEXT_LENGTH)
+    setRawText(nextValue)
     setHasValidImport(false)
-    onTextChange?.(value)
+    onTextChange?.(nextValue)
   }
 
   const currentFeaturedDeck = featuredDecks[featuredDeckIndex]
@@ -486,6 +490,7 @@ export function DeckImport(props: DeckImportProps) {
           <div className={cn("p-3", hasValidImport && "pb-6")}>
             <Textarea
               rows={5}
+              maxLength={MAX_DECK_TEXT_LENGTH}
               value={rawText}
               onChange={(e) => handleTextChange(e.target.value)}
               className="bg-transparent border-0 focus-visible:ring-0 text-sm font-mono text-slate-100 resize-none"
