@@ -41,6 +41,9 @@ export function SiteFooter() {
             <Link href="/privacy" className="hover:underline">
               Privacy
             </Link>
+            <Link href="/accessibility" className="hover:underline">
+              Accessibility
+            </Link>
             <Link href="mailto:chriszcodes@gmail.com" className="hover:underline">
               Contact
             </Link>
