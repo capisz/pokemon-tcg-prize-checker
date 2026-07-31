@@ -1,4 +1,4 @@
-# PrizeCheckDrillr.io
+# PrizeCheck.us
 
 Train your Pokémon TCG prize-checking muscle memory.
 

@@ -342,7 +342,7 @@ export function ResultsView({
   }
 
   // ----- Social share helpers -----
-  const shareTextBase = `I scored ${score} points in PrizeCheckDrillr guessing my prize cards!`
+  const shareTextBase = `I scored ${score} points in PrizeCheck.us guessing my prize cards!`
 
   const handleShare = (platform: "twitter" | "facebook" | "instagram") => {
     if (typeof window === "undefined") return

@@ -405,7 +405,7 @@ export function DeckImport(props: DeckImportProps) {
           <div className="flex items-center gap-3">
             <img
               src="/sprite1_vector.svg"
-              alt="PrizeCheckDrill mascot"
+              alt="PrizeCheck mascot"
               className="
                 h-24 w-30 md:h-12 md:w-18
                 mascot-bob
@@ -440,7 +440,7 @@ export function DeckImport(props: DeckImportProps) {
   type="button"
   onClick={() => setShowHelpOverlay(true)}
   className="text-slate-400 hover:text-emerald-300 transition-transform duration-150 hover:scale-110 focus:outline-none"
-  aria-label="How to use PrizeCheckDrillr.io"
+  aria-label="How to use PrizeCheck.us"
 >
   <HelpCircle className="h-5 w-5" />
 </button>

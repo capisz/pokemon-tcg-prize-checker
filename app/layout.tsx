@@ -6,31 +6,35 @@ import { CookieConsent } from "@/components/cookie-consent"
 
 const inter = Inter({ subsets: ["latin"] })
 
-// app/layout.tsx (or app/page.tsx)
+const siteUrl = "https://prizecheck.us"
 
 export const metadata: Metadata = {
-  title: "PrizeCheckDrillr.io",
+  metadataBase: new URL(siteUrl),
+  title: "PrizeCheck.us",
   description: "Practice guessing your prize cards like a tournament grinder.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "PrizeCheckDrillr.io",
+    title: "PrizeCheck.us",
     description: "Practice guessing your prize cards like a tournament grinder.",
-    url: "https://prize-checkr-io.vercel.app/",
-    siteName: "PrizeCheckDrillr.io",
+    url: siteUrl,
+    siteName: "PrizeCheck.us",
     images: [
       {
-        url: "https://prize-checkr-io.vercel.app/prizecheckdrillr-og.png",
+        url: `${siteUrl}/prizecheck-og.png`,
         width: 1200,
         height: 630,
-        alt: "PrizeCheckDrillr game summary screen",
+        alt: "PrizeCheck.us game summary screen",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PrizeCheckDrillr.io",
+    title: "PrizeCheck.us",
     description: "Practice guessing your prize cards like a tournament grinder.",
-    images: ["https://prize-checkr-io.vercel.app/prizecheckdrillr-og.png"],
+    images: [`${siteUrl}/prizecheck-og.png`],
   },
 }
 

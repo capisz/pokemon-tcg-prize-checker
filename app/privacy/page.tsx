@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { SiteFooter } from "@/components/site-footer"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | PrizeCheck",
+  title: "Privacy Policy | PrizeCheck.us",
   description: "Privacy details for PrizeCheck.",
 }
 
