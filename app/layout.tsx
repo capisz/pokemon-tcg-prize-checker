@@ -2,6 +2,7 @@
 import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 import { CookieConsent } from "@/components/cookie-consent"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} min-h-screen`}>
         {children}
         <CookieConsent />
+        <Analytics />
       </body>
     </html>
   )
