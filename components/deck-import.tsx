@@ -54,6 +54,18 @@ interface DeckImportProps {
 
 export function DeckImport(props: DeckImportProps) {
   const practice = usePractice()
+  const startButtonRef = React.useRef<HTMLButtonElement>(null)
+  const [completedImport, setCompletedImport] = useState(0)
+  useEffect(() => {
+    if (!completedImport || !window.matchMedia('(max-width: 767px)').matches) return
+    const frame = window.requestAnimationFrame(() => {
+      startButtonRef.current?.scrollIntoView({
+        block: 'center',
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      })
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [completedImport])
   const {
     onImportInvalidated,
     onDeckImported,
@@ -246,6 +258,7 @@ export function DeckImport(props: DeckImportProps) {
       practice.setSource(importText)
       onDeckImported?.(expandedDeck)
       onImportComplete?.(expandedDeck)
+      setCompletedImport(value => value + 1)
     } catch (err: unknown) {
       console.error(err)
       if (revision !== importRevision.current) return
@@ -521,6 +534,7 @@ export function DeckImport(props: DeckImportProps) {
                   <Button
                     type="button"
                     size="sm"
+                    ref={startButtonRef}
                     aria-disabled={!canStartGame || !hasValidImport || isLoading}
                     className={cn(
                       "peer h-9 min-w-0 flex-1 rounded-full px-3 font-semibold transition-all",
