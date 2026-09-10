@@ -1,9 +1,12 @@
 "use client"
 
+import { CardFoil } from "@/components/card-foil"
+
 import { useEffect, useRef, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { copyDeckText } from "@/lib/deck-text"
 import { Copy } from "lucide-react"
 import { stylizeEx } from "@/lib/text"
 
@@ -23,6 +26,7 @@ type FeaturedDeckSectionProps = {
   importText: string
   playedBy?: string
   cards: FeaturedCard[]
+  onUseDeck?: (text: string) => void
   loading?: boolean
 }
 
@@ -49,7 +53,9 @@ export function FeaturedDeckSection({
   playedBy,
   cards,
   loading,
+  onUseDeck,
 }: FeaturedDeckSectionProps) {
+  const [copyError, setCopyError] = useState("")
   const [copied, setCopied] = useState(false)
   const [displayedDeck, setDisplayedDeck] = useState<DisplayedFeaturedDeck | null>(null)
   const [transitionPhase, setTransitionPhase] = useState<TransitionPhase>("entering")
@@ -170,7 +176,7 @@ export function FeaturedDeckSection({
               )}
             </div>
 
-            <div className="mt-1 flex flex-wrap items-center gap-4">
+            <div className="featured-actions mt-1 flex flex-wrap items-center gap-4">
               {displayedDeck.sourceUrl && (
                 <a
                   href={displayedDeck.sourceUrl}
@@ -182,16 +188,19 @@ export function FeaturedDeckSection({
                 </a>
               )}
 
+              {onUseDeck && <Button className="sm:hidden min-h-11 rounded-full bg-emerald-500 px-4 text-xs font-semibold text-slate-950 hover:bg-emerald-400" onClick={() => onUseDeck(displayedDeck.importText)}>Use this deck</Button>}
+              {copyError && <span role="status" className="text-xs text-rose-200">{copyError}</span>}
               <Button
                 type="button"
                 size="sm"
                 onClick={async () => {
                   try {
-                    await navigator.clipboard.writeText(displayedDeck.importText)
+                    setCopyError("")
+                    await copyDeckText(displayedDeck.importText)
                     setCopied(true)
                     window.setTimeout(() => setCopied(false), 1500)
                   } catch {
-                    // Clipboard access can be blocked by the browser.
+                    setCopyError("Copy unavailable. Tap Use this deck to import directly.")
                   }
                 }}
                 className={cn(
@@ -247,7 +256,7 @@ export function FeaturedDeckSection({
                     isExiting && "featured-card-wipe-exiting",
                   )}
                 >
-                  <div className="aspect-[2.5/3.5] w-full">
+                  <div className="relative isolate aspect-[2.5/3.5] w-full">
                     {card.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -260,6 +269,7 @@ export function FeaturedDeckSection({
                         {stylizeEx(card.name)}
                       </div>
                     )}
+                    <CardFoil name={card.name} />
                   </div>
                 </div>
 

@@ -4,10 +4,10 @@ import Link from "next/link"
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-emerald-200/60 bg-emerald-100/90 backdrop-blur-sm">
+    <footer className="mobile-footer border-t border-emerald-200/60 bg-emerald-100/90 backdrop-blur-sm">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-4 md:flex-row md:items-center md:justify-between">
         {/* Left: title + links */}
-        <div className="space-y-2">
+        <div className="footer-links space-y-2">
           <p className="text-xs font-semibold tracking-[0.16em] uppercase text-emerald-900">
             PrizeCheck.us
           </p>
@@ -15,38 +15,41 @@ export function SiteFooter() {
             Use this and the tools below to become a better player.
           </p>
 
-          <nav className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-emerald-900/80">
-           
+          <nav aria-label="Footer" className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-emerald-900/80">
+            <div className="footer-tools sm:contents"><h2 className="sm:hidden font-semibold">Other tools</h2>
             <Link
               href="https://dragapultist.vercel.app"
               target="_blank"
-              className="hover:underline"
+              className="inline-flex min-h-11 sm:min-h-6 items-center rounded px-1 sm:px-0 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900"
             >
-              Dragapultist (Pokémon TCG Analyzer)
+              Dragapultist<span className="hidden sm:inline"> (Pokémon TCG Analyzer)</span>
             </Link>
             <Link
               href="https://tcgmasters.net"
               target="_blank"
-              className="hover:underline"
+              className="inline-flex min-h-11 sm:min-h-6 items-center rounded px-1 sm:px-0 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900"
             >
-              TCG Masters (Matchup Simulator)
+              TCG Masters<span className="hidden sm:inline"> (Matchup Simulator)</span>
             </Link>
             <Link
               href="https://limitlesstcg.com/decks/lists"
               target="_blank"
-              className="hover:underline"
+              className="inline-flex min-h-11 sm:min-h-6 items-center rounded px-1 sm:px-0 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900"
             >
-              LimitlessTCG (Deck Database)
+              LimitlessTCG<span className="hidden sm:inline"> (Deck Database)</span>
             </Link>
-            <Link href="/privacy" className="hover:underline">
+            </div>
+            <div className="footer-site sm:contents"><h2 className="sm:hidden font-semibold">PrizeCheck.us</h2>
+            <Link href="/privacy" className="inline-flex min-h-11 sm:min-h-6 items-center rounded px-1 sm:px-0 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">
               Privacy
             </Link>
-            <Link href="/accessibility" className="hover:underline">
+            <Link href="/accessibility" className="inline-flex min-h-11 sm:min-h-6 items-center rounded px-1 sm:px-0 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">
               Accessibility
             </Link>
-            <Link href="mailto:chriszcodes@gmail.com" className="hover:underline">
+            <Link href="mailto:chriszcodes@gmail.com" className="inline-flex min-h-11 sm:min-h-6 items-center rounded px-1 sm:px-0 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900">
               Contact
             </Link>
+            </div>
           </nav>
         </div>
 

@@ -1,4 +1,5 @@
 "use client"
+import { CardFoil } from "@/components/card-foil"
 
 import { useEffect, useRef, useState } from 'react'
 import { onAuthStateChanged, type User } from 'firebase/auth'
@@ -148,7 +149,7 @@ export function DeckLibrary({ text, onLoad, cards }: { cards: ImportedCard[]; te
           <label htmlFor="saved-deck-name" className="block text-sm font-medium">Save current imported deck</label>
           <input id="saved-deck-name" value={name} onChange={event => setName(event.target.value)} maxLength={80} required disabled={busy || !text} placeholder="Deck name" className="w-full rounded-md border border-slate-600 bg-slate-900 p-2 text-sm" />
           <div className="flex items-center gap-3">
-            {coverCard?.image && <img src={coverCard.image} alt="Selected deck logo" className="h-14 w-10 shrink-0 rounded object-contain" />}
+            {coverCard?.image && <span className="relative isolate h-14 w-10 shrink-0 overflow-hidden rounded"><img src={coverCard.image} alt="Selected deck logo" className="h-full w-full object-contain" /><CardFoil name={coverCard.name} /></span>}
             <label className="min-w-0 flex-1 text-xs text-slate-400">Deck logo<select aria-label="Deck logo" value={coverCardId || ''} disabled={busy} onChange={event => setCover(event.target.value)} className="mt-1 block w-full rounded border border-slate-700 bg-slate-950 p-2 text-slate-100">{cards.map(card => <option key={card.id} value={card.id}>{card.name}</option>)}</select></label>
             <Button size="sm" className={primaryButton} disabled={busy || !name.trim()} type="submit">Save deck</Button>
           </div>
@@ -159,8 +160,9 @@ export function DeckLibrary({ text, onLoad, cards }: { cards: ImportedCard[]; te
         {search && !visibleDecks.length && <p className="text-slate-400">No matching decks{hasMore ? ' in this page. Load more to keep looking.' : '.'}</p>}
         <ul className="space-y-3">{visibleDecks.map(deck => <li key={deck.id} className="relative rounded-xl border border-slate-800 bg-slate-900/40 p-3">
           <div className="flex items-start gap-3">
-          <button type="button" title="Change deck logo" aria-label={`Change logo for ${deck.name}`} disabled={busy} onClick={() => setLogoPicker(deck.id)} className="flex h-20 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-emerald-500/20 bg-emerald-950/40 text-xl font-semibold text-emerald-300 hover:border-emerald-400 focus-visible:outline-2 focus-visible:outline-emerald-300">
+          <button type="button" title="Change deck logo" aria-label={`Change logo for ${deck.name}`} disabled={busy} onClick={() => setLogoPicker(deck.id)} className="relative isolate flex h-20 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-emerald-500/20 bg-emerald-950/40 text-xl font-semibold text-emerald-300 hover:border-emerald-400 focus-visible:outline-2 focus-visible:outline-emerald-300">
             {deck.coverCardId && logos[deck.coverCardId]?.image ? <img src={logos[deck.coverCardId].image} alt="" className="h-full w-full object-contain" /> : deck.name.slice(0,1).toUpperCase()}
+            {deck.coverCardId && logos[deck.coverCardId] && <CardFoil name={logos[deck.coverCardId].name} />}
           </button>
           <div className="min-w-0 flex-1">
           {editing === deck.id ? <form className="mb-3 space-y-2" onSubmit={event => {

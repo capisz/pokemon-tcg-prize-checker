@@ -29,3 +29,14 @@ it('bounds API input and permits gallery IDs without permitting paths', () => {
   expect(cardRequestSchema.safeParse({ids:['../../etc/passwd']}).success).toBe(false)
   expect(cardRequestSchema.safeParse({ids:Array(257).fill('paf-7')}).success).toBe(false)
 })
+
+import { normalizeDeckText } from '../lib/deck-text'
+it('repairs encoded mobile clipboard deck text without bypassing validation', () => {
+  const source = FEATURED_DECKS[0].importText
+  for (const value of [source, encodeURIComponent(source), encodeURIComponent(encodeURIComponent(source))]) {
+    expect(normalizeDeckText(value)).toBe(source)
+    expect(getDeckValidationError(parseIdsFromText(normalizeDeckText(value)))).toBeNull()
+  }
+  expect(getDeckImportSecurityError(normalizeDeckText(encodeURIComponent('<script>alert(1)</script>')))).not.toBeNull()
+  expect(normalizeDeckText('bad%20%ZZ')).toBe('bad%20%ZZ')
+})

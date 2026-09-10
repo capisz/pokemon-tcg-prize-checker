@@ -7,7 +7,6 @@ async function openApp(page: Page) {
   // Third-party images/advertising are not required to verify the game rules.
   await page.route('https://**/*', route => route.abort())
   await page.goto('/')
-  await page.getByRole('button', { name: 'Decline', exact: true }).click()
 }
 async function importDeck(page: Page) {
   await page.getByRole('textbox', { name: 'Deck list' }).fill(FEATURED_DECKS[0].importText)
@@ -67,18 +66,13 @@ test('keyboard selection, summary dismissal, and repeat play work', async ({page
   expect(errors).toEqual([])
 })
 
-test('consent does not load advertising before acceptance or after decline', async ({page}) => {
-  await page.addInitScript(()=>localStorage.setItem('pcd_has_seen_help','true'))
-  await page.route('https://**/*', route=>route.abort())
-  await page.goto('/')
+test('advertising remains disabled with a previously accepted cookie', async ({page}) => {
+  await page.context().addCookies([{name:'pcd_cookie_consent',value:'accepted',url:'http://127.0.0.1:3100'}])
+  await openApp(page)
   await expect(page.locator('script[src*="adsbygoogle"]')).toHaveCount(0)
-  await page.getByRole('button',{name:'Decline',exact:true}).click()
+  await expect(page.getByRole('button',{name:'Accept',exact:true})).toHaveCount(0)
   await page.reload()
   await expect(page.locator('script[src*="adsbygoogle"]')).toHaveCount(0)
-  await page.context().clearCookies()
-  await page.reload()
-  await page.getByRole('button',{name:'Accept',exact:true}).click()
-  await expect(page.locator('script[src*="adsbygoogle"]')).toHaveCount(1)
 })
 
 test('help dialog supports Escape and accessible controls', async ({page}) => {
@@ -177,7 +171,7 @@ test('completed practice is recorded once and available for review', async ({pag
   await expect(history.getByText('Prize frequency',{exact:true})).toBeVisible()
   await history.getByRole('textbox',{name:'Deck name',exact:true}).fill('My tournament deck')
   await history.getByRole('textbox',{name:'Deck name',exact:true}).press('Enter')
-  await expect(history.getByRole('button',{name:'History deck',exact:true})).toHaveText('My tournament deck')
+  await expect(history.getByRole('button',{name:/^History deck:/})).toHaveText('My tournament deck')
 
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('prizecheck:practice-history:v1') || '[]').length)).toBe(1)
   await history.getByRole('button',{name:'Close history',exact:true}).click()
@@ -224,7 +218,7 @@ test('progress filters support keyboard and inline names save or cancel',async({
  await page.getByRole('button',{name:'Submit Guesses'}).click()
  await page.keyboard.press('Escape')
  await page.getByRole('button',{name:'Practice history',exact:true}).click()
- const picker=page.getByRole('button',{name:'History mode',exact:true})
+ const picker=page.getByRole('button',{name:/^History mode:/})
  await picker.press('ArrowDown')
  await page.keyboard.press('End')
  await page.keyboard.press('Enter')
@@ -238,9 +232,151 @@ test('progress filters support keyboard and inline names save or cancel',async({
  await name.fill('Discard');await name.press('Escape');await expect(name).toHaveValue(before)
  await name.fill('  ');await name.press('Enter');await expect(page.getByRole('alert')).toContainText('1–80')
  await name.fill('Edited deck');await name.press('Tab');await expect(name).toHaveValue('Edited deck')
- await expect(page.getByRole('button',{name:'History deck',exact:true})).toContainText('Edited deck')
+ await expect(page.getByRole('button',{name:/^History deck:/})).toContainText('Edited deck')
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true)
  await picker.click();await page.getByRole('option',{name:'2 minutes',exact:true}).click()
  await page.getByRole('dialog').evaluate(el=>{el.scrollTop=0})
  await page.screenshot({path:info.outputPath('progress.png'),fullPage:false})
+})
+
+test('manual sorting buttons and desktop shortcuts preserve card count', async ({page}, info) => {
+  test.skip(info.project.name !== 'mobile', 'Mobile-only control panel')
+  await openApp(page)
+  await startGame(page)
+  await expect(page.getByRole('button',{name:'Move to front',exact:true})).toBeDisabled()
+  const first = await page.getByTestId('center-card').locator('img').getAttribute('alt')
+  await page.getByRole('button',{name:'Move to back',exact:true}).click()
+  await expect(page.getByRole('status')).toHaveText(`${first} moved to back`)
+  await page.getByRole('button',{name:'Next card',exact:true}).click()
+  await expect(page.getByRole('button',{name:'Move to front',exact:true})).toBeEnabled()
+  await page.keyboard.press('a')
+  await expect(page.getByRole('slider',{name:'Deck position'})).toHaveValue('3')
+  await page.keyboard.press('ArrowRight')
+  await expect(page.getByRole('slider',{name:'Deck position'})).toHaveValue('4')
+  await page.getByRole('button',{name:'Move to back',exact:true}).focus()
+  await page.keyboard.press('Space')
+  await expect(page.getByRole('slider',{name:'Deck position'})).toHaveValue('4')
+})
+
+test('touch gestures require clear direction and sorting opt-in', async ({page}, info) => {
+  test.skip(info.project.name !== 'mobile', 'Mobile-only control panel')
+  await openApp(page)
+  await startGame(page)
+  const card=page.getByTestId('center-card')
+  async function swipe(dx:number,dy:number,cancel=false) {
+    // Synthetic pointer sequences verify routing; native scrolling needs phone testing.
+    await card.dispatchEvent('pointerdown',{pointerType:'touch',pointerId:7,isPrimary:true,clientX:150,clientY:250})
+    await card.dispatchEvent(cancel?'pointercancel':'pointerup',{pointerType:'touch',pointerId:7,isPrimary:true,clientX:150+dx,clientY:250+dy})
+  }
+  await swipe(0,90)
+  await expect(page.getByRole('status')).toHaveText('')
+  await swipe(-80,5)
+  await expect(page.getByRole('slider',{name:'Deck position'})).toHaveValue('2')
+  await page.getByRole('button',{name:'Sorting gestures off'}).click()
+  await swipe(5,10)
+  await swipe(70,70)
+  await swipe(0,90,true)
+  await expect(page.getByRole('status')).toHaveText('')
+  const name=await card.locator('img').getAttribute('alt')
+  await swipe(0,-90)
+  await expect(page.getByRole('status')).toHaveText(`${name} moved to front`)
+  await expect(page.getByRole('slider',{name:'Deck position'})).toHaveValue('3')
+})
+
+test('encoded phone paste imports and featured decks can bypass the clipboard', async ({page}) => {
+  await openApp(page)
+  await page.getByRole('textbox',{name:'Deck list'}).fill(encodeURIComponent(FEATURED_DECKS[0].importText))
+  await page.getByRole('button',{name:'Import Deck',exact:true}).click()
+  await expect(page.getByText('Deck ready',{exact:true})).toBeVisible()
+  if (await page.getByRole('button',{name:'Use this deck',exact:true}).isVisible()) await page.getByRole('button',{name:'Use this deck',exact:true}).click()
+  await expect(page.getByText('Deck ready',{exact:true})).toBeVisible()
+  expect(await page.locator('#deck-import-panel').innerText()).not.toContain('%20')
+})
+
+test('deck scrubber and hold navigation cross many cards and stop on release', async ({page}, info) => {
+  test.skip(info.project.name !== 'mobile', 'Mobile-only control panel')
+  await openApp(page); await startGame(page)
+  const slider=page.getByRole('slider',{name:'Deck position'})
+  await slider.fill('25')
+  await expect(slider).toHaveValue('25')
+  await page.getByRole('button',{name:'First',exact:true}).click()
+  await expect(slider).toHaveValue('1')
+  const box=(await page.getByRole('button',{name:'Next card',exact:true}).boundingBox())!
+  await page.mouse.move(box.x+box.width/2,box.y+box.height/2)
+  await page.mouse.down()
+  await expect.poll(async()=>Number(await slider.inputValue())).toBeGreaterThan(3)
+  await page.mouse.up()
+  const stopped=await slider.inputValue()
+  await page.waitForTimeout(300)
+  await expect(slider).toHaveValue(stopped)
+  await page.getByRole('button',{name:'Last',exact:true}).click()
+  await expect(slider).toHaveValue('46')
+  await expect(page.getByRole('button',{name:'Move to back',exact:true})).toBeDisabled()
+})
+
+test('featured copy produces plain text that imports back into the app', async ({page,context}) => {
+  await context.grantPermissions(['clipboard-read','clipboard-write'])
+  await openApp(page)
+  await page.getByRole('button',{name:'Copy Decklist',exact:true}).click()
+  await expect(page.getByRole('button',{name:'Copied!',exact:true})).toBeVisible()
+  const copied=await page.evaluate(()=>navigator.clipboard.readText())
+  expect(copied).toContain('\n')
+  expect(copied).not.toMatch(/%20|%0A/i)
+  await page.getByRole('textbox',{name:'Deck list'}).fill(copied)
+  await page.getByRole('button',{name:'Import Deck',exact:true}).click()
+  await expect(page.getByText('Deck ready',{exact:true})).toBeVisible()
+})
+
+test('footer touch targets and visible picker labels pass the reported accessibility rules', async ({page}, info) => {
+  await openApp(page)
+  await importDeck(page)
+  const audit=await new AxeBuilder({page}).withRules(['target-size','label-content-name-mismatch']).analyze()
+  expect(audit.violations).toEqual([])
+  const picker=page.getByRole('button',{name:'Practice mode: 2 minutes',exact:true})
+  await picker.click()
+  await page.getByRole('option',{name:'Untimed',exact:true}).click()
+  await expect(page.getByRole('button',{name:'Practice mode: Untimed',exact:true})).toBeVisible()
+  for (const link of await page.locator('footer nav a').all()) {
+    const box=(await link.boundingBox())!
+    expect(box.height).toBeGreaterThanOrEqual(24)
+  }
+})
+
+test('desktop keeps production layout while phone controls stay compact', async ({page}, info) => {
+  await openApp(page)
+  if (info.project.name === 'desktop') {
+    await expect(page.getByRole('button',{name:'Use this deck',exact:true})).toBeHidden()
+    await startGame(page)
+    await expect(page.locator('.mobile-practice-controls')).toBeHidden()
+    await expect(page.getByText('Viewing card 1 of 46',{exact:true})).toBeVisible()
+  } else {
+    await expect(page.getByRole('textbox',{name:'Deck list'})).toHaveCSS('font-size','16px')
+    await page.locator('footer').scrollIntoViewIfNeeded()
+    await page.locator('footer').screenshot({path:info.outputPath('mobile-footer.png')})
+    await startGame(page)
+    const front=(await page.getByRole('button',{name:'Move to front',exact:true}).boundingBox())!
+    const back=(await page.getByRole('button',{name:'Move to back',exact:true}).boundingBox())!
+    expect(Math.abs(front.y-back.y)).toBeLessThan(1)
+    expect(front.height).toBeGreaterThanOrEqual(44)
+    await page.screenshot({path:info.outputPath('mobile-controls.png'),fullPage:true})
+  }
+})
+
+test('ex foil is decorative, uses the supplied star, and respects reduced motion', async ({page}) => {
+  await openApp(page); await startGame(page)
+  const cards=page.locator('#practice-carousel [data-testid="center-card"]').locator('..')
+  await expect(page.locator('#practice-carousel [data-card-foil="ex"]').first()).toBeAttached()
+  const foil=page.locator('#practice-carousel [data-card-foil="ex"]').first()
+  await expect(foil).toHaveCSS('pointer-events','none')
+  await expect(foil).toHaveAttribute('aria-hidden','true')
+  expect(await foil.evaluate(el=>getComputedStyle(el,'::before').backgroundImage)).toContain('/effects/ex-star.png')
+  await page.emulateMedia({reducedMotion:'reduce'})
+  expect(await foil.evaluate(el=>getComputedStyle(el,'::before').animationName)).toBe('none')
+  expect(await foil.evaluate(el=>getComputedStyle(el,'::after').animationName)).toBe('none')
+  await page.getByRole('button',{name:'Guess Prizes',exact:true}).click()
+  const choices=page.getByRole('button',{name:/, copy \d+$/})
+  for (const choice of await choices.all()) {
+    const name=await choice.getAttribute('aria-label')
+    await expect(choice.locator('[data-card-foil]')).toHaveCount(/\bex\b/i.test(name!) ? 1 : 0)
+  }
 })

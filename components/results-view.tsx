@@ -1,5 +1,7 @@
 "use client"
 
+import { CardFoil } from "@/components/card-foil"
+
 import { useEffect, useMemo, useState, useRef } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -297,16 +299,16 @@ export function ResultsView({
   }
 
   return (
-    <div className="container mx-auto max-w-7xl p-6 space-y-6 text-slate-50">
+    <div className="container mx-auto max-w-7xl p-3 sm:p-6 space-y-4 sm:space-y-6 text-slate-50">
       {showResults && <div className="flex flex-wrap items-center gap-2"><PracticeHistory />{historyError && <p role="alert" className="text-sm text-rose-300">History could not be saved on this device.</p>}</div>}
       {showResults && syncState !== 'idle' && <div className="text-sm text-emerald-200" role="status">{syncState === 'saving' ? 'Saving to account…' : syncState === 'saved' ? 'Saved to account' : <><span>Account sync failed. </span><Button variant="ghost" onClick={() => pendingRecord.current && void saveToAccount(pendingRecord.current)}>Retry sync</Button></>}</div>}
       {showResults && totalTime !== 120 && <p className="text-xs text-slate-400">Custom practice · standard rank unchanged.</p>}
       {/* Header with inline submit button OR View Summary */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="sticky sm:static top-0 z-30 sm:z-auto rounded-xl sm:rounded-none bg-slate-950/95 sm:bg-transparent p-3 sm:p-0 flex flex-col gap-2 sm:gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-2 text-center sm:text-left">
           <h1
             className={cn(
-              "text-[32px] sm:text-[40px] font-semibold text-emerald-200/90",
+              "text-2xl sm:text-[40px] font-semibold text-emerald-200/90",
               "tracking-tight",
             )}
           >
@@ -595,7 +597,7 @@ export function ResultsView({
       {/* Card grid */}
       <Card
         className={cn(
-          "p-5 rounded-3xl",
+          "p-2 sm:p-5 rounded-3xl",
           "bg-teal-900/40 shadow-[0_20px_45px_rgba(0,0,0,0.9)]",
           "border-transparent",
         )}
@@ -612,16 +614,18 @@ export function ResultsView({
                 aria-pressed={selectedCards.has(card.instanceId)}
                 aria-disabled={showResults}
                 key={`${card.instanceId}-${index}`}
+                style={{touchAction:"pan-y pinch-zoom", userSelect:"none", WebkitTouchCallout:"none"}}
+                onContextMenu={event => event.preventDefault()}
                 onClick={() => isClickable && toggleCard(card.instanceId)}
                 className={cn(
-                  "group relative aspect-[2.5/3.5] rounded-xl overflow-hidden transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-200",
-                  isClickable && "cursor-pointer",
+                  "group relative isolate aspect-[2.5/3.5] rounded-xl overflow-hidden transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-200",
+                  isClickable && "cursor-pointer sm:hover:scale-105",
                   status === "selected" && "ring-3 ring-sky-400 scale-[0.97]",
                   status === "correct" && "ring-3 ring-emerald-400",
                   status === "incorrect" && "ring-3 ring-rose-500",
                   status === "missed" && "ring-3 ring-orange-400 opacity-90",
                   status === "normal" && showResults && "opacity-40",
-                  !showResults && "hover:scale-105",
+
                 )}
               >
                 {card.image ? (
@@ -629,7 +633,8 @@ export function ResultsView({
                   <img
                     src={card.image || "/placeholder.svg"}
                     alt={card.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover select-none"
+                    draggable={false}
                   />
                 ) : (
                   <div className="w-full h-full bg-slate-800 flex items-center justify-center p-2">
@@ -638,6 +643,8 @@ export function ResultsView({
                     </p>
                   </div>
                 )}
+
+                <CardFoil name={card.name} />
 
                 {/* Status badge */}
                 {showResults && status !== "normal" && (
@@ -660,11 +667,12 @@ export function ResultsView({
                   </div>
                 )}
 
+                {!showResults && status === "selected" && <span className="sm:hidden pointer-events-none absolute bottom-1 right-1 flex items-center gap-1 rounded-md bg-sky-950 px-2 py-1 text-xs font-semibold text-white"><CheckCircle2 className="h-4 w-4" /> Selected</span>}
                 {/* Hover / selection overlay before submit */}
                 {!showResults && (
                   <div
                     className={cn(
-                      "absolute inset-0 transition-opacity flex items-center justify-center p-2",
+                      "hidden sm:flex absolute inset-0 transition-opacity items-center justify-center p-2",
                       status === "selected"
                         ? "bg-sky-500/25 backdrop-blur-sm opacity-100"
                         : "bg-black/70 opacity-0 group-hover:opacity-100",

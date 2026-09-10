@@ -13,7 +13,6 @@ test.describe('local account library', () => {
       return host === 'apis.google.com' ? route.continue() : route.abort()
     })
     await page.goto('/')
-    await page.getByRole('button', { name: 'Decline', exact: true }).click()
   }
   async function signIn(page: Page, email: string) {
     const popupReady = page.waitForEvent('popup')
@@ -164,7 +163,7 @@ test.describe('local account library', () => {
     await expect(page.getByRole('dialog')).toHaveCount(1)
     const name=page.getByRole('textbox',{name:'Deck name',exact:true})
     await name.fill('Shared name');await name.press('Enter')
-    await expect(page.getByRole('button',{name:'History deck',exact:true})).toContainText('Shared name')
+    await expect(page.getByRole('button',{name:/^History deck:/})).toContainText('Shared name')
     await page.getByRole('button',{name:'Decks',exact:true}).click()
     await expect(page.getByRole('dialog').getByText('Shared name',{exact:true})).toBeVisible()
     await page.getByRole('button',{name:'Progress',exact:true}).click()

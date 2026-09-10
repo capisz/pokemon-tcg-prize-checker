@@ -43,7 +43,7 @@ export function CountdownOverlay({ visible, count }: CountdownOverlayProps) {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 transition-opacity duration-300 transform-gpu",
+        "fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 transition-opacity duration-300",
         visible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
       )}
     >
@@ -57,9 +57,9 @@ export function CountdownOverlay({ visible, count }: CountdownOverlayProps) {
         {count != null && (
           <div
             className={cn(
-              "text-slate-300 text-6xl md:text-4xl font-semibold tabular-nums",
+              "countdown-number text-slate-300 text-6xl md:text-4xl font-semibold tabular-nums",
               "transition-transform duration-200 ease-out",
-              "drop-shadow-[0_0_12px_rgba(45,212,191,0.9)]", "opacity-80",
+              "opacity-80",
               isPulsing ? "scale-120" : "scale-100"
             )}
           >

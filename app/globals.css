@@ -100,76 +100,20 @@
   --sidebar-ring: oklch(0.6 0.22 250);
 }
 
-/* Soft card-like holographic foil for ex cards */
-.holo-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  mix-blend-mode: screen;
-  opacity: 0.62;
-  background:
-    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.34), transparent 18%),
-    radial-gradient(circle at 82% 74%, rgba(56, 189, 248, 0.24), transparent 20%),
-    linear-gradient(
-      115deg,
-      rgba(244, 114, 182, 0.18),
-      rgba(250, 204, 21, 0.14) 28%,
-      rgba(52, 211, 153, 0.16) 48%,
-      rgba(56, 189, 248, 0.2) 68%,
-      rgba(168, 85, 247, 0.18)
-    );
-}
-
-.holo-overlay::before {
-  content: "";
-  position: absolute;
-  inset: -35%;
-  pointer-events: none;
-  background-image:
-    repeating-linear-gradient(
-      112deg,
-      rgba(255, 255, 255, 0.18) 0,
-      rgba(255, 255, 255, 0.08) 1px,
-      transparent 2px,
-      transparent 9px
-    ),
-    linear-gradient(
-      125deg,
-      rgba(59, 130, 246, 0.18),
-      rgba(236, 72, 153, 0.2) 28%,
-      rgba(250, 204, 21, 0.18) 50%,
-      rgba(20, 184, 166, 0.2) 72%,
-      rgba(129, 140, 248, 0.18)
-    );
-  background-size: 100% 100%, 220% 220%;
-  filter: saturate(1.35) contrast(1.08);
-  opacity: 0.36;
-  transform: rotate(0.001deg);
-  animation: holo-foil-drift 7s ease-in-out infinite alternate;
-}
-
-.holo-overlay::after {
-  content: "";
-  position: absolute;
-  top: -20%;
-  bottom: -20%;
-  left: -75%;
-  width: 46%;
-  pointer-events: none;
-  background: linear-gradient(
-    105deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.04) 18%,
-    rgba(255, 255, 255, 0.42) 46%,
-    rgba(125, 211, 252, 0.26) 54%,
-    transparent 78%
-  );
-  filter: blur(0.4px);
-  opacity: 0.52;
-  transform: skewX(-18deg);
-  animation: holo-light-sweep 5.4s ease-in-out infinite;
-}
+/* Subtle foil and extracted star brush, clipped to each ex card. */
+.holo-overlay { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; mix-blend-mode: screen; opacity: .32;
+  background: linear-gradient(120deg, transparent 10%, rgb(245 158 210 / 18%) 30%, rgb(125 211 252 / 24%) 52%, rgb(253 230 138 / 16%) 72%, transparent 90%); }
+.holo-overlay::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: url('/effects/ex-star.png'), url('/effects/ex-star.png'), url('/effects/ex-star.png'), url('/effects/ex-star.png'), url('/effects/ex-star.png');
+  background-size: 16% auto, 9% auto, 12% auto, 8% auto, 11% auto;
+  background-position: 18% 18%, 76% 29%, 38% 66%, 86% 82%, 15% 90%; background-repeat: no-repeat;
+  opacity: .6; animation: ex-star-shimmer 6s ease-in-out infinite alternate; }
+.holo-overlay::after { content: ""; position: absolute; inset: -15% -75%; pointer-events: none;
+  background: linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 20%) 49%, rgb(165 243 252 / 16%) 53%, transparent 60%);
+  animation: ex-foil-sweep 8s ease-in-out infinite; }
+@keyframes ex-star-shimmer { from { opacity: .25; } to { opacity: .8; } }
+@keyframes ex-foil-sweep { 0%, 15% { transform: translateX(-30%); opacity: 0; } 50% { opacity: .7; } 85%, 100% { transform: translateX(30%); opacity: 0; } }
+.practice-carousel-glow { background: radial-gradient(ellipse at 50% 48%, rgb(56 189 248 / 20%) 0%, rgb(56 189 248 / 8%) 38%, transparent 70%); }
 
 @keyframes holo-foil-drift {
   0% {
@@ -391,5 +335,55 @@ body {
   .featured-card-wipe {
     animation: none;
     transition: none;
+  }
+}
+
+/* Phone layout only: desktop keeps the production presentation. */
+@media (max-width: 639px) {
+  input:not([type="range"]), textarea, select { font-size: 16px; }
+  .featured-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .featured-actions > a { grid-column: 1 / -1; min-height: 24px; font-size: 12px; }
+  .featured-actions > button { width: 100%; min-height: 44px; padding: 0 12px; font-size: 12px; border-radius: 999px; box-shadow: none; filter: none; }
+  .featured-actions > button svg { width: 15px; height: 15px; margin-right: 6px; }
+  .mobile-practice-controls button { box-shadow: none; }
+  .mobile-practice-controls button:hover { transform: none; }
+  .mobile-practice-controls input[type="range"] { width: 100%; }
+  .mobile-footer { background: #c5eddf; border-color: rgb(6 78 59 / 20%); }
+  .mobile-footer > div { gap: 8px; padding: 12px 16px max(12px, env(safe-area-inset-bottom)); }
+  .mobile-footer .footer-links > p { display: none; }
+  .mobile-footer nav { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 0; }
+  .mobile-footer .footer-site { order: -1; }
+  .mobile-footer nav h2 { font-size: 13px; line-height: 18px; margin-bottom: 2px; }
+  .mobile-footer nav a { display: flex; min-height: 24px; padding: 0; line-height: 24px; }
+  .mobile-footer nav a { font-size: 12px; }
+  .mobile-footer > div > p { font-size: 10px; line-height: 1.5; border-top: 1px solid rgb(6 78 59 / 20%); padding-top: 8px; }
+  .mobile-import-header { flex-direction: row; align-items: center; gap: 8px; }
+  .mobile-brand { gap: 6px; align-items: center; width: auto; min-width: 0; }
+  .mobile-brand > img { width: 36px; height: 36px; flex-shrink: 0; object-fit: contain; }
+  .mobile-brand > div { min-width: 0; flex: 1; }
+  .mobile-brand h1 { font-size: clamp(16px, 4.8vw, 20px); line-height: 32px; white-space: nowrap; padding-right: 0; }
+  .mobile-brand p { display: none; }
+  .mobile-account-actions { position: static; margin-left: auto; gap: 4px; flex-wrap: nowrap; }
+  .mobile-account-actions #deck-library-trigger { min-height: 32px; padding: 0 12px; font-size: 12px; }
+  .mobile-account-actions > button { min-width: 28px; min-height: 32px; display: flex; align-items: center; justify-content: center; }
+  .featured-actions > button:first-of-type { background: #00bc8c; color: #052e25; }
+  .featured-actions > button:last-of-type { background: #a7f3d0; color: #064e3b; }
+  .mobile-practice-controls > div:nth-child(2) { max-width: 320px; width: 100%; align-self: center; }
+
+}
+
+/* Text shadow follows the numeral without a rectangular filter layer on iOS. */
+.countdown-number {
+  text-shadow: 0 0 12px rgb(45 212 191 / 70%), 0 0 24px rgb(45 212 191 / 30%);
+}
+@media (max-width: 639px) {
+  .mobile-brand > img { display: none; }
+  [data-slot="card"] {
+    outline: 1px solid rgb(110 231 183 / 28%);
+    outline-offset: -1px;
+  }
+  [role="dialog"] {
+    outline: 1px solid rgb(110 231 183 / 28%);
+    outline-offset: -1px;
   }
 }

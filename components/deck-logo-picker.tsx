@@ -1,4 +1,6 @@
 "use client"
+
+import { CardFoil } from "@/components/card-foil"
 import { useEffect, useState } from 'react'
 import { loadDeck } from '@/lib/firebase/decks'
 import { parseIdsFromText } from '@/lib/deck-parser'
@@ -19,7 +21,7 @@ export function DeckLogoPicker({ deckId, busy, onChoose, onClose }: { deckId: st
   return <div className="mt-3 border-t border-slate-800 pt-3">
     <div className="mb-2 flex items-center justify-between"><p className="text-xs text-slate-300">Choose a card from this deck</p><Button size="sm" variant="ghost" onClick={onClose}>Cancel logo</Button></div>
     {failed ? <Button variant="ghost" onClick={() => setAttempt(value => value+1)}>Retry loading cards</Button> : !cards.length ? <p role="status" className="text-xs text-slate-400">Loading cards…</p> : <div className="grid max-h-56 grid-cols-4 gap-2 overflow-y-auto">{cards.map(card => <button type="button" disabled={busy} key={card.id} aria-label={`Use ${card.name} ${card.id} as logo`} onClick={() => onChoose(card)} className="rounded-lg border border-slate-700 p-1 text-left hover:border-emerald-300 focus-visible:outline-2 focus-visible:outline-emerald-300 disabled:opacity-50">
-      {card.image && <img src={card.image} alt="" className="aspect-[2.5/3.5] w-full rounded object-contain" />}
+      <div className="relative isolate overflow-hidden rounded">{card.image && <img src={card.image} alt="" className="aspect-[2.5/3.5] w-full rounded object-contain" />}<CardFoil name={card.name} /></div>
       <span className="mt-1 block truncate text-[10px]">{card.name}</span>
     </button>)}</div>}
   </div>

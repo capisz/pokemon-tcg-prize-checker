@@ -1,6 +1,9 @@
 "use client"
 
-import { useEffect, useState, useCallback, useRef } from "react"
+import { CardFoil } from "@/components/card-foil"
+
+import { useEffect, useState, useCallback, useRef, type PointerEvent } from "react"
+import { RepeatButton } from "@/components/repeat-button"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
@@ -37,6 +40,11 @@ export function DeckView({
   const [timeRemaining, setTimeRemaining] = useState(duration)
   const [deckOrder, setDeckOrder] = useState<PokemonCard[]>(deck)
 
+  const [sortingGestures, setSortingGestures] = useState(false)
+  const gesture = useRef<{ id: number; x: number; y: number } | null>(null)
+  const suppressClick = useRef(false)
+  const [announcement, setAnnouncement] = useState("")
+
   const deadline = useRef<number | null>(null)
   const finished = useRef(false)
   const progress = duration ? ((duration - timeRemaining) / duration) * 100 : 0
@@ -71,24 +79,26 @@ export function DeckView({
 
   const moveCardToFront = useCallback(
     (cardIndex: number) => {
+      if (cardIndex <= 0 || cardIndex >= deckOrder.length) return
       const newDeck = [...deckOrder]
       const [card] = newDeck.splice(cardIndex, 1)
       newDeck.unshift(card)
+      setAnnouncement(`${card.name} moved to front`)
       setDeckOrder(newDeck)
 
-      setCenterIndex((prev) => {
-        if (cardIndex < prev) return Math.max(prev - 1, 0)
-        return prev
-      })
+      // After moving the current card, inspect the next untouched card.
+      setCenterIndex(prev => cardIndex >= prev ? Math.min(prev + 1, newDeck.length - 1) : prev)
     },
     [deckOrder],
   )
 
   const moveCardToBack = useCallback(
     (cardIndex: number) => {
+      if (cardIndex < 0 || cardIndex >= deckOrder.length) return
       const newDeck = [...deckOrder]
       const [card] = newDeck.splice(cardIndex, 1)
       newDeck.push(card)
+      setAnnouncement(`${card.name} moved to back`)
       setDeckOrder(newDeck)
 
       setCenterIndex((prev) => {
@@ -99,10 +109,30 @@ export function DeckView({
     [deckOrder],
   )
 
+  const startGesture = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") { suppressClick.current = false; return }
+    suppressClick.current = true
+    if (!event.isPrimary) { gesture.current = null; return }
+    gesture.current = { id: event.pointerId, x: event.clientX, y: event.clientY }
+    if (event.nativeEvent.isTrusted) event.currentTarget.setPointerCapture(event.pointerId)
+  }
+  const endGesture = (event: PointerEvent<HTMLDivElement>) => {
+    const start = gesture.current
+    gesture.current = null
+    if (!start || start.id !== event.pointerId) return
+    const dx = event.clientX - start.x, dy = event.clientY - start.y
+    // Deliberate, axis-dominant movement only; diagonal drags do nothing.
+    if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) goNext(); else goPrevious()
+    } else if (sortingGestures && Math.abs(dy) >= 65 && Math.abs(dy) > Math.abs(dx) * 1.5) {
+      if (dy < 0) moveCardToFront(centerIndex); else moveCardToBack(centerIndex)
+    }
+  }
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey || e.altKey || (e.target instanceof HTMLElement && e.target.matches("input, textarea, [contenteditable=true]"))) return
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target instanceof HTMLElement && e.target.matches("input, textarea, select, [contenteditable=true]"))) return
       const key = e.key.toLowerCase()
 
       if (["arrowleft", "arrowright", "a", "d"].includes(key)) {
@@ -155,15 +185,15 @@ export function DeckView({
   }
 
   return (
-    <div className="relative container mx-auto max-w-7xl p-4 sm:p-6 min-h-dvh flex flex-col gap-4 text-slate-50">
+    <div className="relative container mx-auto max-w-7xl p-3 sm:p-6 min-h-dvh flex flex-col gap-2 sm:gap-4 text-slate-50">
       {/* Header with timer + end button */}
-      <Card className={cn("p-4", panelClasses)}>
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <Card className={cn("p-3 sm:p-4", panelClasses)}>
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-4">
           {/* Timer */}
           <div className="flex items-center gap-3">
             <Clock
               className={cn(
-                "h-6 w-6",
+                "hidden sm:block h-6 w-6",
                 duration > 0 && timeRemaining <= 20
                   ? "text-rose-400 animate-pulse"
                   : "text-emerald-300",
@@ -172,13 +202,13 @@ export function DeckView({
             <div>
               <div
                 className={cn(
-                  "text-3xl sm:text-4xl font-semibold tabular-nums tracking-[0.18em]",
+                  "text-2xl sm:text-4xl font-semibold tabular-nums tracking-normal sm:tracking-[0.18em]",
                   duration > 0 && timeRemaining <= 20 ? "text-rose-400" : "text-emerald-50",
                 )}
               >
                 {formatTime(timeRemaining)}
               </div>
-              <div className="text-[11px] uppercase tracking-[0.22em] text-emerald-200/80">
+              <div className="text-[9px] sm:text-[11px] uppercase tracking-normal sm:tracking-[0.22em] text-emerald-200/80">
                 {duration ? "Time Remaining" : "Untimed · elapsed"}
               </div>
             </div>
@@ -204,7 +234,7 @@ export function DeckView({
                 size="sm"
                 onClick={handleRestartClick}
                 className={cn(
-                  "rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40",
+                  "rounded-full px-3 sm:px-5 font-semibold shadow-md shadow-emerald-500/40",
                   "bg-emerald-500 text-slate-950 hover:bg-emerald-400",
                   "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
                 )}
@@ -218,7 +248,7 @@ export function DeckView({
               size="sm"
               onClick={handleGuessPrizesClick}
               className={cn(
-                "rounded-full px-5 font-semibold shadow-md shadow-emerald-500/40",
+                "rounded-full px-3 sm:px-5 font-semibold shadow-md shadow-emerald-500/40",
                 "bg-emerald-500 text-slate-950 hover:bg-emerald-400",
                 "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
               )}
@@ -230,11 +260,12 @@ export function DeckView({
       </Card>
 
       {/* Carousel */}
-      <div id="practice-carousel" className="min-h-[370px] flex-1 flex items-start justify-center overflow-hidden pt-2">
-        <div className="relative w-full max-w-5xl h-[370px] 2xl:h-[520px] flex items-center justify-center">
+      <div id="practice-carousel" className="practice-carousel-glow min-h-[300px] sm:min-h-[370px] flex-1 flex items-start justify-center overflow-hidden pt-2">
+        <div className="relative w-full max-w-5xl h-[300px] sm:h-[370px] 2xl:h-[520px] flex items-center justify-center">
           {/* Background glow behind cards (blue again) */}
           <div
             className="
+              hidden
               pointer-events-none
               absolute
               inset-x-16
@@ -248,7 +279,7 @@ export function DeckView({
           />
 
           {/* Left arrow */}
-          <Button
+          <RepeatButton
             type="button"
             variant="ghost"
             size="icon"
@@ -260,14 +291,14 @@ export function DeckView({
               centerIndex === 0 && "opacity-40 cursor-default hover:bg-slate-950",
             )}
             aria-label="Previous card"
-            onClick={goPrevious}
+            onRepeat={goPrevious}
             disabled={centerIndex === 0}
           >
             <ChevronLeft className="h-6 w-6" />
-          </Button>
+          </RepeatButton>
 
           {/* Right arrow */}
-          <Button
+          <RepeatButton
             type="button"
             variant="ghost"
             size="icon"
@@ -280,11 +311,11 @@ export function DeckView({
                 "opacity-40 cursor-default hover:bg-slate-950",
             )}
             aria-label="Next card"
-            onClick={goNext}
+            onRepeat={goNext}
             disabled={centerIndex === deckOrder.length - 1}
           >
             <ChevronRight className="h-6 w-6" />
-          </Button>
+          </RepeatButton>
 
           {deckOrder.map((card, index) => {
             const relativeIndex = index - centerIndex // 0 = center
@@ -310,26 +341,35 @@ export function DeckView({
             const zClass =
               distance === 0 ? "z-30" : distance === 1 ? "z-20" : "z-10"
 
-            const name = card.name ?? ""
-            const isExCard = /\bex\b/i.test(name) // matches "Charizard ex", "Gardevoir ex", etc.
 
             return (
               <div
-                key={`${card.id}-${index}`}
+                key={card.id}
                 className={cn(
-                  "absolute cursor-pointer transition-all duration-500 ease-out will-change-transform",
+                  "absolute cursor-pointer transition-all duration-150 sm:duration-500 motion-reduce:transition-none ease-out will-change-transform",
                   zClass,
                   hidden && "pointer-events-none",
                 )}
+                data-testid={isCenter ? "center-card" : undefined}
+                onPointerDown={startGesture}
+                onPointerUp={endGesture}
+                onPointerCancel={() => { gesture.current = null }}
+                onLostPointerCapture={() => { gesture.current = null }}
                 style={{
+                  userSelect: "none",
+                  WebkitUserSelect: "none",
+                  WebkitTouchCallout: "none",
+                  touchAction: sortingGestures ? "pinch-zoom" : "pan-y pinch-zoom",
                   transform: `translateX(${xTranslate}px) scale(${scale})`,
                   opacity: baseOpacity,
                 }}
                 onContextMenu={(e) => {
                   e.preventDefault()
+                  if (suppressClick.current) return
                   moveCardToBack(index)
                 }}
-                onClick={() => {
+                onClick={(event) => {
+                  if (suppressClick.current && event.detail !== 0) { suppressClick.current = false; return }
                   if (isCenter) {
                     moveCardToFront(index)
                   } else {
@@ -339,10 +379,10 @@ export function DeckView({
               >
                 <div
                   className={cn(
-                    "w-[235px] transition-shadow duration-500 rounded-xl",
+                    "w-[195px] sm:w-[235px] transition-shadow duration-150 sm:duration-500 rounded-xl",
                     isCenter
-                      ? "shadow-[0_0_80px_rgba(56,189,248,0.9)]"
-                      : "shadow-[0_0_40px_rgba(15,23,42,0.9)]",
+                      ? "shadow-none"
+                      : "shadow-none",
                   )}
                 >
                   <div
@@ -367,7 +407,7 @@ export function DeckView({
                     )}
 
                     {/* Holographic overlay for ex cards */}
-                    {isExCard && <div className="holo-overlay" />}
+                    <CardFoil name={card.name} />
                   </div>
                 </div>
               </div>
@@ -376,12 +416,29 @@ export function DeckView({
         </div>
       </div>
 
+      <div className="mobile-practice-controls sm:hidden -mt-2 flex flex-col gap-1">
+        <div className="flex items-center gap-2 w-full">
+          <Button variant="ghost" className="min-h-11 px-2 text-xs text-emerald-200" onClick={() => setCenterIndex(0)}>First</Button>
+          <input className="min-h-11 min-w-0 flex-1 accent-emerald-300" type="range" min={1} max={deckOrder.length} value={centerIndex + 1} aria-label="Deck position" aria-valuetext={`Card ${centerIndex + 1} of ${deckOrder.length}: ${deckOrder[centerIndex]?.name}`} onChange={event => setCenterIndex(Number(event.target.value) - 1)} />
+          <Button variant="ghost" className="min-h-11 px-2 text-xs text-emerald-200" onClick={() => setCenterIndex(deckOrder.length - 1)}>Last</Button>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <RepeatButton className="min-h-11 rounded-full bg-emerald-500 text-slate-950 text-xs font-semibold hover:bg-emerald-400" onRepeat={() => moveCardToFront(centerIndex)} disabled={centerIndex === 0}>Move to front</RepeatButton>
+          <RepeatButton className="min-h-11 rounded-full bg-emerald-500 text-slate-950 text-xs font-semibold hover:bg-emerald-400" onRepeat={() => moveCardToBack(centerIndex)} disabled={centerIndex === deckOrder.length - 1}>Move to back</RepeatButton>
+          <Button variant="ghost" className="col-span-2 min-h-9 justify-self-center rounded-full px-3 text-[11px] text-emerald-200" aria-pressed={sortingGestures} onClick={() => { gesture.current = null; setSortingGestures(value => !value) }}>Sorting gestures {sortingGestures ? "on" : "off"}</Button>
+        </div>
+        <p className="text-center text-[10px] text-slate-400">Swipe to browse. Hold buttons to repeat. {sortingGestures ? "Swipe up to front; down to back. Scroll outside the cards." : ""}</p>
+        <p className="order-first text-center text-xs font-medium leading-5 text-emerald-100" aria-live="polite" aria-atomic="true">Card {centerIndex + 1} of {deckOrder.length}: {deckOrder[centerIndex]?.name}</p>
+        <span className="sr-only" role="status">{announcement}</span>
+      </div>
+
       {/* Bottom instructions + starting hand overlay */}
-      <div className="relative mt-6 group">
+      <div className="relative mt-2 sm:mt-6 group">
         {hand.length > 0 && (
           <div className="pointer-events-none absolute inset-x-16 bottom-6 h-16 rounded-full bg-emerald-500/18 blur-3xl opacity-80 z-10" />
         )}
 
+        {hand.length > 0 && <p className="sm:hidden mb-2 text-[11px] text-emerald-200/80">Starting hand + first draw · {hand.length} cards</p>}
         {/* Starting hand */}
         {hand.length > 0 && (
           <div
@@ -393,9 +450,9 @@ export function DeckView({
               {hand.map((card, index) => (
                 <div
                   key={`${card.id}-hand-${index}`}
-                  className="shrink-0 w-[90px] sm:w-[100px] md:w-[110px]"
+                  className="shrink-0 w-[65px] sm:w-[100px] md:w-[110px]"
                 >
-                  <div className="aspect-[2.5/3.5] overflow-hidden rounded-md bg-slate-950 shadow-[0_0_25px_rgba(15,23,42,0.9)]">
+                  <div className="relative isolate aspect-[2.5/3.5] overflow-hidden rounded-md bg-slate-950 shadow-[0_0_25px_rgba(15,23,42,0.9)]">
                     {card.image ? (
                       <img
                         src={card.image || "/placeholder.svg"}
@@ -410,6 +467,7 @@ export function DeckView({
                         </p>
                       </div>
                     )}
+                    <CardFoil name={card.name} />
                   </div>
                 </div>
               ))}
@@ -418,15 +476,15 @@ export function DeckView({
         )}
 
         {/* Help bar */}
-        <Card className={cn("relative z-30 p-4 text-slate-200", panelClasses)}>
+        <Card className={cn("hidden sm:block relative z-30 p-4 text-slate-200", panelClasses)}>
           <div className="text-center text-sm space-y-1">
-            <p className="font-medium">
+            <p className="hidden sm:block font-medium">
               <span className="text-emerald-300">Left Click or Press A:</span>{" "}
               Center card (or move to front if centered) •{" "}
               <span className="text-emerald-300">Right Click or Press D:</span>{" "}
               Move card to back
             </p>
-            <p>
+            <p className="hidden sm:block">
               <span className="text-emerald-300">Arrow Keys / Mouse Wheel:</span>{" "}
               Scroll through deck •{" "}
               <span className="text-emerald-300">Side Arrows:</span> Step one

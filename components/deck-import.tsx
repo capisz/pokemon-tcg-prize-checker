@@ -1,5 +1,7 @@
 "use client"
 
+import { CardFoil } from "@/components/card-foil"
+
 import * as React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -9,6 +11,7 @@ import { CardSearch } from "@/components/card-search"
 import { DeckListEditor } from "@/components/deck-list-editor"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { normalizeDeckText } from "@/lib/deck-text"
 import { FeaturedDeckSection } from "@/components/featured-deck"
 import { HelpCircle, X } from "lucide-react"
 import type { FeaturedDeckDefinition } from "@/lib/featured-decks"
@@ -195,6 +198,8 @@ export function DeckImport(props: DeckImportProps) {
   }
 
   async function handleImport(importText = rawText, binding: DeckBinding | null = null) {
+    importText = normalizeDeckText(importText)
+    setRawText(importText)
     const revision = ++importRevision.current
     practice.setBinding(null)
     onImportInvalidated?.()
@@ -271,7 +276,7 @@ export function DeckImport(props: DeckImportProps) {
     practice.setBinding(null)
     onImportInvalidated?.()
     setError(null)
-    const nextValue = value.slice(0, MAX_DECK_TEXT_LENGTH)
+    const nextValue = normalizeDeckText(value).slice(0, MAX_DECK_TEXT_LENGTH)
     setRawText(nextValue)
     setHasValidImport(false)
     onTextChange?.(nextValue)
@@ -320,12 +325,12 @@ export function DeckImport(props: DeckImportProps) {
   ])
 
   return (
-    <div className="flex flex-col items-center px-4 py-10 text-slate-50">
+    <div className="flex flex-col items-center px-4 py-4 sm:py-10 text-slate-50">
       <div className="w-full max-w-6xl space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="mobile-import-header flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           {/* Left: title + mascot */}
-          <div className="flex items-center gap-3">
+          <div className="mobile-brand flex items-center gap-3">
             <img
               src="/sprite1_vector.svg"
               alt="PrizeCheck mascot"
@@ -359,7 +364,7 @@ export function DeckImport(props: DeckImportProps) {
 
 
        {/* Account and help controls */}
-<div className="flex shrink-0 flex-wrap items-center gap-3">
+<div className="mobile-account-actions flex shrink-0 flex-wrap items-center gap-3">
         <DeckLibrary cards={previewCards} text={hasValidImport ? rawText : null} onLoad={(text, binding) => {
           setRawText(text)
           onTextChange?.(text)
@@ -384,7 +389,7 @@ export function DeckImport(props: DeckImportProps) {
 
 
         {/* Text area */}
-        <Card
+        <Card id="deck-import-panel"
           className={cn(
             "relative bg-slate-900/35 border gap-3 py-0 transition-all duration-300",
             guide.step === "import" && guide.visible ? "border-emerald-300 shadow-[0_0_24px_rgba(52,211,153,0.35)]" : hasValidImport
@@ -436,6 +441,7 @@ export function DeckImport(props: DeckImportProps) {
 
         {/* Featured deck banner */}
         <FeaturedDeckSection
+          onUseDeck={(text) => { handleTextChange(normalizeDeckText(text)); void handleImport(text); document.getElementById("deck-import-panel")?.scrollIntoView({block:"start"}) }}
           deckId={currentFeaturedDeck?.id ?? "custom"}
           title={currentFeaturedDeck?.title ?? effectiveDeckTitle}
           sourceUrl={currentFeaturedDeck?.sourceUrl ?? "https://limitlesstcg.com/decks/lists"}
@@ -546,7 +552,7 @@ export function DeckImport(props: DeckImportProps) {
 
               {hoveredCard ? (
                 <>
-                  <div className="aspect-[2.5/3.5] w-full max-w-[248px] rounded-xl overflow-hidden border border-slate-700 bg-slate-900 shadow-lg">
+                  <div className="relative isolate aspect-[2.5/3.5] w-full max-w-[248px] rounded-xl overflow-hidden border border-slate-700 bg-slate-900 shadow-lg">
                     {hoveredCard.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -559,6 +565,7 @@ export function DeckImport(props: DeckImportProps) {
                         {hoveredCard.name}
                       </div>
                     )}
+                    <CardFoil name={hoveredCard.name} />
                   </div>
                   <p className="mt-2 text-xs text-slate-300 text-center px-2">
                     {hoveredCard.name}
