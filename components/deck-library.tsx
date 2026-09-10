@@ -12,7 +12,7 @@ import { Modal } from './modal'
 import { DeckLogoPicker } from './deck-logo-picker'
 import { fetchLogoCards } from '@/lib/deck-logo'
 import type { ImportedCard } from '@/lib/card-contract'
-import { X } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import { Button } from './ui/button'
 import { firebaseConfigured, getFirebaseServices, signInWithGoogle, signOutOfAccount } from '@/lib/firebase/client'
 import { deleteDeck, listDecks, loadDeck, loadDeckSnapshot, reviseDeck, newDeckId, saveDeck, renameDeck, setDeckLogo, type DeckCursor, type SavedDeck } from '@/lib/firebase/decks'
@@ -114,18 +114,18 @@ export function DeckLibrary({ text, onLoad, cards }: { cards: ImportedCard[]; te
         className="absolute right-3 top-3 rounded text-slate-400 hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-emerald-300">
         <X className="h-4 w-4" aria-hidden="true" />
       </button>
-      <div className="mb-3 flex items-center gap-2 pr-5">
+      <div className="mb-3 flex items-center justify-center gap-2 px-5 text-center">
         <h2 className="text-lg font-semibold">{user ? <span className="text-emerald-300">My decks</span> : <><span className="text-emerald-300">Log in to</span> <span className="text-emerald-100">PrizeCheck.us</span></>}</h2>
       </div>
-      <nav aria-label="Library sections" className="mb-4 flex gap-2 border-b border-slate-800 pb-3">
+      <nav aria-label="Library sections" className="mb-4 flex justify-center gap-2 border-b border-slate-800 pb-3">
         <Button size="sm" variant="ghost" aria-pressed={tab==='decks'} className={tab==='decks'?'bg-emerald-950 text-emerald-300':'text-slate-400'} onClick={()=>setTab('decks')}>Decks</Button>
         <Button size="sm" variant="ghost" aria-pressed={tab==='progress'} className={tab==='progress'?'bg-emerald-950 text-emerald-300':'text-slate-400'} onClick={()=>setTab('progress')}>Progress</Button>
       </nav>
       {notice && <p className="mt-3 text-sm text-emerald-300" role="status">{notice}</p>}
       {tab==='progress' ? <PracticeHistory key={user?.uid || 'guest'} embedded onPractice={(source,binding)=>{onLoad(source,binding);setOpen(false)}} /> : <>
-      {!firebaseConfigured ? <p className="mt-4">Account saving is not configured yet. You can still import decks and practice.</p> : !ready ? <p role="status">Checking sign-in…</p> : !user ? <div className="mt-4 space-y-4">
+      {!firebaseConfigured ? <p className="mt-4">Account saving is not configured yet. You can still import decks and practice.</p> : !ready ? <p role="status">Checking sign-in…</p> : !user ? <div className="mt-4 space-y-4 text-center">
         <p className="text-slate-300">Sign in or create an account with Google.</p>
-        <Button className={primaryButton} disabled={busy} onClick={() => void run(async () => { await signInWithGoogle() })}>Continue with Google</Button>
+        <Button className={primaryButton} disabled={busy} onClick={() => void run(async () => { await signInWithGoogle() })}><img src="/icons/google.svg" alt="" aria-hidden="true" width={20} height={20} className="mr-2 h-5 w-5 shrink-0" />Continue with Google</Button>
       </div> : <div className="mt-4 space-y-5">
 
         {text && <Button size="sm" variant="outline" aria-expanded={savingForm} onClick={()=>setSavingForm(!savingForm)}>{savingForm?'Cancel save':'Save current deck'}</Button>}
@@ -150,11 +150,11 @@ export function DeckLibrary({ text, onLoad, cards }: { cards: ImportedCard[]; te
           <input id="saved-deck-name" value={name} onChange={event => setName(event.target.value)} maxLength={80} required disabled={busy || !text} placeholder="Deck name" className="w-full rounded-md border border-slate-600 bg-slate-900 p-2 text-sm" />
           <div className="flex items-center gap-3">
             {coverCard?.image && <span className="relative isolate h-14 w-10 shrink-0 overflow-hidden rounded"><img src={coverCard.image} alt="Selected deck logo" className="h-full w-full object-contain" /><CardFoil name={coverCard.name} /></span>}
-            <label className="min-w-0 flex-1 text-xs text-slate-400">Deck logo<select aria-label="Deck logo" value={coverCardId || ''} disabled={busy} onChange={event => setCover(event.target.value)} className="mt-1 block w-full rounded border border-slate-700 bg-slate-950 p-2 text-slate-100">{cards.map(card => <option key={card.id} value={card.id}>{card.name}</option>)}</select></label>
+            <label className="min-w-0 flex-1 text-xs text-slate-400">Deck logo<span className="relative mt-1 block"><select aria-label="Deck logo" value={coverCardId || ''} disabled={busy} onChange={event => setCover(event.target.value)} className="block w-full appearance-none rounded border border-slate-700 bg-slate-950 py-2 pl-3 pr-10 text-slate-100">{cards.map(card => <option key={card.id} value={card.id}>{card.name}</option>)}</select><ChevronDown aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-100" /></span></label>
             <Button size="sm" className={primaryButton} disabled={busy || !name.trim()} type="submit">Save deck</Button>
           </div>
         </form>}
-        <div className="flex items-center justify-between"><h3 className="font-medium">Saved decks</h3><Button size="sm" variant="ghost" className="text-xs text-slate-400" disabled={busy} onClick={() => void run(() => refresh())}>Refresh</Button></div>
+        <div className="flex items-center justify-between"><h3 className="font-medium">Saved decks</h3><Button size="sm" variant="outline" className="rounded-full border-emerald-500/30 bg-emerald-950/40 px-4 text-sm font-medium text-emerald-200 hover:bg-emerald-900/50 hover:text-emerald-100" disabled={busy} onClick={() => void run(() => refresh())}>Refresh</Button></div>
         {!decks.length && !busy && !error && <div className="rounded-xl border border-dashed border-slate-700 px-4 py-7 text-center"><p className="text-slate-200">No saved decks yet.</p>{!text && <><p className="mt-1 text-xs text-slate-400">Import a deck to save it here.</p><Button className="mt-3 rounded-full text-emerald-300" variant="ghost" onClick={() => setOpen(false)}>Import a deck</Button></>}</div>}
         {decks.length > 0 && <input type="search" aria-label="Filter loaded decks" placeholder="Find a deck…" value={search} onChange={event => setSearch(event.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-900 p-2 text-sm" />}
         {search && !visibleDecks.length && <p className="text-slate-400">No matching decks{hasMore ? ' in this page. Load more to keep looking.' : '.'}</p>}
@@ -194,7 +194,7 @@ export function DeckLibrary({ text, onLoad, cards }: { cards: ImportedCard[]; te
             }}>Load deck</Button>
             <details className="relative"><summary aria-label={`Actions for ${deck.name}`} className="cursor-pointer list-none rounded-lg px-3 py-1 text-lg text-slate-300 hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-emerald-300">⋯</summary>
             <div className="absolute right-0 top-full z-10 flex min-w-40 flex-col rounded-xl border border-slate-700 bg-slate-950 p-2 shadow-xl">
-            <Button size="sm" variant="ghost" className="text-xs text-slate-300" disabled={busy || editing === deck.id} onClick={(event) => { event.currentTarget.closest('details')?.removeAttribute('open'); setEditing(deck.id); setEditedName(deck.name); setConfirmDelete(null) }}>Rename</Button>
+            <Button size="sm" variant="ghost" className="text-sm font-medium text-slate-200" disabled={busy || editing === deck.id} onClick={(event) => { event.currentTarget.closest('details')?.removeAttribute('open'); setEditing(deck.id); setEditedName(deck.name); setConfirmDelete(null) }}>Rename</Button>
             {confirmDelete === deck.id ? <><Button size="sm" className={primaryButton} disabled={busy} onClick={() => {
               const token = generation.current
               void run(async () => {
@@ -202,9 +202,9 @@ export function DeckLibrary({ text, onLoad, cards }: { cards: ImportedCard[]; te
                 if (generation.current !== token) return
                 setConfirmDelete(null); setNotice('Deck deleted.'); await refresh()
               })
-            }}>Confirm delete</Button><Button variant="ghost" disabled={busy} onClick={() => setConfirmDelete(null)}>Cancel</Button></> : <Button size="sm" variant="ghost" className="text-xs text-slate-400" disabled={busy} onClick={() => setConfirmDelete(deck.id)}>Delete</Button>}
-            <Button size="sm" variant="ghost" disabled={busy} onClick={(event)=>{event.currentTarget.closest('details')?.removeAttribute('open');setLogoPicker(deck.id)}}>Change logo</Button>
-            {text && <Button size="sm" variant="ghost" disabled={busy} onClick={(event)=>{event.currentTarget.closest('details')?.removeAttribute('open');setRevisionTarget(deck.id)}}>Update list</Button>}
+            }}>Confirm delete</Button><Button size="sm" variant="ghost" className="text-sm font-medium text-slate-200" disabled={busy} onClick={() => setConfirmDelete(null)}>Cancel</Button></> : <Button size="sm" variant="ghost" className="text-sm font-medium text-slate-200" disabled={busy} onClick={() => setConfirmDelete(deck.id)}>Delete</Button>}
+            <Button size="sm" variant="ghost" className="text-sm font-medium text-slate-200" disabled={busy} onClick={(event)=>{event.currentTarget.closest('details')?.removeAttribute('open');setLogoPicker(deck.id)}}>Change logo</Button>
+            {text && <Button size="sm" variant="ghost" className="text-sm font-medium text-slate-200" disabled={busy} onClick={(event)=>{event.currentTarget.closest('details')?.removeAttribute('open');setRevisionTarget(deck.id)}}>Update list</Button>}
             </div></details>
           </div>
           </div></div>
@@ -229,8 +229,8 @@ export function DeckLibrary({ text, onLoad, cards }: { cards: ImportedCard[]; te
         {hasMore && <Button disabled={busy} variant="outline" onClick={() => void run(() => refresh(true))}>Load more</Button>}
       </div>}
       </>}
-      <details className="mt-5 border-t border-slate-800 pt-3"><summary className="mb-3 cursor-pointer text-xs text-slate-400">Account settings</summary>
-        <div className="flex flex-wrap items-center justify-between gap-2"><span className="text-xs text-slate-400">{user?.email || 'Guest practice'}</span>{user && <Button size="sm" variant="ghost" className="text-xs text-slate-400" disabled={busy} onClick={() => void run(async () => { await signOutOfAccount() })}>Sign out</Button>}</div>
+      <details className="mt-5 border-t border-slate-800 pt-3 text-center"><summary className="mx-auto mb-3 w-fit cursor-pointer text-xs text-slate-400">Account settings</summary>
+        <div className="flex flex-wrap items-center justify-center gap-2"><span className="text-xs text-slate-400">{user?.email || 'Guest practice'}</span>{user && <Button size="sm" variant="ghost" className="text-xs text-slate-400" disabled={busy} onClick={() => void run(async () => { await signOutOfAccount() })}>Sign out</Button>}</div>
         {user && <Button size="sm" variant="ghost" className="mt-2 text-xs text-slate-400" disabled={busy} onClick={()=>setDeleteConfirmation(true)}>Delete account</Button>}
         {deleteConfirmation && user && <div className="mt-3 rounded-lg border border-rose-500/40 p-3"><p>Delete your account, all saved decks and account history? You’ll confirm your Google identity first. This cannot be undone; guest history remains on this device.</p><Button disabled={busy} onClick={()=>void run(async()=>{await deleteAccount(user.uid);practice.setBinding(null);setDeleteConfirmation(false);setNotice('Account deleted.')})}>Confirm account deletion</Button><Button variant="ghost" disabled={busy} onClick={()=>setDeleteConfirmation(false)}>Cancel deletion</Button></div>}
         {process.env.NEXT_PUBLIC_FIREBASE_USE_EMULATORS === 'true' && <p className="mt-1 text-[11px] text-slate-500">Local demo</p>}
