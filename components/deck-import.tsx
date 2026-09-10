@@ -55,16 +55,17 @@ interface DeckImportProps {
 export function DeckImport(props: DeckImportProps) {
   const practice = usePractice()
   const startButtonRef = React.useRef<HTMLButtonElement>(null)
+  const importScrollDelay = React.useRef(0)
   const [completedImport, setCompletedImport] = useState(0)
   useEffect(() => {
     if (!completedImport || !window.matchMedia('(max-width: 767px)').matches) return
-    const frame = window.requestAnimationFrame(() => {
+    const timer = window.setTimeout(() => {
       startButtonRef.current?.scrollIntoView({
         block: 'center',
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
       })
-    })
-    return () => window.cancelAnimationFrame(frame)
+    }, importScrollDelay.current)
+    return () => window.clearTimeout(timer)
   }, [completedImport])
   const {
     onImportInvalidated,
@@ -209,7 +210,7 @@ export function DeckImport(props: DeckImportProps) {
     }
   }
 
-  async function handleImport(importText = rawText, binding: DeckBinding | null = null) {
+  async function handleImport(importText = rawText, binding: DeckBinding | null = null, scrollDelay = 0) {
     importText = normalizeDeckText(importText)
     setRawText(importText)
     const revision = ++importRevision.current
@@ -258,6 +259,7 @@ export function DeckImport(props: DeckImportProps) {
       practice.setSource(importText)
       onDeckImported?.(expandedDeck)
       onImportComplete?.(expandedDeck)
+      importScrollDelay.current = scrollDelay
       setCompletedImport(value => value + 1)
     } catch (err: unknown) {
       console.error(err)
@@ -454,7 +456,7 @@ export function DeckImport(props: DeckImportProps) {
 
         {/* Featured deck banner */}
         <FeaturedDeckSection
-          onUseDeck={(text) => { handleTextChange(normalizeDeckText(text)); void handleImport(text); document.getElementById("deck-import-panel")?.scrollIntoView({block:"start"}) }}
+          onUseDeck={(text) => { handleTextChange(normalizeDeckText(text)); void handleImport(text, null, 350); if (!window.matchMedia("(max-width: 767px)").matches) document.getElementById("deck-import-panel")?.scrollIntoView({block:"start"}) }}
           deckId={currentFeaturedDeck?.id ?? "custom"}
           title={currentFeaturedDeck?.title ?? effectiveDeckTitle}
           sourceUrl={currentFeaturedDeck?.sourceUrl ?? "https://limitlesstcg.com/decks/lists"}
