@@ -59,13 +59,42 @@ export function DeckImport(props: DeckImportProps) {
   const [completedImport, setCompletedImport] = useState(0)
   useEffect(() => {
     if (!completedImport || !window.matchMedia('(max-width: 767px)').matches) return
+    let frame = 0
+    let cancelled = false
+    const cancel = () => { cancelled = true; window.cancelAnimationFrame(frame) }
     const timer = window.setTimeout(() => {
-      startButtonRef.current?.scrollIntoView({
-        block: 'center',
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-      })
+      const button = startButtonRef.current
+      if (!button || cancelled) return
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        button.scrollIntoView({ block: 'center', behavior: 'instant' })
+        return
+      }
+      const start = window.scrollY
+      const rect = button.getBoundingClientRect()
+      const target = Math.max(0, Math.min(
+        start + rect.top + rect.height / 2 - window.innerHeight / 2,
+        document.documentElement.scrollHeight - window.innerHeight,
+      ))
+      const started = performance.now()
+      const step = (now: number) => {
+        if (cancelled) return
+        const progress = Math.min(1, (now - started) / 800)
+        const eased = progress * progress * (3 - 2 * progress)
+        window.scrollTo({ top: start + (target - start) * eased, behavior: 'instant' })
+        if (progress < 1) frame = window.requestAnimationFrame(step)
+      }
+      frame = window.requestAnimationFrame(step)
     }, importScrollDelay.current)
-    return () => window.clearTimeout(timer)
+    window.addEventListener('touchstart', cancel, { passive: true })
+    window.addEventListener('wheel', cancel, { passive: true })
+    window.addEventListener('keydown', cancel)
+    return () => {
+      window.clearTimeout(timer)
+      cancel()
+      window.removeEventListener('touchstart', cancel)
+      window.removeEventListener('wheel', cancel)
+      window.removeEventListener('keydown', cancel)
+    }
   }, [completedImport])
   const {
     onImportInvalidated,
