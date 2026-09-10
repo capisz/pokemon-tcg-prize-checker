@@ -3,7 +3,10 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+import { PracticeModePicker } from "@/components/practice-mode-picker"
+import { useImportGuide } from "@/components/use-import-guide"
+import { CardSearch } from "@/components/card-search"
+import { DeckListEditor } from "@/components/deck-list-editor"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { FeaturedDeckSection } from "@/components/featured-deck"
@@ -12,18 +15,14 @@ import type { FeaturedDeckDefinition } from "@/lib/featured-decks"
 import {
   getDeckImportSecurityError,
   MAX_DECK_TEXT_LENGTH,
-  parseDeckCardLine,
-  parseDeckSectionHeading,
-  type DeckSection,
 } from "@/lib/deck-import-security"
 
-type ImportedCard = {
-  id: string
-  name: string
-  image?: string
-  set: string
-  number: string | number
-}
+import { cardResponseSchema, type ImportedCard } from "@/lib/card-contract"
+import { parseIdsFromText, getDeckValidationError } from "@/lib/deck-parser"
+import { readStorage, writeStorage } from "@/lib/storage"
+import { Modal } from "@/components/modal"
+import { usePractice, type DeckBinding } from "@/components/practice-context"
+import { DeckLibrary } from "@/components/deck-library"
 
 type FeaturedCard = ImportedCard & {
   count: number
@@ -34,15 +33,8 @@ type CardLookupResult = {
   missingIds: string[]
 }
 
-type ParsedDeckText = {
-  fullIds: string[]
-  uniqueIds: string[]
-  counts: Map<string, number>
-  totalCount: number
-  sectionCounts: Record<DeckSection, number>
-}
-
 interface DeckImportProps {
+  onImportInvalidated?: () => void
   onDeckImported?: (cards: ImportedCard[]) => void
   onImportComplete?: (cards: ImportedCard[]) => void
   onFeaturedDeckSelected?: (cards: ImportedCard[]) => void
@@ -58,7 +50,9 @@ interface DeckImportProps {
 }
 
 export function DeckImport(props: DeckImportProps) {
+  const practice = usePractice()
   const {
+    onImportInvalidated,
     onDeckImported,
     onImportComplete,
     onFeaturedDeckSelected,
@@ -71,7 +65,7 @@ export function DeckImport(props: DeckImportProps) {
   } = props
 
   // Fallbacks until wired to Limitless/API
-  const effectiveDeckTitle = deckTitle ?? "Imported Deck"
+  const effectiveDeckTitle = deckTitle ?? practice.binding?.name ?? "Imported Deck"
   const effectiveDeckPlayer = deckPlayer ?? ""
 
   const [rawText, setRawText] = useState("")
@@ -81,88 +75,17 @@ export function DeckImport(props: DeckImportProps) {
   const [isFeaturedLoading, setIsFeaturedLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [hasValidImport, setHasValidImport] = useState(false)
+  const guide = useImportGuide(hasValidImport, Boolean(rawText.trim()))
   const [hasHydratedFeaturedDecks, setHasHydratedFeaturedDecks] = useState(false)
   const [activeListMode, setActiveListMode] = useState<"featured" | "custom">("featured")
   const [featuredDeckIndex, setFeaturedDeckIndex] = useState(0)
   const [featuredDeckCards, setFeaturedDeckCards] = useState<Record<string, FeaturedCard[]>>({})
   const [featuredDeckExpandedDecks, setFeaturedDeckExpandedDecks] = useState<Record<string, ImportedCard[]>>({})
+  const importRevision = React.useRef(0)
   const selectedFeaturedDeckRef = React.useRef<string | null>(null)
 
 // Help overlay state – default closed; we'll auto-open based on localStorage
   const [showHelpOverlay, setShowHelpOverlay] = useState(false)
-
-  function parseIdsFromText(text: string): ParsedDeckText {
-    const fullIds: string[] = []
-    const counts = new Map<string, number>()
-    const sectionCounts: Record<DeckSection, number> = {
-      pokemon: 0,
-      trainer: 0,
-      energy: 0,
-      unknown: 0,
-    }
-    let currentSection: DeckSection = "unknown"
-    let totalCount = 0
-
-    const lines = text.split(/\r?\n/)
-
-    for (const line of lines) {
-      const trimmed = line.trim()
-      if (!trimmed) continue
-
-      const nextSection = parseDeckSectionHeading(trimmed)
-      if (nextSection) {
-        currentSection = nextSection
-        continue
-      }
-
-      const cardLine = parseDeckCardLine(trimmed)
-      if (cardLine) {
-        const cardId = `${cardLine.setCode}-${cardLine.number}`
-
-        totalCount += cardLine.count
-        sectionCounts[currentSection] += cardLine.count
-
-        for (let i = 0; i < cardLine.count; i++) {
-          fullIds.push(cardId)
-        }
-        counts.set(cardId, (counts.get(cardId) || 0) + cardLine.count)
-      }
-    }
-
-    const uniqueIds = Array.from(new Set(fullIds))
-
-    return {
-      fullIds,
-      uniqueIds,
-      counts,
-      totalCount,
-      sectionCounts,
-    }
-  }
-
-  function getDeckValidationError(parsed: ParsedDeckText) {
-    if (!parsed.uniqueIds.length) {
-      return "Couldn't find any card IDs like PAF 7 / OBF 162 in the text. Make sure lines look like '4 Charmander PAF 7'."
-    }
-
-    if (parsed.sectionCounts.unknown > 0) {
-      return "Every card must appear under a Pokemon, Trainer, or Energy heading."
-    }
-
-    if (parsed.sectionCounts.pokemon < 1) {
-      return "Deck list must include at least 1 Pokemon."
-    }
-
-    if (parsed.sectionCounts.energy < 1) {
-      return "Deck list must include at least 1 Energy card."
-    }
-
-    if (parsed.totalCount !== 60) {
-      return `Deck list must total exactly 60 cards. This list currently totals ${parsed.totalCount}.`
-    }
-
-    return null
-  }
 
   function buildCardById(cards: ImportedCard[]) {
     const cardById = new Map<string, ImportedCard>()
@@ -212,17 +135,17 @@ export function DeckImport(props: DeckImportProps) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ids }),
+      signal: AbortSignal.timeout(15000),
     })
 
     if (!response.ok) throw new Error("Failed to fetch cards")
 
-    const data = await response.json()
-    return {
-      cards: Array.isArray(data.cards) ? (data.cards as ImportedCard[]) : [],
-      missingIds: Array.isArray(data.missingIds)
-        ? data.missingIds.filter((id: unknown): id is string => typeof id === "string")
-        : [],
+    const data = cardResponseSchema.parse(await response.json())
+    const returned = new Set(data.cards.map(card => card.id.toLowerCase()))
+    if (ids.some(id => !returned.has(id.toLowerCase()))) {
+      throw new Error("Card lookup returned an incomplete deck. Please try again.")
     }
+    return data
   }
 
   async function hydrateFeaturedDecks() {
@@ -263,18 +186,22 @@ export function DeckImport(props: DeckImportProps) {
       setFeaturedDeckCards(nextFeaturedCards)
       setFeaturedDeckExpandedDecks(nextFeaturedExpandedDecks)
       setHasHydratedFeaturedDecks(true)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
-      setError(err.message ?? "Something went wrong loading featured decks.")
+      setError(err instanceof Error ? err.message : "Something went wrong loading featured decks.")
     } finally {
       setIsFeaturedLoading(false)
     }
   }
 
-  async function handleImport() {
+  async function handleImport(importText = rawText, binding: DeckBinding | null = null) {
+    const revision = ++importRevision.current
+    practice.setBinding(null)
+    onImportInvalidated?.()
+    setHasValidImport(false)
     setError(null)
 
-    const securityError = getDeckImportSecurityError(rawText)
+    const securityError = getDeckImportSecurityError(importText)
     if (securityError) {
       setPreviewCards([])
       setHasValidImport(false)
@@ -282,7 +209,7 @@ export function DeckImport(props: DeckImportProps) {
       return
     }
 
-    const parsed = parseIdsFromText(rawText)
+    const parsed = parseIdsFromText(importText)
     const validationError = getDeckValidationError(parsed)
 
     if (validationError) {
@@ -296,6 +223,7 @@ export function DeckImport(props: DeckImportProps) {
 
     try {
       const { cards: fetchedCards, missingIds } = await fetchCardsByIds(parsed.uniqueIds)
+      if (revision !== importRevision.current) return
       if (missingIds.length) {
         throw new Error(`Unrecognized card codes: ${missingIds.join(", ").toUpperCase()}`)
       }
@@ -309,28 +237,19 @@ export function DeckImport(props: DeckImportProps) {
       setHasValidImport(true)
       selectedFeaturedDeckRef.current = null
 
+      practice.setBinding(binding)
+      practice.setSource(importText)
       onDeckImported?.(expandedDeck)
       onImportComplete?.(expandedDeck)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err)
+      if (revision !== importRevision.current) return
       setHasValidImport(false)
-      setError(err.message ?? "Something went wrong importing the deck.")
+      setError(err instanceof Error ? err.message : "Something went wrong importing the deck.")
     } finally {
       setIsLoading(false)
     }
   }
-
-  useEffect(() => {
-  if (typeof window === "undefined") return
-
-  const hasSeenHelp = window.localStorage.getItem("pcd_has_seen_help")
-
-  // If they've never seen it, show once and mark as seen
-  if (!hasSeenHelp) {
-    setShowHelpOverlay(true)
-    window.localStorage.setItem("pcd_has_seen_help", "true")
-  }
-  }, [])
 
   useEffect(() => {
     void hydrateFeaturedDecks()
@@ -348,6 +267,10 @@ export function DeckImport(props: DeckImportProps) {
   }, [featuredDecks.length])
 
   const handleTextChange = (value: string) => {
+    importRevision.current += 1
+    practice.setBinding(null)
+    onImportInvalidated?.()
+    setError(null)
     const nextValue = value.slice(0, MAX_DECK_TEXT_LENGTH)
     setRawText(nextValue)
     setHasValidImport(false)
@@ -400,7 +323,7 @@ export function DeckImport(props: DeckImportProps) {
     <div className="flex flex-col items-center px-4 py-10 text-slate-50">
       <div className="w-full max-w-6xl space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           {/* Left: title + mascot */}
           <div className="flex items-center gap-3">
             <img
@@ -415,7 +338,7 @@ export function DeckImport(props: DeckImportProps) {
             />
             <div className="flex flex-col">
               <h1 className="text-2xl font-semibold text-emerald-300">
-                PrizeCheck.us
+                PrizeCheck<span className="text-emerald-100/80">.us</span>
               </h1>
               <p className="text-xs sm:text-sm text-slate-400">
                 Paste your deck list and test how well you remember your prizes.{" "}
@@ -434,8 +357,14 @@ export function DeckImport(props: DeckImportProps) {
             </div>
           </div>
 
-       {/* Right: help icon + Import button */}
-<div className="flex items-center gap-3">
+
+       {/* Account and help controls */}
+<div className="flex shrink-0 flex-wrap items-center gap-3">
+        <DeckLibrary cards={previewCards} text={hasValidImport ? rawText : null} onLoad={(text, binding) => {
+          setRawText(text)
+          onTextChange?.(text)
+          void handleImport(text, binding)
+        }} />
  <button
   type="button"
   onClick={() => setShowHelpOverlay(true)}
@@ -446,6 +375,34 @@ export function DeckImport(props: DeckImportProps) {
 </button>
 
 
+
+</div>
+
+
+        </div>
+
+
+
+        {/* Text area */}
+        <Card
+          className={cn(
+            "relative bg-slate-900/35 border gap-3 py-0 transition-all duration-300",
+            guide.step === "import" && guide.visible ? "border-emerald-300 shadow-[0_0_24px_rgba(52,211,153,0.35)]" : hasValidImport
+              ? "border-emerald-400/80 shadow-[0_0_20px_rgba(52,211,153,0.45)]"
+              : "border-emerald-900/25 shadow-[0_0_10px_rgba(16,185,129,0.18)]",
+          )}
+        >
+
+          {(guide.step === 'import' || guide.step === 'confirm') && <div className={cn("pointer-events-none absolute right-3 bottom-full z-30 mb-1 rounded-lg border border-emerald-400/40 bg-slate-950 px-3 py-1.5 text-xs leading-relaxed text-emerald-100 shadow-lg transition-opacity duration-700 motion-reduce:transition-none",guide.visible?'opacity-100':'opacity-0')}><span role="status">{guide.step === 'confirm' ? 'Now click Import Deck.' : 'Paste your decklist to get started.'}</span></div>}
+          <div className="px-2 pt-2">
+            <DeckListEditor value={rawText} onChange={handleTextChange} error={error} />
+            {error && (
+              <p id="deck-import-error" role="alert" className="mt-2 text-xs text-rose-400">{error}</p>
+            )}
+          </div>
+          <div className="flex items-center justify-between gap-3 px-2 pb-2 flex-wrap sm:flex-nowrap">
+            <div className="min-w-0 flex-1"><CardSearch /></div>
+            <p aria-live="polite" className="shrink-0 text-xs font-medium text-emerald-300">{hasValidImport && !error ? 'Deck ready' : ''}</p>
   <div className="group relative">
     <Button
       size="sm"
@@ -459,7 +416,8 @@ export function DeckImport(props: DeckImportProps) {
         void handleImport()
       }}
       className={cn(
-        "rounded-full font-semibold shadow-md transition-transform duration-150 active:scale-95",
+        "h-[29px] rounded-full px-[11px] text-[13px] font-semibold shadow-md transition-transform duration-150 active:scale-95",
+        guide.step === "confirm" && guide.visible && "ring-2 ring-emerald-200 ring-offset-2 ring-offset-slate-950 shadow-[0_0_24px_rgba(52,211,153,0.5)]",
         canAttemptImport
           ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/30"
           : "bg-emerald-950/80 text-emerald-200/80 border border-emerald-500/35 shadow-[0_0_14px_rgba(16,185,129,0.2)] cursor-not-allowed hover:bg-emerald-900/80 hover:text-emerald-100 hover:shadow-[0_0_18px_rgba(16,185,129,0.32)]",
@@ -468,46 +426,12 @@ export function DeckImport(props: DeckImportProps) {
       {isLoading ? "Importing..." : "Import Deck"}
     </Button>
     {needsDeckText && (
-      <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-max max-w-[220px] -translate-x-1/2 translate-y-1 rounded-md border border-emerald-500/30 bg-slate-950/95 px-3 py-1.5 text-[11px] font-medium text-emerald-100 opacity-0 shadow-lg shadow-black/40 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+      <div className="pointer-events-none absolute right-0 bottom-full z-20 mb-2 w-max max-w-[220px]  translate-y-1 rounded-md border border-emerald-500/30 bg-slate-950/95 px-3 py-1.5 text-[11px] font-medium text-emerald-100 opacity-0 shadow-lg shadow-black/40 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
         Put a valid deck list in the box first
       </div>
     )}
   </div>
-</div>
-
-
-        </div>
-
-        {/* Text area */}
-        <Card
-          className={cn(
-            "relative bg-slate-900/35 border py-0 transition-all duration-300",
-            hasValidImport
-              ? "border-emerald-400/80 shadow-[0_0_20px_rgba(52,211,153,0.45)]"
-              : "border-emerald-900/25 shadow-[0_0_10px_rgba(16,185,129,0.18)]",
-          )}
-        >
-          <div className={cn("p-3", hasValidImport && "pb-6")}>
-            <Textarea
-              rows={5}
-              maxLength={MAX_DECK_TEXT_LENGTH}
-              value={rawText}
-              onChange={(e) => handleTextChange(e.target.value)}
-              className="bg-transparent border-0 focus-visible:ring-0 text-sm font-mono text-slate-100 resize-none"
-              placeholder="Paste deck list here..."
-            />
-            {error && (
-              <p className="mt-2 text-xs text-rose-400">{error}</p>
-            )}
           </div>
-          {hasValidImport && !error && (
-            <p
-              aria-live="polite"
-              className="pointer-events-none absolute bottom-2 right-3 text-[11px] font-medium text-emerald-300"
-            >
-              valid deck import
-            </p>
-          )}
         </Card>
 
         {/* Featured deck banner */}
@@ -531,7 +455,7 @@ export function DeckImport(props: DeckImportProps) {
             className="deck-list-fade-in flex flex-col md:flex-row gap-6 mt-2 outer-glow-emerald-900 border-emerald-500/50"
           >
             {/* LIST: now has its own dark-green title bar INSIDE the card */}
-            <div className="flex-1 max-h-[420px] rounded-lg border border-slate-800 bg-slate-900/70 flex flex-col">
+            <div className="min-w-0 flex-1 max-h-[420px] rounded-lg border border-slate-800 bg-slate-900/70 flex flex-col">
               {/* Title bar that feels like part of the list */}
               <div className="px-4 py-2 border-b border-slate-800 bg-emerald-300/35 rounded-t-lg">
                 <p className="text-xs sm:text-sm font-semibold text-emerald-100">
@@ -556,8 +480,11 @@ export function DeckImport(props: DeckImportProps) {
                     <div
                       key={card.id}
                       onMouseEnter={() => setHoveredCard(card)}
+                      onFocus={() => setHoveredCard(card)}
+                      onClick={() => setHoveredCard(card)}
+                      tabIndex={0}
                       className={cn(
-                        "flex items-center justify-between px-4 py-2 text-sm border-b border-slate-800/60 last:border-b-0 cursor-pointer transition-colors",
+                        "flex flex-wrap items-center justify-between gap-x-3 px-4 py-2 text-sm border-b border-slate-800/60 last:border-b-0 cursor-pointer transition-colors",
                         // zebra rows
                         isEvenRow ? "bg-slate-800/20" : "bg-slate-900/90",
                         // hover / active
@@ -583,30 +510,34 @@ export function DeckImport(props: DeckImportProps) {
             {/* Hover preview on the right */}
             <div className="w-full md:w-64 shrink-0 flex flex-col items-center justify-start">
               {onStartGame && (
-                <div className="group relative mb-4">
+                <div className="group relative mb-3 flex w-full max-w-64 items-center gap-2">
+                  <PracticeModePicker value={practice.duration} onChange={practice.setDuration} />
                   <Button
                     type="button"
                     size="sm"
-                    aria-disabled={!canStartGame}
+                    aria-disabled={!canStartGame || !hasValidImport || isLoading}
                     className={cn(
-                      "rounded-full px-7 font-semibold transition-all",
+                      "peer h-9 min-w-0 flex-1 rounded-full px-3 font-semibold transition-all",
+                      guide.step === "start" && guide.visible && "ring-2 ring-emerald-200 ring-offset-2 ring-offset-slate-950 shadow-[0_0_24px_rgba(52,211,153,0.5)]",
                       canStartGame
                         ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md shadow-emerald-500/30 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]"
                         : "bg-emerald-950/80 text-emerald-200/80 border border-emerald-500/35 shadow-[0_0_14px_rgba(16,185,129,0.2)] cursor-not-allowed hover:bg-emerald-900/80 hover:text-emerald-100 hover:shadow-[0_0_18px_rgba(16,185,129,0.32)]",
                     )}
                     onClick={(event) => {
-                      if (!canStartGame) {
+                      if (!canStartGame || !hasValidImport || isLoading) {
                         event.preventDefault()
                         return
                       }
 
+                      guide.dismiss()
                       onStartGame()
                     }}
                   >
                     Start Game
                   </Button>
+                  {guide.step === 'start' && <div className={cn("pointer-events-none absolute right-0 bottom-full z-30 mb-2 w-max max-w-64 rounded-xl border border-emerald-400/40 bg-slate-950 px-3 py-2 text-xs text-emerald-100 shadow-lg transition-opacity duration-700 motion-reduce:transition-none",guide.visible?'opacity-100':'opacity-0')}><span role="status">Deck ready. Click Start Game to practice.</span></div>}
                   {!canStartGame && (
-                    <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-max max-w-[220px] -translate-x-1/2 translate-y-1 rounded-md border border-emerald-500/30 bg-slate-950/95 px-3 py-1.5 text-[11px] font-medium text-emerald-100 opacity-0 shadow-lg shadow-black/40 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                    <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 w-max max-w-[220px] -translate-x-1/2 translate-y-1 rounded-md border border-emerald-500/30 bg-slate-950/95 px-3 py-1.5 text-[11px] font-medium text-emerald-100 opacity-0 shadow-lg shadow-black/40 transition-all duration-200 peer-hover:translate-y-0 peer-hover:opacity-100 peer-focus-visible:translate-y-0 peer-focus-visible:opacity-100">
                       Import a valid deck to start
                     </div>
                   )}
@@ -615,13 +546,13 @@ export function DeckImport(props: DeckImportProps) {
 
               {hoveredCard ? (
                 <>
-                  <div className="aspect-[2.5/3.5] w-full rounded-xl overflow-hidden border border-slate-700 bg-slate-900 shadow-lg">
+                  <div className="aspect-[2.5/3.5] w-full max-w-[248px] rounded-xl overflow-hidden border border-slate-700 bg-slate-900 shadow-lg">
                     {hoveredCard.image ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={hoveredCard.image}
                         alt={hoveredCard.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-xs text-slate-400">
@@ -645,12 +576,11 @@ export function DeckImport(props: DeckImportProps) {
 
       {/* Help overlay */}
       {showHelpOverlay && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75"
-          onClick={() => setShowHelpOverlay(false)}
-        >
+        <Modal open={showHelpOverlay} onOpenChange={setShowHelpOverlay} title="How to use PrizeCheck.us"
+          overlayClassName="fixed inset-0 z-50 bg-black/75"
+          className="w-[calc(100%-2rem)] max-w-lg">
           <Card
-            className="relative w-full max-w-lg mx-4 rounded-3xl bg-slate-950/95 border border-emerald-500/50 shadow-[0_24px_60px_rgba(0,0,0,0.9)] px-6 py-5 text-slate-50"
+            className="relative w-full rounded-3xl bg-slate-950/95 border border-emerald-500/50 shadow-[0_24px_60px_rgba(0,0,0,0.9)] px-6 py-5 text-slate-50"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
@@ -787,7 +717,7 @@ export function DeckImport(props: DeckImportProps) {
               </p>
             </div>
           </Card>
-        </div>
+        </Modal>
       )}
     </div>
   )

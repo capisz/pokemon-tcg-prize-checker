@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import path from "path"
+import { cardRequestSchema } from "@/lib/card-contract"
 import { promises as fs } from "fs"
 
 export const runtime = "nodejs"
@@ -16,6 +17,7 @@ type CardIndex = {
   sourceCommit?: string | null
   cardsById: Record<string, IndexedCard>
   setCodeToId: Record<string, string>
+  setIdsByCode?: Record<string, string[]>
   setNameById?: Record<string, string>
   setNameByCode?: Record<string, string>
 }
@@ -30,8 +32,6 @@ const CARD_INDEX_PATH = path.join(
 let cardIndexPromise: Promise<CardIndex> | null = null
 
 const MAX_REQUEST_BODY_LENGTH = 20_000
-const MAX_CARD_IDS = 256
-const CARD_ID_PATTERN = /^[a-z0-9]{2,10}-\d{1,3}[a-z]?$/i
 
 function normalize(value: string | number | undefined | null) {
   return String(value ?? "").trim().toLowerCase()
@@ -63,9 +63,8 @@ function resolveCard(rawId: string, index: CardIndex) {
   const number = normalize(cardNumber)
   const canonicalSetId = index.setCodeToId[code] ?? code
 
-  const match =
-    index.cardsById[buildId(canonicalSetId, number)] ??
-    index.cardsById[buildId(code, number)]
+  const candidates = [canonicalSetId, code, ...(index.setIdsByCode?.[code] ?? [])]
+  const match = candidates.map(setId => index.cardsById[buildId(setId, number)]).find(Boolean)
 
   if (!match) return null
 
@@ -110,10 +109,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Request is too large." }, { status: 413 })
     }
 
-    const rawBody = await req.text()
-    if (rawBody.length > MAX_REQUEST_BODY_LENGTH) {
-      return NextResponse.json({ error: "Request is too large." }, { status: 413 })
+    const chunks: Uint8Array[] = []
+    const reader = req.body?.getReader()
+    let size = 0
+    if (reader) {
+      try {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          size += value.byteLength
+          if (size > MAX_REQUEST_BODY_LENGTH) {
+            await reader.cancel()
+            return NextResponse.json({ error: "Request is too large." }, { status: 413 })
+          }
+          chunks.push(value)
+        }
+      } finally { reader.releaseLock() }
     }
+    const rawBody = Buffer.concat(chunks).toString("utf8")
 
     let body: unknown
     try {
@@ -122,20 +135,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid JSON request." }, { status: 400 })
     }
 
-    if (!body || typeof body !== "object" || !Array.isArray((body as { ids?: unknown }).ids)) {
-      return NextResponse.json({ error: "Request must include an ids array." }, { status: 400 })
+    const parsed = cardRequestSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Include up to 256 valid card IDs." }, { status: 400 })
     }
-
-    const rawIds = (body as { ids: unknown[] }).ids
-    if (rawIds.length > MAX_CARD_IDS) {
-      return NextResponse.json({ error: "Too many card IDs." }, { status: 413 })
-    }
-
-    if (rawIds.some((id) => typeof id !== "string" || !CARD_ID_PATTERN.test(id))) {
-      return NextResponse.json({ error: "Request contains an invalid card ID." }, { status: 400 })
-    }
-
-    const ids = rawIds.map((id) => normalize(id as string))
+    const ids = parsed.data.ids.map(normalize)
 
     if (!ids.length) {
       return NextResponse.json({ cards: [] }, { status: 200 })
@@ -162,4 +166,27 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     )
   }
+}
+
+/** Bounded name lookup using the same index and import codes as deck imports. */
+export async function GET(request: NextRequest) {
+  const q = normalize(request.nextUrl.searchParams.get('q'))
+  if (q.length < 2 || q.length > 80) return NextResponse.json({cards:[]})
+  try {
+    const index = await loadCardIndex()
+    const matches: {name:string;code:string}[] = []
+    for (const [code,setId] of Object.entries(index.setCodeToId)) {
+      if (code === setId && Object.entries(index.setCodeToId).some(([alias,target]) => target === setId && alias !== setId)) continue
+      const sets = new Set([setId,code,...(index.setIdsByCode?.[code] ?? [])])
+      for (const card of Object.values(index.cardsById)) {
+        if (!sets.has(card.id.slice(0,card.id.lastIndexOf('-'))) || !normalize(card.name).includes(q)) continue
+        const resolved = resolveCard(`${code}-${card.number}`,index)
+        if (!resolved || resolved.name !== card.name) continue
+        matches.push({name:card.name,code:`${code.toUpperCase()} ${card.number}`})
+      }
+    }
+    const unique = [...new Map(matches.map(card=>[card.code,card])).values()]
+    unique.sort((a,b)=>Number(normalize(b.name)===q)-Number(normalize(a.name)===q)||a.name.localeCompare(b.name)||a.code.localeCompare(b.code,undefined,{numeric:true}))
+    return NextResponse.json({cards:unique.slice(0,12)})
+  } catch { return NextResponse.json({error:'Card search unavailable'},{status:503}) }
 }

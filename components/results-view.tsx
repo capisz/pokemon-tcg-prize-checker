@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, useRef } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -16,10 +16,23 @@ import type { PokemonCard } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 import type { RankState } from "@/lib/rank"
-import { initialRankState, updateRank } from "@/lib/rank"
+import { initialRankState, updateRank, rankSchema } from "@/lib/rank"
 import { RankDisplay } from "@/components/rank-display"
 
+import { calculateScore, evaluateGuesses, SCORING_VERSION } from "@/lib/game"
+import { readStorage, writeStorage } from "@/lib/storage"
+import { usePractice } from "@/components/practice-context"
+import { enqueuePractice, syncStatus } from "@/lib/firebase/sync-queue"
+import type { PracticeRecord } from "@/lib/practice-history"
+import { makeRecord, writeHistory } from "@/lib/practice-history"
+import { PracticeHistory } from "@/components/practice-history"
+import { Modal } from "@/components/modal"
+
+const BEST_KEY = `prizeCheckerPersonalBest:v${SCORING_VERSION}`
+const RANK_KEY = `prizeCheckerRankState:v${SCORING_VERSION}`
+
 interface ResultsViewProps {
+  onSubmitted?: () => void
   allCards: PokemonCard[]
   prizeCards: PokemonCard[]
   onRestart: () => void
@@ -90,9 +103,19 @@ export function ResultsView({
   prizeCards,
   onRestart,
   onImportNewList,
+  onSubmitted,
   timeLeft,
   totalTime,
 }: ResultsViewProps) {
+  const practice = usePractice()
+  const [syncState,setSyncState] = useState<"idle" | "saving" | "saved" | "failed">("idle")
+  useEffect(()=>{const update=()=>{if(practice.roundUid&&pendingRecord.current){const state=syncStatus(practice.roundUid);setSyncState(state==='saved'?'saved':state==='retry'?'failed':'saving')}};window.addEventListener('prizecheck-sync',update);return()=>window.removeEventListener('prizecheck-sync',update)},[practice.roundUid])
+  const pendingRecord = useRef<PracticeRecord | null>(null)
+  async function saveToAccount(record: PracticeRecord) {
+    if(!practice.roundUid) return
+    setSyncState("saving")
+    try { await enqueuePractice(practice.roundUid, record); setSyncState(syncStatus(practice.roundUid)==="saved"?"saved":"saving") } catch { setSyncState("failed") }
+  }
   const [selectedCards, setSelectedCards] = useState<Set<string>>(new Set())
   const [showResults, setShowResults] = useState(false)
   const [personalBest, setPersonalBest] = useState<number | null>(null)
@@ -106,30 +129,16 @@ export function ResultsView({
 
   const totalPrizes = prizeCards.length || 6
 
-  // Load personal best once
+  const historyId = useRef<string | null>(null)
+  const [historyError, setHistoryError] = useState(false)
+  const hasSaved = useRef(false)
   useEffect(() => {
-    if (typeof window === "undefined") return
-    const stored = window.localStorage.getItem("prizeCheckerPersonalBest")
-    if (stored) {
-      const value = Number(stored)
-      if (!Number.isNaN(value)) setPersonalBest(value)
-    }
-  }, [])
-
-  // Load rank once
-  useEffect(() => {
-    if (typeof window === "undefined") return
-    const stored = window.localStorage.getItem("prizeCheckerRankState")
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as RankState
-        setRank(parsed)
-      } catch {
-        setRank(initialRankState)
-      }
-    } else {
-      setRank(initialRankState)
-    }
+    const value = Number(readStorage(BEST_KEY))
+    if (Number.isFinite(value) && value >= 0 && value <= 1000) setPersonalBest(value)
+    try {
+      const parsed = rankSchema.safeParse(JSON.parse(readStorage(RANK_KEY) ?? "null"))
+      setRank(parsed.success ? parsed.data : initialRankState)
+    } catch { setRank(initialRankState) }
   }, [])
 
   // Expand meta & sort so duplicates are grouped together
@@ -150,155 +159,56 @@ export function ResultsView({
     [allCards],
   )
 
-  // prize counts per base card (handles duplicates)
-  const prizeCountByBase = useMemo(() => {
-    const map = new Map<string, number>()
-    for (const c of prizeCards) {
-      const baseId = c.id.split("#")[0]
-      map.set(baseId, (map.get(baseId) || 0) + 1)
-    }
-    return map
-  }, [prizeCards])
-
   const toggleCard = (cardId: string) => {
     if (showResults) return
 
     const next = new Set(selectedCards)
     if (next.has(cardId)) {
       next.delete(cardId)
-    } else if (next.size < 6) {
+    } else if (next.size < totalPrizes) {
       next.add(cardId)
     }
     setSelectedCards(next)
   }
 
-  const [statusMap, correctGuesses, incorrectGuesses, missedPrizes] = useMemo(() => {
-    if (!showResults) return [new Map<string, Status>(), 0, 0, 0] as const
-
-    const status = new Map<string, Status>()
-
-    // group instances by baseId
-    const cardsByBase = new Map<string, string[]>()
-    for (const c of cardsWithMeta) {
-      const ids = cardsByBase.get(c.baseId) || []
-      ids.push(c.instanceId)
-      cardsByBase.set(c.baseId, ids)
-    }
-
-    let correct = 0
-    let incorrect = 0
-    let missed = 0
-
-    for (const [baseId, instanceIds] of cardsByBase.entries()) {
-      const prizeCount = prizeCountByBase.get(baseId) || 0
-      if (prizeCount === 0) {
-        // nothing prized for this card: only mark selected as incorrect
-        for (const id of instanceIds) {
-          if (selectedCards.has(id)) {
-            status.set(id, "incorrect")
-            incorrect++
-          }
-        }
-        continue
-      }
-
-      const selectedIds = instanceIds.filter((id) => selectedCards.has(id))
-      const correctCount = Math.min(prizeCount, selectedIds.length)
-
-      // mark correct selected
-      for (let i = 0; i < correctCount; i++) {
-        const id = selectedIds[i]
-        status.set(id, "correct")
-        correct++
-      }
-
-      // extra selected -> incorrect
-      for (let i = 0; i < selectedIds.length - correctCount; i++) {
-        const id = selectedIds[correctCount + i]
-        status.set(id, "incorrect")
-        incorrect++
-      }
-
-      // remaining prized copies that were never selected -> missed
-      const remainingPrizes = prizeCount - correctCount
-      if (remainingPrizes > 0) {
-        const unselectedIds = instanceIds.filter((id) => !selectedCards.has(id))
-        for (let i = 0; i < Math.min(remainingPrizes, unselectedIds.length); i++) {
-          const id = unselectedIds[i]
-          status.set(id, "missed")
-          missed++
-        }
-      }
-    }
-
-    return [status, correct, incorrect, missed] as const
-  }, [showResults, cardsWithMeta, prizeCountByBase, selectedCards])
+  const evaluation = useMemo(
+    () => evaluateGuesses(cardsWithMeta, prizeCards, selectedCards),
+    [cardsWithMeta, prizeCards, selectedCards],
+  )
+  const { status: statusMap, correct: correctGuesses } = evaluation
+  const score = calculateScore(correctGuesses, totalPrizes, timeLeft, totalTime)
+  const accuracy = Math.round(correctGuesses / totalPrizes * 100)
+  const usedTime = totalTime ? totalTime - Math.max(0, Math.min(totalTime, timeLeft ?? 0)) : Math.min(86400, -(timeLeft || 0))
 
   const handleSubmit = () => {
+    if (showResults || selectedCards.size !== totalPrizes) return
     setShowResults(true)
-    setShowSummary(true) // auto open on first submit
+    setShowSummary(true)
+    historyId.current ??= crypto.randomUUID()
+    const record = makeRecord(historyId.current, allCards, prizeCards, selectedCards, timeLeft === null ? null : usedTime, totalTime as 0 | 60 | 120 | 180)
+    record.source = practice.source
+    if(practice.binding && practice.binding.uid === practice.roundUid) {
+      record.deckId = practice.binding.id; record.version = practice.binding.version; record.deckName = practice.binding.name
+      if(practice.binding.coverCardId) record.coverCardId = practice.binding.coverCardId
+      record.customName = true
+    }
+    pendingRecord.current = record
+    try { writeHistory(record, practice.roundUid) } catch { setHistoryError(true) }
+    void saveToAccount(record)
+    onSubmitted?.()
   }
 
-  const accuracy =
-    totalPrizes > 0 ? Math.round((correctGuesses / totalPrizes) * 100) : 0
-
-  // If timeLeft is null, assume 0 seconds used (fastest case)
-  const usedTime =
-    timeLeft == null ? 0 : Math.max(0, totalTime - timeLeft)
-
-  const timePercent =
-    totalTime === 0
-      ? 0
-      : Math.max(0, Math.min(1, (totalTime - usedTime) / totalTime))
-
-  // scoring: 70% accuracy, 30% speed, scaled to 0–1000
-  const score = (() => {
-    const accScore = accuracy / 100
-    const raw = accScore * 0.7 + timePercent * 0.3
-    return Math.round(raw * 1000)
-  })()
-
-  // PB update
   useEffect(() => {
-    if (!showResults) return
-    if (typeof window === "undefined") return
-
-    setPersonalBest((prev) => {
-      const currentBest =
-        prev ??
-        (() => {
-          const stored = window.localStorage.getItem("prizeCheckerPersonalBest")
-          const n = stored ? Number(stored) : 0
-          return Number.isNaN(n) ? 0 : n
-        })()
-
-      const newBest = score > currentBest ? score : currentBest
-      if (newBest !== currentBest) {
-        window.localStorage.setItem("prizeCheckerPersonalBest", String(newBest))
-      }
-      return newBest
-    })
-  }, [showResults, score])
-
-  // rank update when results show
-  useEffect(() => {
-    if (!showResults) return
-    if (typeof window === "undefined") return
-
-    setRank((current) => {
-      const currentRank = current ?? initialRankState
-      const nextRank = updateRank(currentRank, score, 1000)
-      setPreviousRank(currentRank)
-      window.localStorage.setItem(
-        "prizeCheckerRankState",
-        JSON.stringify(nextRank),
-      )
-      return nextRank
-    })
-  }, [showResults, score])
-
-  const isNewPB =
-    showResults && (personalBest === null || score >= personalBest)
+    if (!showResults || hasSaved.current || rank === null || totalTime !== 120) return
+    hasSaved.current = true
+    const nextRank = updateRank(rank, score, 1000)
+    setPreviousRank(rank)
+    setRank(nextRank)
+    writeStorage(RANK_KEY, JSON.stringify(nextRank))
+    const best = Math.max(personalBest ?? 0, score)
+    setPersonalBest(best)
+    writeStorage(BEST_KEY, String(best))
+  }, [showResults, rank, score, personalBest])
 
   const scoreColor = (() => {
     if (score >= 800) return "text-emerald-400"
@@ -388,6 +298,9 @@ export function ResultsView({
 
   return (
     <div className="container mx-auto max-w-7xl p-6 space-y-6 text-slate-50">
+      {showResults && <div className="flex flex-wrap items-center gap-2"><PracticeHistory />{historyError && <p role="alert" className="text-sm text-rose-300">History could not be saved on this device.</p>}</div>}
+      {showResults && syncState !== 'idle' && <div className="text-sm text-emerald-200" role="status">{syncState === 'saving' ? 'Saving to account…' : syncState === 'saved' ? 'Saved to account' : <><span>Account sync failed. </span><Button variant="ghost" onClick={() => pendingRecord.current && void saveToAccount(pendingRecord.current)}>Retry sync</Button></>}</div>}
+      {showResults && totalTime !== 120 && <p className="text-xs text-slate-400">Custom practice · standard rank unchanged.</p>}
       {/* Header with inline submit button OR View Summary */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-2 text-center sm:text-left">
@@ -432,6 +345,7 @@ export function ResultsView({
             <Button
               type="button"
               size="sm"
+              data-summary-trigger
               onClick={() => setShowSummary(true)}
               className="rounded-full px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold shadow-md shadow-emerald-500/30 transition-transform duration-150 active:scale-95 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]"
             >
@@ -443,8 +357,9 @@ export function ResultsView({
 
       {/* Summary modal */}
       {showResults && showSummary && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl mx-4">
+        <Modal returnFocusSelector="[data-summary-trigger]" open={showSummary} onOpenChange={setShowSummary} title="Practice results"
+          overlayClassName="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm"
+          className="w-[calc(100%-2rem)] max-w-4xl">
             <Card
               className={cn(
                 "relative px-6 py-6 sm:px-8 sm:py-7 text-slate-50 space-y-4",
@@ -534,7 +449,7 @@ export function ResultsView({
         {formatTime(usedTime)}
       </span>
       <span className="text-slate-400">
-        of {formatTime(totalTime)} used
+        {totalTime ? `of ${formatTime(totalTime)} used` : 'untimed inspection'}
       </span>
     </div>
   </div>
@@ -652,7 +567,7 @@ export function ResultsView({
                             />
                           </div>
                           <div className="mt-1 text-center text-[11px] text-slate-400">
-                            {toNext}% to next rank
+                            {toNext}% remaining to next rank
                             {delta !== null && delta !== 0 && (
                               <span
                                 className={cn(
@@ -674,8 +589,7 @@ export function ResultsView({
                 )}
               </div>
             </Card>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* Card grid */}
@@ -692,11 +606,15 @@ export function ResultsView({
             const isClickable = !showResults
 
             return (
-              <div
+              <button
+                type="button"
+                aria-label={`${card.name}, copy ${index + 1}${showResults ? `: ${status}` : ""}`}
+                aria-pressed={selectedCards.has(card.instanceId)}
+                aria-disabled={showResults}
                 key={`${card.instanceId}-${index}`}
                 onClick={() => isClickable && toggleCard(card.instanceId)}
                 className={cn(
-                  "group relative aspect-[2.5/3.5] rounded-xl overflow-hidden transition-all",
+                  "group relative aspect-[2.5/3.5] rounded-xl overflow-hidden transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-200",
                   isClickable && "cursor-pointer",
                   status === "selected" && "ring-3 ring-sky-400 scale-[0.97]",
                   status === "correct" && "ring-3 ring-emerald-400",
@@ -768,7 +686,7 @@ export function ResultsView({
                     )}
                   </div>
                 )}
-              </div>
+              </button>
             )
           })}
         </div>

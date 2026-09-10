@@ -1,3 +1,14 @@
 node_modules/
 .next/
 .DS_Store
+*.tsbuildinfo
+playwright-report/
+test-results/
+coverage/
+.env*
+!.env.example
+
+# Local Firebase runtime state
+*-debug.log
+.firebase/
+.emulator-data/

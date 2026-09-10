@@ -7,15 +7,3 @@ export interface PokemonCard {
     logo?: string
   }
 }
-
-export interface GameState {
-  allCards: PokemonCard[]
-  hand: PokemonCard[]
-  prizes: PokemonCard[]
-  deck: PokemonCard[]
-  currentCardIndex: number
-  timeRemaining: number
-  phase: "import" | "playing" | "results"
-  selectedCards: Set<string>
-  score?: number
-}

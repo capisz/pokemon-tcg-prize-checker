@@ -12,7 +12,7 @@ export const MAX_DECK_LINES = 200
 
 const CONTROL_CHARACTER_PATTERN = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/
 const SECTION_PATTERN = /^(pok(?:e|é)mon|trainer|energy)\s*:\s*(?:\d{1,2})?\s*$/i
-const CARD_LINE_PATTERN = /^\s*(\d{1,2})\s+(.{1,120}?)\s+([A-Z0-9]{2,6})\s+(\d{1,3}[A-Z]?)\s*$/u
+const CARD_LINE_PATTERN = /^\s*(\d{1,2})\s+(.{1,120}?)\s+([A-Z0-9.]{2,15})\s+([A-Z]{0,4}\d{1,4}(?:_[A-Z0-9]{1,3}|[A-Z])?)\s*$/iu
 const SAFE_CARD_NAME_PATTERN = /^[\p{L}\p{M}\p{N} .,'’():/&+!?\-♀♂]+$/u
 const CODE_LIKE_PATTERN =
   /(?:javascript\s*:|data\s*:|on\w+\s*=|\b(?:alert|confirm|prompt|eval|function|fetch|require|import|setTimeout|setInterval)\s*\(|\b(?:document|window|globalThis|process)\s*\.)/i

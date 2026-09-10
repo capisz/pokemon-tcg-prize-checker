@@ -142,7 +142,7 @@ export function FeaturedDeckSection({
         "overflow-visible",
       )}
     >
-      <div className="flex items-center gap-6 px-6 py-3 md:px-8 md:py-3">
+      <div className="flex flex-col lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-stretch lg:items-center gap-6 px-6 py-3 md:px-8 md:py-3">
         <div className="flex-1 min-w-[0]">
           <div
             className={cn(
@@ -170,7 +170,7 @@ export function FeaturedDeckSection({
               )}
             </div>
 
-            <div className="mt-1 flex items-center gap-4">
+            <div className="mt-1 flex flex-wrap items-center gap-4">
               {displayedDeck.sourceUrl && (
                 <a
                   href={displayedDeck.sourceUrl}
@@ -211,11 +211,13 @@ export function FeaturedDeckSection({
           </div>
         </div>
 
-        <div className="flex-1 flex justify-end overflow-visible">
-          <div className="flex gap-4 items-center min-h-[160px] overflow-visible">
+        <div data-testid="featured-card-strip" className="min-w-0 w-full overflow-x-auto">
+          <div className="flex lg:grid lg:grid-cols-5 gap-4 items-center min-h-[160px] p-2">
             {displayedDeck.cards.map((card, index) => (
               <div
                 key={card.id}
+                data-testid="featured-card"
+                data-phase={transitionPhase}
                 style={{
                   transitionDelay: isExiting
                     ? `${(displayedDeck.cards.length - index - 1) * 55}ms`
@@ -224,7 +226,7 @@ export function FeaturedDeckSection({
                       : "0ms",
                 }}
                 className={cn(
-                  "relative flex-shrink-0 w-24 sm:w-28 md:w-32",
+                  "relative flex-shrink-0 w-24 sm:w-28 md:w-32 lg:w-full lg:min-w-0",
                   "transition-all duration-500 ease-out will-change-transform",
                   isShown && "opacity-100 translate-x-0 translate-y-0 scale-100",
                   transitionPhase === "entering" &&

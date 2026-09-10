@@ -1,0 +1,105 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    function activeOwner(uid) { return owner(uid) && !exists(/databases/$(database)/documents/users/$(uid)/account/deletion); }
+    match /users/{uid}/account/deletion {
+      allow read: if owner(uid);
+      allow create: if owner(uid) && request.resource.data.keys().hasOnly(['deleting']) && request.resource.data.deleting == true;
+    }
+    function historyEpoch(uid) { return exists(/databases/$(database)/documents/users/$(uid)/account/history) ? get(/databases/$(database)/documents/users/$(uid)/account/history).data.epoch : 0; }
+    function historyOpen(uid) { return !exists(/databases/$(database)/documents/users/$(uid)/account/history) || !get(/databases/$(database)/documents/users/$(uid)/account/history).data.clearing; }
+    match /users/{uid}/account/history {
+      allow read: if owner(uid);
+      allow create: if owner(uid) && request.resource.data.keys().hasOnly(['epoch','clearing']) && request.resource.data.epoch == 1 && request.resource.data.clearing == true;
+      allow update: if owner(uid) && request.resource.data.keys().hasOnly(['epoch','clearing']) && request.resource.data.epoch is int && request.resource.data.clearing is bool && ((request.resource.data.epoch == resource.data.epoch + 1 && request.resource.data.clearing == true) || (request.resource.data.epoch == resource.data.epoch && resource.data.clearing == true));
+    }
+    match /users/{uid}/historyNames/{identity} {
+      allow read, delete: if owner(uid);
+      allow create, update: if activeOwner(uid) && historyOpen(uid) && request.resource.data.keys().hasOnly(['deckKey','name']) && request.resource.data.deckKey is string && request.resource.data.deckKey.size() <= 12000 && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 80;
+    }
+    function validPrize(card) {
+      let n=card.name;
+      let d=card.deckCount;
+      let p=card.prizeCount;
+      let m=card.missedCount;
+      return card.keys().hasOnly(['name','deckCount','prizeCount','missedCount']) && n is string && n.size()>0 && n.size()<=200 && d is int && d<=60 && p in [1,2,3,4,5,6] && p<=d && m in [0,1,2,3,4,5,6] && m<=p;
+    }
+    function prizeAt(cards,i) { return cards.size() > i ? cards[i].prizeCount : 0; }
+    function validPrizes(cards) {
+      return cards is list && cards.size()>=1 && cards.size()<=6
+        && (cards.size()<1 || validPrize(cards[0]))
+        && (cards.size()<2 || validPrize(cards[1]))
+        && (cards.size()<3 || validPrize(cards[2]))
+        && (cards.size()<4 || validPrize(cards[3]))
+        && (cards.size()<5 || validPrize(cards[4]))
+        && (cards.size()<6 || validPrize(cards[5]))
+        ;
+    }
+    function validCover(data) { return !('coverCardId' in data) || (data.coverCardId is string && data.coverCardId.size() <= 100 && data.coverCardId.matches('[a-z0-9.]+-[a-z0-9_]+')); }
+    function validDeck(data) {
+      return data.keys().hasAll(['name','activeVersion','schemaVersion','createdAt'])
+        && data.keys().hasOnly(['name','activeVersion','schemaVersion','createdAt','coverCardId'])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 80
+        && data.activeVersion is string && data.activeVersion.matches('[a-zA-Z0-9-]{1,100}')
+        && data.schemaVersion == 1 && validCover(data);
+    }
+    match /users/{uid}/decks/{deckId} {
+      allow read: if owner(uid);
+      allow create: if activeOwner(uid) && validDeck(request.resource.data)
+        && request.resource.data.activeVersion == '1' && request.resource.data.createdAt == request.time
+        && getAfter(/databases/$(database)/documents/users/$(uid)/decks/$(deckId)/versions/1).data.cardCount == 60;
+      allow update: if activeOwner(uid) && validDeck(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','coverCardId','activeVersion'])
+        && getAfter(/databases/$(database)/documents/users/$(uid)/decks/$(deckId)/versions/$(request.resource.data.activeVersion)).data.cardCount == 60;
+      allow delete: if owner(uid);
+      match /versions/{versionId} {
+        allow read, delete: if owner(uid);
+        allow create: if activeOwner(uid)
+          && request.resource.data.keys().hasAll(['text','cardCount','schemaVersion','createdAt'])
+          && request.resource.data.keys().hasOnly(['text','cardCount','schemaVersion','createdAt'])
+          && request.resource.data.text is string && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 12000
+          && request.resource.data.cardCount == 60 && request.resource.data.schemaVersion == 1
+          && request.resource.data.createdAt == request.time
+          && getAfter(/databases/$(database)/documents/users/$(uid)/decks/$(deckId)).data.activeVersion == versionId;
+      }
+    }
+    function optionalText(data, key, size) { return !(key in data) || (data[key] is string && data[key].size() <= size); }
+    function validMiss(card) { return card is map && card.keys().hasAll(['id','name','count']) && card.keys().hasOnly(['id','name','count']) && card.id is string && card.id.size() <= 100 && card.name is string && card.name.size() <= 200 && card.count is int && card.count >= 1 && card.count <= 6; }
+    function validMisses(cards) {
+      return cards is list && cards.size() <= 6
+        && (cards.size() < 1 || validMiss(cards[0])) && (cards.size() < 2 || validMiss(cards[1]))
+        && (cards.size() < 3 || validMiss(cards[2])) && (cards.size() < 4 || validMiss(cards[3]))
+        && (cards.size() < 5 || validMiss(cards[4])) && (cards.size() < 6 || validMiss(cards[5]));
+    }
+    function validSession(uid,sessionId) {
+      let data=request.resource.data;
+      return activeOwner(uid)
+        && data.keys().hasAll(['id','deckKey','deckName','at','scoringVersion','duration','correct','seconds','missed'])
+        && data.keys().hasOnly(['id','deckKey','deckName','at','scoringVersion','duration','correct','seconds','missed','deckId','version','coverCardId','source','customName','prizeGroups','syncEpoch'])
+        && historyOpen(uid) && data.get('syncEpoch',0) == historyEpoch(uid)
+        && (!('syncEpoch' in data) || (data.syncEpoch is int && data.syncEpoch >= 0))
+        && (!('prizeGroups' in data) || validPrizes(data.prizeGroups))
+        && data.id == sessionId && sessionId.size() <= 100
+        && data.deckKey is string && data.deckKey.size() <= 12000
+        && data.deckName is string && data.deckName.size() <= 200
+        && data.at is number && data.at >= 0 && data.at <= request.time.toMillis()
+        && data.scoringVersion == 2 && data.duration in [0,60,120,180]
+        && data.correct is int && data.correct >= 0 && data.correct <= 6
+        && (data.seconds == null || (data.seconds is number && data.seconds >= 0 && data.seconds <= 86400))
+        && (('prizeGroups' in data) ? data.missed == [] : validMisses(data.missed))
+        && optionalText(data,'source',12000) && optionalText(data,'coverCardId',100)
+        && (!('customName' in data) || data.customName is bool)
+        && ((!('deckId' in data) && !('version' in data)) ||
+          (optionalText(data,'deckId',100) && optionalText(data,'version',100)
+          && 'deckId' in data && 'version' in data
+          && exists(/databases/$(database)/documents/users/$(uid)/decks/$(data.deckId)/versions/$(data.version))));
+    }
+    match /users/{uid}/sessions/{sessionId} {
+      allow read, delete: if owner(uid);
+      allow create: if validSession(uid,sessionId);
+
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

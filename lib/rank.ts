@@ -1,3 +1,5 @@
+import { z } from "zod"
+
 // lib/rank.ts
 export type TierId = "pokeball" | "greatball" | "ultraball" | "masterball";
 
@@ -43,6 +45,7 @@ export function updateRank(
   overallScore: number,
   maxScore: number,
 ): RankState {
+  if (!Number.isFinite(overallScore) || !Number.isFinite(maxScore) || maxScore <= 0) return current;
   const normalized = Math.max(0, Math.min(1, overallScore / maxScore));
 
   // Master Ball → Elo mode only
@@ -59,7 +62,7 @@ export function updateRank(
   const { expected, scale } = TIER_CONFIG[current.tier];
   const delta = (normalized - expected) * scale;
   let nextProgress = current.progress + delta;
-  let nextTier = current.tier;
+  let nextTier: TierId = current.tier;
 
   const idx = TIER_ORDER.indexOf(current.tier);
 
@@ -83,7 +86,7 @@ export function updateRank(
   }
 
   // Demotion (can’t go below Poké Ball)
-  if (nextProgress <= 0 && current.tier !== "pokeball") {
+  if (nextTier === current.tier && nextProgress <= 0 && current.tier !== "pokeball") {
     const demotedTier = TIER_ORDER[idx - 1] ?? "pokeball";
     nextTier = demotedTier;
     // fall back to 80% of the lower tier so it’s easy to bounce back
@@ -98,3 +101,9 @@ export function updateRank(
     progress: Math.round(nextProgress),
   };
 }
+
+export const rankSchema = z.object({
+  tier: z.enum(["pokeball", "greatball", "ultraball", "masterball"]),
+  progress: z.number().min(0).max(100),
+  elo: z.number().int().nonnegative(),
+})

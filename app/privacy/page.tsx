@@ -35,13 +35,19 @@ export default function PrivacyPage() {
 
             <h2 className="text-base font-semibold text-emerald-100">Cookies And Storage</h2>
             <p>
-              The app stores your cookie preference in a browser cookie named{" "}
-              <code className="rounded bg-slate-900 px-1 py-0.5 text-emerald-100">
-                pcd_cookie_consent
-              </code>
-              . It also uses browser local storage for app-only preferences and progress, such as
-              whether the help overlay has been seen and saved result stats.
+              The app uses browser storage for preferences and practice progress. Pending
+              account uploads are stored in IndexedDB until synchronized or cleared. An older
+              advertising-choice cookie may remain in your browser, but it is not used to load advertising.
             </p>
+
+            <h2 className="text-base font-semibold text-emerald-100">Optional Accounts And Practice History</h2>
+            <p>Signing in with Google enables private saved decks, card-logo selections, deck revisions, and practice history through Firebase Authentication and Cloud Firestore. Google provides account identifiers and basic profile information such as your email and display name. Practice records include deck lists, inspection timing, mode, accuracy, and missed cards. These are personal practice results, not verified competitive scores.</p>
+            <p>Guest rounds remain on this browser. Transferring guest history to an account requires an explicit confirmation and may include rounds played by other people on the same device. The latest 100 device records are retained per guest/account storage area; account records remain until you delete them. Names and logos for saved decks are shared across the library and account progress views.</p>
+            <p>You can clear guest history on this device, clear account history, delete saved decks, or delete your account from My decks. Account deletion first asks you to confirm your Google identity, then removes stored deck revisions and history before removing the Firebase account. Deletion can require a retry if interrupted. A minimal deletion marker containing only the deleting flag under the former account ID remains to prevent delayed requests from recreating data. Guest history is not removed by account deletion. Browser backups or copies on other devices are not erased by clearing this browser’s storage.</p>
+            <p>In local-demo mode, authentication and database operations use local Firebase emulators rather than the live project. Test records can disappear when emulators restart.</p>
+
+            <h2 className="text-base font-semibold text-emerald-100">Advertising</h2>
+            <p>Advertising is disabled in this release. PrizeCheck does not load Google AdSense, including when an earlier advertising choice was accepted.</p>
 
             <h2 className="text-base font-semibold text-emerald-100">Deck And Card Data</h2>
             <p>

@@ -189,7 +189,7 @@ There are three main stages in the app:
 
 ### Prerequisites
 
-- **Node.js** `18+` (preferably `20.x`)
+- **Node.js** `22.12+`
 - **npm**
 
 ### Setup
@@ -218,3 +218,23 @@ npm run dev
 ### Data updates
 
 Use `npm run refresh:tcg-data` whenever new sets are added upstream. This downloads the current `master` data, rebuilds `data/generated/card-index.json`, and keeps runtime card lookup local and fast.
+
+## Reliability checks
+
+Use Node.js 22.12 or later. From a clean checkout:
+
+```sh
+npm ci
+npm run check
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+`check` runs TypeScript, domain/API regression tests, and the card-index smoke check. Browser tests run the production server at port 3100 at desktop and phone sizes. Third-party assets are blocked in these tests so external image or advertising availability does not affect game regression results. Accessibility checks cover selected control/dialog rules and are not a full WCAG audit.
+
+GitHub Actions runs the same checks on pushes and pull requests. Development and production builds use Next.js webpack for compatibility with restricted local environments. Inter is bundled locally so builds do not fetch Google Fonts.
+
+Scoring v2 scales the speed bonus by accuracy: zero correct answers earns zero points. The clock measures deck inspection; selecting guesses is untimed. Rank and personal best use separate v2 storage keys, preserving legacy values without comparing incompatible scores.
+
+See [the engineering plan](docs/ENGINEERING-PLAN.md) for the Firebase-based persistence milestone and later training analytics work. No Firebase service is required for local practice.

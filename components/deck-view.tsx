@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
@@ -9,6 +9,7 @@ import type { PokemonCard } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 interface DeckViewProps {
+  duration?: number
   deck: PokemonCard[]
   hand: PokemonCard[]
   onTimeUp: (timeLeft: number) => void
@@ -16,7 +17,7 @@ interface DeckViewProps {
   onRestartGame?: () => void
 }
 
-const GAME_DURATION = 120
+import { GAME_DURATION, remainingSeconds } from "@/lib/game"
 const MAX_VISIBLE_DISTANCE = 3
 
 // Single-color emerald panel used for header + help bar
@@ -30,34 +31,34 @@ export function DeckView({
   onTimeUp,
   onEndEarly,
   onRestartGame,
+  duration = GAME_DURATION,
 }: DeckViewProps) {
   const [centerIndex, setCenterIndex] = useState(0)
-  const [timeRemaining, setTimeRemaining] = useState(GAME_DURATION)
+  const [timeRemaining, setTimeRemaining] = useState(duration)
   const [deckOrder, setDeckOrder] = useState<PokemonCard[]>(deck)
 
-  // keep in sync when a new deck is imported
-  useEffect(() => {
-    setDeckOrder(deck)
-    setCenterIndex(0)
-    setTimeRemaining(GAME_DURATION)
-  }, [deck])
+  const deadline = useRef<number | null>(null)
+  const finished = useRef(false)
+  const progress = duration ? ((duration - timeRemaining) / duration) * 100 : 0
 
-  const progress = ((GAME_DURATION - timeRemaining) / GAME_DURATION) * 100
-
-  // Timer countdown
   useEffect(() => {
-    if (timeRemaining <= 0) {
-      // ⏱ when timer hits zero, tell parent we ended with 0 seconds left
-      onTimeUp(0)
-      return
+    deadline.current = Date.now() + duration * 1000
+    finished.current = false
+    const tick = () => {
+      const remaining = duration ? remainingSeconds(deadline.current!, Date.now()) : Math.floor((Date.now() - deadline.current!) / 1000)
+      setTimeRemaining(remaining)
+      if (duration > 0 && remaining === 0 && !finished.current) {
+        finished.current = true
+        onTimeUp(0)
+      }
     }
-
-    const timer = window.setInterval(() => {
-      setTimeRemaining((prev) => Math.max(0, prev - 1))
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [timeRemaining, onTimeUp])
+    const timer = window.setInterval(tick, 100)
+    window.addEventListener("focus", tick)
+    return () => {
+      window.clearInterval(timer)
+      window.removeEventListener("focus", tick)
+    }
+  }, [onTimeUp, duration])
 
   // Navigation handlers
   const goNext = useCallback(() => {
@@ -101,6 +102,7 @@ export function DeckView({
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || (e.target instanceof HTMLElement && e.target.matches("input, textarea, [contenteditable=true]"))) return
       const key = e.key.toLowerCase()
 
       if (["arrowleft", "arrowright", "a", "d"].includes(key)) {
@@ -130,8 +132,9 @@ export function DeckView({
       else if (e.deltaY < 0) goPrevious()
     }
 
-    window.addEventListener("wheel", handleWheel, { passive: false })
-    return () => window.removeEventListener("wheel", handleWheel)
+    const carousel = document.getElementById("practice-carousel")
+    carousel?.addEventListener("wheel", handleWheel, { passive: false })
+    return () => carousel?.removeEventListener("wheel", handleWheel)
   }, [goNext, goPrevious])
 
   const formatTime = (seconds: number) => {
@@ -146,20 +149,22 @@ export function DeckView({
 
   const handleGuessPrizesClick = () => {
     // 🟢 when user ends early, report how many seconds are left
-    onEndEarly(timeRemaining)
+    if (finished.current || deadline.current === null) return
+    finished.current = true
+    onEndEarly(duration ? remainingSeconds(deadline.current, Date.now()) : -Math.floor((Date.now() - deadline.current) / 1000))
   }
 
   return (
-    <div className="relative container mx-auto max-w-7xl p-6 h-screen flex flex-col gap-4 text-slate-50">
+    <div className="relative container mx-auto max-w-7xl p-4 sm:p-6 min-h-dvh flex flex-col gap-4 text-slate-50">
       {/* Header with timer + end button */}
       <Card className={cn("p-4", panelClasses)}>
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Timer */}
           <div className="flex items-center gap-3">
             <Clock
               className={cn(
                 "h-6 w-6",
-                timeRemaining <= 20
+                duration > 0 && timeRemaining <= 20
                   ? "text-rose-400 animate-pulse"
                   : "text-emerald-300",
               )}
@@ -168,19 +173,19 @@ export function DeckView({
               <div
                 className={cn(
                   "text-3xl sm:text-4xl font-semibold tabular-nums tracking-[0.18em]",
-                  timeRemaining <= 20 ? "text-rose-400" : "text-emerald-50",
+                  duration > 0 && timeRemaining <= 20 ? "text-rose-400" : "text-emerald-50",
                 )}
               >
                 {formatTime(timeRemaining)}
               </div>
               <div className="text-[11px] uppercase tracking-[0.22em] text-emerald-200/80">
-                Time Remaining
+                {duration ? "Time Remaining" : "Untimed · elapsed"}
               </div>
             </div>
           </div>
 
           {/* Progress */}
-          <div className="flex-1 max-w-md">
+          <div className="order-last basis-full sm:order-none sm:basis-auto flex-1 max-w-md">
             <Progress
               value={progress}
               className={cn(
@@ -192,7 +197,7 @@ export function DeckView({
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
             {onRestartGame && (
               <Button
                 type="button"
@@ -225,8 +230,8 @@ export function DeckView({
       </Card>
 
       {/* Carousel */}
-      <div className="flex-1 flex items-start justify-center overflow-hidden pt-2">
-        <div className="relative w-full max-w-5xl h-[520px] flex items-center justify-center">
+      <div id="practice-carousel" className="min-h-[370px] flex-1 flex items-start justify-center overflow-hidden pt-2">
+        <div className="relative w-full max-w-5xl h-[370px] 2xl:h-[520px] flex items-center justify-center">
           {/* Background glow behind cards (blue again) */}
           <div
             className="
@@ -254,6 +259,7 @@ export function DeckView({
               "transition-transform duration-150 active:scale-95 active:translate-y-[1px]",
               centerIndex === 0 && "opacity-40 cursor-default hover:bg-slate-950",
             )}
+            aria-label="Previous card"
             onClick={goPrevious}
             disabled={centerIndex === 0}
           >
@@ -273,6 +279,7 @@ export function DeckView({
               centerIndex === deckOrder.length - 1 &&
                 "opacity-40 cursor-default hover:bg-slate-950",
             )}
+            aria-label="Next card"
             onClick={goNext}
             disabled={centerIndex === deckOrder.length - 1}
           >
@@ -379,16 +386,14 @@ export function DeckView({
         {hand.length > 0 && (
           <div
             className={cn(
-              "absolute inset-x-0 bottom-6 flex justify-center transition-transform duration-300 ease-out z-20",
-              "translate-y-8",
-              "group-hover:translate-y-3",
+              "relative w-full overflow-x-auto z-20",
             )}
           >
-            <div className="flex gap-3 px-8 pb-2">
+            <div className="flex w-max min-w-full justify-center gap-3 px-2 pb-3">
               {hand.map((card, index) => (
                 <div
                   key={`${card.id}-hand-${index}`}
-                  className="w-[90px] sm:w-[100px] md:w-[110px]"
+                  className="shrink-0 w-[90px] sm:w-[100px] md:w-[110px]"
                 >
                   <div className="aspect-[2.5/3.5] overflow-hidden rounded-md bg-slate-950 shadow-[0_0_25px_rgba(15,23,42,0.9)]">
                     {card.image ? (

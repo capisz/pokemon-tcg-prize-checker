@@ -56,6 +56,7 @@ async function main() {
   }
 
   const setCodeToId = new Map()
+  const setIdsByCode = new Map()
   const setNameById = new Map()
   const setNameByCode = new Map()
   for (const set of sets) {
@@ -67,7 +68,10 @@ async function main() {
       setNameByCode.set(id, set.name)
     }
     if (ptcgoCode) {
-      setCodeToId.set(ptcgoCode, id)
+      const candidates = [...(setIdsByCode.get(ptcgoCode) ?? []), id]
+      candidates.sort((a, b) => a.length - b.length || a.localeCompare(b))
+      setIdsByCode.set(ptcgoCode, candidates)
+      setCodeToId.set(ptcgoCode, candidates[0])
       if (set.name) setNameByCode.set(ptcgoCode, set.name)
     }
   }
@@ -111,6 +115,7 @@ async function main() {
     generatedAt: new Date().toISOString(),
     cardFileCount: files.length,
     cardCount,
+    setIdsByCode: Object.fromEntries(setIdsByCode),
     setCodeToId: Object.fromEntries([...setCodeToId.entries()].sort(([a], [b]) => a.localeCompare(b))),
     setNameById: Object.fromEntries([...setNameById.entries()].sort(([a], [b]) => a.localeCompare(b))),
     setNameByCode: Object.fromEntries([...setNameByCode.entries()].sort(([a], [b]) => a.localeCompare(b))),
