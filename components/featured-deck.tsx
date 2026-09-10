@@ -153,10 +153,10 @@ export function FeaturedDeckSection({
           <div
             className={cn(
               "flex flex-col gap-3 h-full",
-              "transition-all duration-500 ease-out will-change-transform",
-              isShown && "opacity-100 translate-y-0 blur-0",
-              transitionPhase === "entering" && "opacity-0 -translate-y-4 blur-[2px]",
-              isExiting && "opacity-0 translate-y-3 blur-[2px]",
+              "transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none",
+              isShown && "opacity-100 translate-y-0",
+              transitionPhase === "entering" && "opacity-0 -translate-y-4",
+              isExiting && "opacity-0 translate-y-3",
             )}
           >
             <div className="space-y-1">
@@ -236,7 +236,7 @@ export function FeaturedDeckSection({
                 }}
                 className={cn(
                   "relative flex-shrink-0 w-24 sm:w-28 md:w-32 lg:w-full lg:min-w-0",
-                  "transition-all duration-500 ease-out will-change-transform",
+                  "transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none",
                   isShown && "opacity-100 translate-x-0 translate-y-0 scale-100",
                   transitionPhase === "entering" &&
                     "opacity-0 -translate-x-3 translate-y-1 scale-[0.99]",

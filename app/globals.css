@@ -127,9 +127,9 @@
   animation: ex-foil-sweep 7s ease-in-out infinite alternate;
 }
 @keyframes ex-star-shimmer {
-  from { background-position: 0% 20%; opacity: .55; }
+  from { opacity: .55; }
   50% { opacity: .95; }
-  to { background-position: 100% 80%; opacity: .7; }
+  to { opacity: .7; }
 }
 @keyframes ex-foil-sweep {
   from { transform: translate(-10%, -8%); opacity: .45; }
@@ -237,7 +237,7 @@ body {
       #020b14 45%,
       #020617 100%
     );
-    background-attachment: fixed;
+    background-attachment: scroll;
     background-repeat: no-repeat;
   }
 }
@@ -278,15 +278,13 @@ body {
 }
 
 .featured-card-wipe {
-  filter: blur(0);
   opacity: 1;
   transform: translateX(0) translateY(0) scale(1);
   transition:
-    filter 0.48s ease,
     opacity 0.48s ease,
     transform 0.48s ease;
   transition-delay: inherit;
-  will-change: filter, opacity, transform;
+  /* Avoid persistent filter layers; transitions use opacity and transform only. */
 }
 
 .featured-card-wipe::after {
@@ -313,7 +311,6 @@ body {
 }
 
 .featured-card-wipe-entering {
-  filter: blur(2px) saturate(0.82);
   opacity: 0.28;
   transform: translateX(-12px) translateY(4px) scale(0.99);
 }
@@ -323,7 +320,6 @@ body {
 }
 
 .featured-card-wipe-shown {
-  filter: blur(0);
   opacity: 1;
   transform: translateX(0) translateY(0) scale(1);
 }
@@ -333,7 +329,6 @@ body {
 }
 
 .featured-card-wipe-exiting {
-  filter: blur(2px) saturate(0.7);
   opacity: 0.16;
   transform: translateX(14px) translateY(-4px) scale(0.985);
 }
