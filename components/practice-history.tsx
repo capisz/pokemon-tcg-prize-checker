@@ -12,7 +12,6 @@ import { loadDeckSnapshot,renameDeck } from '@/lib/firebase/decks'
 import { usePractice, type DeckBinding } from './practice-context'
 import { doc, getDocFromServer, type QueryDocumentSnapshot } from 'firebase/firestore'
 import { getFirebaseServices } from '@/lib/firebase/client'
-import { fetchLogoCards } from '@/lib/deck-logo'
 
 const primaryAction = 'rounded-full bg-emerald-500 px-5 font-semibold text-slate-950 shadow-md shadow-emerald-500/20 hover:bg-emerald-400 focus-visible:ring-emerald-300'
 const secondaryAction = 'rounded-full border border-emerald-500/25 bg-emerald-950/40 text-emerald-200 hover:bg-emerald-900/50 hover:text-emerald-100 focus-visible:ring-emerald-300'
@@ -46,7 +45,6 @@ function HistoryPanel({uid,onPractice}:{uid:string|null;onPractice?:(text:string
   const [sync,setSync]=useState(uid?syncStatus(uid):'saved')
   const [name,setName]=useState('')
   const [identities,setIdentities]=useState<Record<string,{name:string;coverCardId?:string}>>({})
-  const [images,setImages]=useState<Record<string,string>>({})
   const groupKey=(item:PracticeRecord)=>item.deckId ? `${item.deckId}:${item.version}` : item.deckKey
   const selected=records.filter(item=>groupKey(item)===deck && item.duration===Number(mode))
   const summary=summarizeHistory(selected)
@@ -73,12 +71,6 @@ function HistoryPanel({uid,onPractice}:{uid:string|null;onPractice?:(text:string
     void Promise.all(ids.map(async id=>{const snapshot=await getDocFromServer(doc(getFirebaseServices().db,'users',uid,'decks',id));return snapshot.exists()?[id,{name:String(snapshot.data().name),coverCardId:snapshot.data().coverCardId}] as const:null})).then(items=>{if(active)setIdentities(Object.fromEntries(items.filter(item=>item!==null)))}).catch(()=>{})
     return ()=>{active=false}
   },[records.map(item=>item.id).join("|"),uid])
-  useEffect(()=>{
-    let active=true
-    const ids=[...new Set(Object.values(identities).flatMap(item=>item.coverCardId?[item.coverCardId]:[]))]
-    void fetchLogoCards(ids).then(cards=>{if(active)setImages(Object.fromEntries(cards.flatMap(card=>card.image?[[card.id,card.image]]:[])))}).catch(()=>{})
-    return ()=>{active=false}
-  },[identities])
   function merge(a:PracticeRecord[],b:PracticeRecord[]) { return [...new Map([...a,...b].map(item=>[item.id,item])).values()].sort((x,y)=>y.at-x.at) }
   async function run(action:()=>Promise<void>) {setBusy(true);setError('');setNotice('');try{await action()}catch{setError('Could not complete this action. Check your connection and retry.')}finally{setBusy(false)}}
   async function saveName(){
@@ -107,7 +99,7 @@ function HistoryPanel({uid,onPractice}:{uid:string|null;onPractice?:(text:string
       {!insights.eligible?<p className="text-sm text-slate-300">Complete a new round to collect prize statistics. Older rounds still count toward speed and accuracy.</p>:<><table className="w-full text-left text-sm"><thead className="text-xs text-slate-400"><tr><th className="py-2 font-normal">Card</th><th className="text-right font-normal">Rounds</th><th className="text-right font-normal">%</th></tr></thead><tbody>{(frequency==='double'?insights.double:insights.prized).slice(0,expanded?undefined:5).map(card=><tr key={card.name} className="border-t border-slate-800"><td className="py-2 pr-2">{card.name}</td><td className="text-right tabular-nums">{frequency==='double'?card.double:card.prized}/{insights.eligible}</td><td className="text-right tabular-nums">{Math.round((frequency==='double'?card.double:card.prized)/insights.eligible*100)}%</td></tr>)}</tbody></table>{frequency==='double'&&!insights.double.length&&<p className="text-xs text-slate-400">No double-prized cards recorded yet.</p>}{(frequency==='double'?insights.double:insights.prized).length>5&&<Button variant="ghost" className={quietAction} onClick={()=>setExpanded(!expanded)}>{expanded?'Show top five':'Show all cards'}</Button>}</>}</section>
       <details className="border-t border-slate-800 pt-3"><summary className="cursor-pointer text-sm text-slate-300">Recent rounds</summary><ul className="mt-3 space-y-2 text-xs">{summary.recent.map(item=><li key={item.id} className="flex justify-between"><span>{new Date(item.at).toLocaleDateString()}</span><span>{item.correct}/6 · {item.seconds===null?'No timing':`${item.seconds}s`}</span></li>)}</ul></details>
       {onPractice && current && (current.source || current.deckId) && <Button className="rounded-full bg-emerald-500 text-slate-950" disabled={busy} onClick={()=>void run(async()=>{if(current.deckId && uid){const saved=await loadDeckSnapshot(current.deckId,current.version);onPractice(saved.text,saved.binding)}else if(current.source)onPractice(current.source,null)})}>Practice this deck</Button>}
-      {confirm==='clear'?<div><p className="mb-2">Delete {uid?'all account history and this account’s device records':'guest history and names on this device'}? This cannot be undone.</p><Button className={primaryAction} disabled={busy} onClick={()=>void run(async()=>{if(uid)await clearCloudPractice(uid);clearHistory(uid);setRecords([]);setConfirm(null)})}>Confirm clear history</Button><Button variant="ghost" className={quietAction} onClick={()=>setConfirm(null)}>Cancel</Button></div>:<Button variant="ghost" className={quietAction} disabled={busy} onClick={()=>setConfirm('clear')}>{uid?'Clear account history':'Clear device history'}</Button>}
+      {confirm==='clear'?<div><p className="mb-2">Delete {uid?'all account history and this account’s device records':'guest history and names on this device'}? This cannot be undone.</p><Button className={primaryAction} disabled={busy} onClick={()=>void run(async()=>{if(uid)await clearCloudPractice(uid);clearHistory(uid);setRecords([]);setCursor(undefined);setMore(false);setIdentities({});setConfirm(null)})}>Confirm clear history</Button><Button variant="ghost" className={quietAction} onClick={()=>setConfirm(null)}>Cancel</Button></div>:<Button variant="ghost" className={quietAction} disabled={busy} onClick={()=>setConfirm('clear')}>{uid?'Clear account history':'Clear device history'}</Button>}
     </>}
     {more && <Button className={primaryAction} disabled={busy} variant="outline" onClick={()=>void run(async()=>{const page=await fetchPractice(uid!,cursor);setRecords(merge(records,page.records));setCursor(page.cursor);setMore(page.more)})}>Load more history</Button>}
     {busy && <p role="status">Working…</p>}{notice && <p role="status" className="text-xs text-emerald-300">{notice}</p>}{error && <p role="alert" className="text-rose-300">{error}</p>}

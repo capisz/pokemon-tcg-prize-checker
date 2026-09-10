@@ -33,6 +33,9 @@ export default function PrivacyPage() {
               information or require an account to use the deck import and prize checking tools.
             </p>
 
+            <h2 className="text-base font-semibold text-emerald-100">Who This App Is For</h2>
+            <p>PrizeCheck is intended for people ages 13 and older.</p>
+
             <h2 className="text-base font-semibold text-emerald-100">Cookies And Storage</h2>
             <p>
               The app uses browser storage for preferences and practice progress. Pending
@@ -43,7 +46,7 @@ export default function PrivacyPage() {
             <h2 className="text-base font-semibold text-emerald-100">Optional Accounts And Practice History</h2>
             <p>Signing in with Google enables private saved decks, card-logo selections, deck revisions, and practice history through Firebase Authentication and Cloud Firestore. Google provides account identifiers and basic profile information such as your email and display name. Practice records include deck lists, inspection timing, mode, accuracy, and missed cards. These are personal practice results, not verified competitive scores.</p>
             <p>Guest rounds remain on this browser. Transferring guest history to an account requires an explicit confirmation and may include rounds played by other people on the same device. The latest 100 device records are retained per guest/account storage area; account records remain until you delete them. Names and logos for saved decks are shared across the library and account progress views.</p>
-            <p>You can clear guest history on this device, clear account history, delete saved decks, or delete your account from My decks. Account deletion first asks you to confirm your Google identity, then removes stored deck revisions and history before removing the Firebase account. Deletion can require a retry if interrupted. A minimal deletion marker containing only the deleting flag under the former account ID remains to prevent delayed requests from recreating data. Guest history is not removed by account deletion. Browser backups or copies on other devices are not erased by clearing this browser’s storage.</p>
+            <p>You can clear guest history on this device, clear account history, delete saved decks, or delete your account from My decks. Account deletion first asks you to confirm your Google identity, then removes stored deck revisions and history before removing the Firebase account. Deletion can require a retry if interrupted. Minimal control records under the former account ID remain to prevent delayed requests from recreating data: a deletion flag and a history generation/clearing status. These records are retained without an automatic expiry. Guest history is not removed by account deletion. Browser backups or copies on other devices are not erased by clearing this browser’s storage.</p>
             <p>In local-demo mode, authentication and database operations use local Firebase emulators rather than the live project. Test records can disappear when emulators restart.</p>
 
             <h2 className="text-base font-semibold text-emerald-100">Advertising</h2>

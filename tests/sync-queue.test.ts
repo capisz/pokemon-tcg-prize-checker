@@ -49,3 +49,29 @@ it('deletion control cancels pending uploads',async()=>{
  queue.activateSync('alice');await queue.flushQueue('alice');expect(mocks.upload).not.toHaveBeenCalled()
  await expect(queue.enqueuePractice('alice',record)).rejects.toThrow()
 })
+
+it('does not report saved before initialization verifies pending uploads',async()=>{
+ await queue.resumeQueue('alice',0)
+ await queue.enqueuePractice('alice',{...record,id:'reload'})
+ vi.resetModules();queue=await import('../lib/firebase/sync-queue')
+ expect(queue.syncStatus('alice')).toBe('syncing')
+ let finish!:(value:typeof mocks.control)=>void
+ mocks.read.mockImplementation(()=>new Promise(resolve=>{finish=resolve}))
+ queue.activateSync('alice')
+ await vi.waitFor(()=>expect(finish).toBeTypeOf('function'))
+ expect(queue.syncStatus('alice')).toBe('syncing')
+ finish(mocks.control)
+ await queue.flushQueue('alice')
+ expect(mocks.upload).toHaveBeenCalledTimes(1)
+ expect(queue.syncStatus('alice')).toBe('saved')
+})
+
+it('keeps syncing while the server confirms an empty queue',async()=>{
+ let finish!:(value:typeof mocks.control)=>void
+ mocks.read.mockImplementation(()=>new Promise(resolve=>{finish=resolve}))
+ queue.activateSync('alice')
+ await vi.waitFor(()=>expect(finish).toBeTypeOf('function'))
+ expect(queue.syncStatus('alice')).toBe('syncing')
+ finish(mocks.control);await queue.flushQueue('alice')
+ expect(queue.syncStatus('alice')).toBe('saved')
+})

@@ -35,7 +35,7 @@ export function getFirebaseServices() {
     connectFirestoreEmulator(db, '127.0.0.1', 8080)
   }
   services = { auth, db }
-  onAuthStateChanged(auth, user => { void import("./sync-queue").then(queue=>queue.activateSync(auth.currentUser?.uid || null)) })
+  onAuthStateChanged(auth, () => { void import("./sync-queue").then(queue=>queue.activateSync(auth.currentUser?.uid || null)) })
   return services
 }
 

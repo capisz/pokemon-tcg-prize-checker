@@ -23,7 +23,8 @@ export async function syncPractice(uid: string, record: PracticeRecord) {
 export async function fetchPractice(uid: string, cursor?: QueryDocumentSnapshot) {
   const {db} = requireOwner(uid)
   const snapshot = await getDocsFromServer(query(collection(db,'users',uid,'sessions'),orderBy('at','desc'),...(cursor?[startAfter(cursor)]:[]),limit(25)))
-  return { records: snapshot.docs.map(item => practiceSchema.parse(item.data())), cursor: snapshot.docs.at(-1), more: snapshot.size===25 }
+  requireOwner(uid)
+  return { records: snapshot.docs.flatMap(item => { const parsed = practiceSchema.safeParse(item.data()); return parsed.success ? [parsed.data] : [] }), cursor: snapshot.docs.at(-1), more: snapshot.size===25 }
 }
 export async function readSyncControl(uid:string){
  const {db}=requireOwner(uid)

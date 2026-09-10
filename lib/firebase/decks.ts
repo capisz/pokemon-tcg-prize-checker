@@ -1,6 +1,6 @@
 "use client"
 
-import { collection, doc, getDocFromServer, getDocsFromServer, limit, orderBy, query, runTransaction, serverTimestamp, startAfter, deleteField, updateDoc, writeBatch, type QueryDocumentSnapshot } from 'firebase/firestore'
+import { collection, doc, getDocFromServer, getDocsFromServer, limit, orderBy, query, runTransaction, serverTimestamp, startAfter, deleteField, writeBatch, type QueryDocumentSnapshot } from 'firebase/firestore'
 import { z } from 'zod'
 import { getFirebaseServices } from './client'
 import { getDeckImportSecurityError, MAX_DECK_TEXT_LENGTH } from '../deck-import-security'
@@ -19,9 +19,10 @@ export function newDeckId() { return doc(ownerCollection()).id }
 /** Stable operation ID makes a retry after a lost response safe. Each saved snapshot is immutable. */
 export async function saveDeck(id: string, input: { name: string; text: string; coverCardId?: string }) {
   const value = deckInputSchema.parse(input)
-  const error = getDeckImportSecurityError(value.text) || getDeckValidationError(parseIdsFromText(value.text))
+  const parsed = parseIdsFromText(value.text)
+  const error = getDeckImportSecurityError(value.text) || getDeckValidationError(parsed)
   if (error) throw new Error(error)
-  if (value.coverCardId && !parseIdsFromText(value.text).uniqueIds.includes(value.coverCardId)) throw new Error('Choose a card in this deck.')
+  if (value.coverCardId && !parsed.uniqueIds.includes(value.coverCardId)) throw new Error('Choose a card in this deck.')
   const parent = doc(ownerCollection(), id)
   const version = doc(parent, 'versions', '1')
   await runTransaction(parent.firestore, async transaction => {
@@ -84,8 +85,18 @@ export async function renameDeck(id: string, name: string) {
 }
 
 export async function setDeckLogo(id: string, cardId: string) {
-  const source = await loadDeck(id)
   const valid = deckInputSchema.shape.coverCardId.unwrap().parse(cardId)
-  if (!parseIdsFromText(source).uniqueIds.includes(valid)) throw new Error('Choose a card in this deck.')
-  await updateDoc(doc(ownerCollection(), id), { coverCardId: valid })
+  const parent = doc(ownerCollection(), id)
+  const uid = parent.path.split('/')[1]
+  await runTransaction(parent.firestore, async transaction => {
+    const metadata = await transaction.get(parent)
+    if (!metadata.exists()) throw new Error('This deck was deleted.')
+    const version = z.string().parse(metadata.data().activeVersion)
+    const snapshot = await transaction.get(doc(parent, 'versions', version))
+    if (getFirebaseServices().auth.currentUser?.uid !== uid) throw new Error('Account changed.')
+    if (!snapshot.exists()) throw new Error('This revision is no longer available.')
+    const source = z.string().max(MAX_DECK_TEXT_LENGTH).parse(snapshot.data().text)
+    if (!parseIdsFromText(source).uniqueIds.includes(valid)) throw new Error('Choose a card in this deck.')
+    transaction.update(parent, { coverCardId: valid })
+  })
 }

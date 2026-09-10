@@ -13,7 +13,7 @@ async function meta(uid:string){return transaction<Meta|undefined>((s,done)=>{co
 async function entries(uid:string){return transaction<Entry[]>((s,done)=>{const r=s.getAll();r.onsuccess=()=>done(r.result.filter((row:Entry)=>row.uid===uid))})}
 export type SyncStatus='saved'|'syncing'|'retry'
 const states=new Map<string,SyncStatus>()
-export function syncStatus(uid:string){return states.get(uid)||'saved'}
+export function syncStatus(uid:string){return states.get(uid)||'syncing'}
 function status(uid:string,value:SyncStatus){states.set(uid,value);window.dispatchEvent(new Event('prizecheck-sync'))}
 let activeUid:string|null=null,timer:ReturnType<typeof setTimeout>|undefined,attempt=0
 const generations=new Map<string,number>()
@@ -39,10 +39,10 @@ export function flushQueue(uid:string):Promise<void>{
  const task=(async()=>{
   if(currentAccount()?.uid!==uid || activeUid!==uid)return
   const token=generation(uid)
+  status(uid,'syncing')
   try {
    if((await meta(uid))?.paused)return
    const rows=await entries(uid)
-   status(uid,rows.length?'syncing':'saved')
    const control=await readSyncControl(uid)
    if(control.clearing || control.deleting){await cancelPending(uid);return}
    if(token!==generation(uid)||currentAccount()?.uid!==uid)return
@@ -53,8 +53,9 @@ export function flushQueue(uid:string):Promise<void>{
     if((row.record.syncEpoch||0)===control.epoch)await syncPractice(uid,row.record)
     await transaction<void>((s,done)=>{s.delete(row.key);done()})
    }
-   attempt=0;status(uid,(await entries(uid)).length?'syncing':'saved')
-   if((await entries(uid)).length && activeUid===uid){clearTimeout(timer);timer=setTimeout(()=>void flushQueue(uid),0)}
+   const remaining = await entries(uid)
+   attempt=0;status(uid,remaining.length?'syncing':'saved')
+   if(remaining.length && activeUid===uid){clearTimeout(timer);timer=setTimeout(()=>void flushQueue(uid),0)}
   }catch{status(uid,'retry');if(activeUid===uid){clearTimeout(timer);timer=setTimeout(()=>void flushQueue(uid),Math.min(60000,1000*2**Math.min(attempt++,6)))}}
  })().finally(()=>running.delete(uid))
  running.set(uid,task);return task
