@@ -100,19 +100,42 @@
   --sidebar-ring: oklch(0.6 0.22 250);
 }
 
-/* Subtle foil and extracted star brush, clipped to each ex card. */
-.holo-overlay { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; mix-blend-mode: screen; opacity: .32;
-  background: linear-gradient(120deg, transparent 10%, rgb(245 158 210 / 18%) 30%, rgb(125 211 252 / 24%) 52%, rgb(253 230 138 / 16%) 72%, transparent 90%); }
-.holo-overlay::before { content: ""; position: absolute; inset: 0; pointer-events: none;
-  background-image: url('/effects/ex-star.png'), url('/effects/ex-star.png'), url('/effects/ex-star.png'), url('/effects/ex-star.png'), url('/effects/ex-star.png');
-  background-size: 16% auto, 9% auto, 12% auto, 8% auto, 11% auto;
-  background-position: 18% 18%, 76% 29%, 38% 66%, 86% 82%, 15% 90%; background-repeat: no-repeat;
-  opacity: .6; animation: ex-star-shimmer 6s ease-in-out infinite alternate; }
-.holo-overlay::after { content: ""; position: absolute; inset: -15% -75%; pointer-events: none;
-  background: linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 20%) 49%, rgb(165 243 252 / 16%) 53%, transparent 60%);
-  animation: ex-foil-sweep 8s ease-in-out infinite; }
-@keyframes ex-star-shimmer { from { opacity: .25; } to { opacity: .8; } }
-@keyframes ex-foil-sweep { 0%, 15% { transform: translateX(-30%); opacity: 0; } 50% { opacity: .7; } 85%, 100% { transform: translateX(30%); opacity: 0; } }
+/* Stationary cards catch a moving light: dense brush stars and narrow prismatic bands. */
+.holo-overlay {
+  position: absolute; inset: 0; border-radius: inherit; overflow: hidden;
+  pointer-events: none; z-index: 1; opacity: .8;
+}
+.holo-overlay::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  -webkit-mask: url('/effects/ex-star-field.svg') center / 100% 100%;
+  mask: url('/effects/ex-star-field.svg') center / 100% 100%;
+  background: repeating-linear-gradient(125deg, #ff83d5 0%, #9d9aff 12%, #6fe5ff 24%, #9eff92 36%, #fff58c 48%, #ff9e72 60%, #ff83d5 72%);
+  background-size: 260% 260%;
+  opacity: .8;
+  animation: ex-star-shimmer 7s ease-in-out infinite alternate;
+}
+.holo-overlay::after {
+  content: ""; position: absolute; inset: -60%; pointer-events: none;
+  background: repeating-linear-gradient(132deg,
+    transparent 0%, transparent 20%,
+    rgb(135 115 255 / 12%) 21%, rgb(94 224 255 / 65%) 21.6%,
+    rgb(255 255 255 / 90%) 22%, rgb(255 243 148 / 85%) 22.4%,
+    rgb(255 127 213 / 55%) 23%, transparent 24%,
+    transparent 39%, rgb(176 153 255 / 35%) 40%,
+    rgb(136 242 255 / 65%) 40.5%, transparent 41.2%, transparent 50%);
+  opacity: .7;
+  animation: ex-foil-sweep 7s ease-in-out infinite alternate;
+}
+@keyframes ex-star-shimmer {
+  from { background-position: 0% 20%; opacity: .55; }
+  50% { opacity: .95; }
+  to { background-position: 100% 80%; opacity: .7; }
+}
+@keyframes ex-foil-sweep {
+  from { transform: translate(-10%, -8%); opacity: .45; }
+  50% { opacity: .85; }
+  to { transform: translate(10%, 8%); opacity: .65; }
+}
 .practice-carousel-glow { background: radial-gradient(ellipse at 50% 48%, rgb(56 189 248 / 20%) 0%, rgb(56 189 248 / 8%) 38%, transparent 70%); }
 
 @keyframes holo-foil-drift {

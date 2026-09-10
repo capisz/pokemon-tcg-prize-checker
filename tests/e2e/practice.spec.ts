@@ -363,13 +363,21 @@ test('desktop keeps production layout while phone controls stay compact', async 
 })
 
 test('ex foil is decorative, uses the supplied star, and respects reduced motion', async ({page}) => {
-  await openApp(page); await startGame(page)
-  const cards=page.locator('#practice-carousel [data-testid="center-card"]').locator('..')
+  await openApp(page); await importDeck(page)
+  // The same foil must render after tapping a dropdown-list row on phones
+  // and focusing it with a keyboard on desktop.
+  const exRow=page.locator('.deck-list-fade-in').getByText('Dragapult ex',{exact:true})
+  await exRow.click()
+  const preview=page.locator('.deck-list-fade-in [data-card-foil="ex"]')
+  await expect(preview).toBeVisible()
+  await expect(preview).toHaveCSS('opacity','0.8')
+  await page.getByRole('button',{name:'Start Game',exact:true}).click()
+  await expect(page.getByRole('button',{name:'Guess Prizes',exact:true})).toBeVisible()
   await expect(page.locator('#practice-carousel [data-card-foil="ex"]').first()).toBeAttached()
   const foil=page.locator('#practice-carousel [data-card-foil="ex"]').first()
   await expect(foil).toHaveCSS('pointer-events','none')
   await expect(foil).toHaveAttribute('aria-hidden','true')
-  expect(await foil.evaluate(el=>getComputedStyle(el,'::before').backgroundImage)).toContain('/effects/ex-star.png')
+  expect(await foil.evaluate(el=>getComputedStyle(el,'::before').maskImage)).toContain('/effects/ex-star-field.svg')
   await page.emulateMedia({reducedMotion:'reduce'})
   expect(await foil.evaluate(el=>getComputedStyle(el,'::before').animationName)).toBe('none')
   expect(await foil.evaluate(el=>getComputedStyle(el,'::after').animationName)).toBe('none')
