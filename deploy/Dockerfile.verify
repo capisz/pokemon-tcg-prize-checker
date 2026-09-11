@@ -1,0 +1,11 @@
+# Test-only image; never use this as the application runtime.
+# Keep the Playwright image version aligned with package-lock.json.
+FROM mcr.microsoft.com/playwright:v1.63.0-noble
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends openjdk-21-jre-headless \
+    && rm -rf /var/lib/apt/lists/*
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+ENV CI=true FIREBASE_E2E=true NEXT_PUBLIC_FIREBASE_USE_EMULATORS=true NEXT_TELEMETRY_DISABLED=1
+CMD ["sh", "-c", "npm run check && npx firebase emulators:exec --only auth,firestore --project demo-prizecheck 'npm run test:rules && node scripts/container-smoke.mjs && npx playwright test --config playwright.container.config.ts'"]

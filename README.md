@@ -2,6 +2,8 @@
 
 Train your Pokémon TCG prize-checking muscle memory.
 
+For the local infrastructure learning environment, see [Docker and Kubernetes setup](docs/LOCAL-KUBERNETES.md), including reliability exercises, troubleshooting, and resume wording. Production remains on its existing hosting.
+
 Paste a deck list, let the app simulate a real game (opening hand + 6 prizes), then see how accurately you can guess what’s prized — while a timer and rank system keep you honest.
 
 > ⚠️ Fan project. Not affiliated with or endorsed by Nintendo, Creatures, GAME FREAK, The Pokémon Company, or LimitlessTCG.

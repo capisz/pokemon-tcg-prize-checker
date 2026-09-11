@@ -5,6 +5,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Opt in only for the local container; preserve the hosted build behavior.
+  ...(process.env.PRIZECHECK_STANDALONE === "true" ? { output: "standalone" } : {}),
   env: {
     // Production uses the verified public Firebase web app; previews stay disabled.
     NEXT_PUBLIC_FIREBASE_ACCOUNTS_DISABLED: process.env.VERCEL_ENV === "preview" ? "true" : "false",
