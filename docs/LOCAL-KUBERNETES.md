@@ -236,3 +236,7 @@ Helm is deferred: one local Deployment and Service do not yet justify templating
 - [Firebase emulator configuration](https://firebase.google.com/docs/emulator-suite/install_and_configure)
 
 See [verified results and portfolio wording](LOCAL-KUBERNETES-RESULTS.md) for what was actually tested and the remaining limitations.
+
+## Infrastructure branch publication
+
+`vercel.json` disables automatic Git deployments only for `prizecheck/local-infrastructure`, using Vercel's [branch-specific deployment configuration](https://vercel.com/docs/project-configuration/git-configuration#git.deploymentenabled). Unspecified branches retain their default behavior. This allows GitHub CI review without a hosted preview; it does not disable production deployments from `main` or change live project settings. Merging remains a separate production decision.
