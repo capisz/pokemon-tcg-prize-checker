@@ -5,6 +5,36 @@ on:
 permissions:
   contents: read
 jobs:
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          push: false
+          tags: prizecheck:ci
+      - name: Verify non-root container and packaged application
+        run: |
+          docker run -d --name prizecheck-ci -p 127.0.0.1:3000:3000 prizecheck:ci
+          test "$(docker exec prizecheck-ci id -u)" = 1000
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000/api/health; then break; fi
+            sleep 2
+          done
+          node scripts/container-smoke.mjs
+      - name: Container logs
+        if: failure()
+        run: docker logs prizecheck-ci
+      - name: Cleanup
+        if: always()
+        run: docker rm -f prizecheck-ci || true
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
