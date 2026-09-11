@@ -36,7 +36,7 @@ The infrastructure branch `prizecheck/local-infrastructure` is based on producti
 
 ## Tools, compatibility, and cost
 
-Verified on Apple Silicon macOS: Colima 0.10.3, Docker CLI 29.7.2, buildx 0.36.1, kind 0.32.0, kubectl 1.36.4, Kubernetes node 1.36.1. The kubectl/server minor versions match. Node images and kind support ARM64; an AMD64 build is configured for GitHub's Linux runner but has not been run remotely in this change.
+Verified on Apple Silicon macOS: Colima 0.10.3, Docker CLI 29.7.2, buildx 0.36.1, kind 0.32.0, kubectl 1.36.4, Kubernetes node 1.36.1. The kubectl/server minor versions match. Node images and kind support ARM64. The Linux AMD64 image build and runtime smoke checks also passed on GitHub Actions; see the linked runs in the results document.
 
 Colima is MIT licensed; Docker CLI and kind are open-source tools. This local route needs no subscription, cloud login, or billing account. [Colima installation](https://colima.run/docs/installation/) and [license](https://github.com/abiosoft/colima/blob/main/LICENSE) explain the selected runtime. Docker Desktop is an alternative subject to its [license eligibility](https://docs.docker.com/desktop/setup/install/mac-install/); it is not used here.
 
@@ -220,9 +220,9 @@ kubectl --context kind-prizecheck -n prizecheck-local rollout history deployment
 
 ## CI and scope of this change
 
-The new `container` job in `.github/workflows/ci.yml` builds and loads the image, verifies UID 1000 and the application smoke check, captures failure logs, and removes its container. It never pushes an image or deploys anything. The existing unit/rules/browser job remains intact. Standard runners in public repositories are free; private-repository runs consume plan allowances. No Actions run, repository push, paid runner, registry publishing, or billing setting was triggered here. See [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
+The new `container` job in `.github/workflows/ci.yml` builds and loads the image, verifies UID 1000 and the application smoke check, captures failure logs, and removes its container. It never pushes an image or deploys anything. The existing unit/rules/browser job remains intact. Standard runners in public repositories are free; private-repository runs consume plan allowances. The feature branch was published as draft PR #3, and both push and PR runs passed. The container job smoke-tests the image; the separate verification job runs browser tests against a source build. No paid runner, registry publishing, or billing setting was used. See [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
 
-The isolated branch contains infrastructure and its test harness only. The original checkout still contains unrelated app work; do not publish it wholesale. No push or PR was created during preparation. The public host's Vercel integrations can react to pushes, so inspect preview behavior before a separately approved push and keep production merging/deployment separate.
+The isolated branch contains infrastructure and its test harness only. The original checkout still contains unrelated app work; do not publish it wholesale. [Draft PR #3](https://github.com/capisz/pokemon-tcg-prize-checker/pull/3) now contains this work, with successful [PR CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555318159) and [push CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555304132) for code commit `6bbc89b`. The branch-specific Vercel rule below disables its automatic Git deployments. Keep production merging/deployment separate.
 
 Helm is deferred: one local Deployment and Service do not yet justify templating. Consider it after there are multiple intentional environments or repeated configuration variants; retain the plain manifests as the learning baseline.
 

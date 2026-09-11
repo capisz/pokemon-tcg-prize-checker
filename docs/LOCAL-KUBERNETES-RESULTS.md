@@ -2,6 +2,22 @@
 
 Verified September 10, 2026 on an Apple Silicon Mac. See [setup and architecture](LOCAL-KUBERNETES.md).
 
+## GitHub CI and final review
+
+[Draft PR #3](https://github.com/capisz/pokemon-tcg-prize-checker/pull/3) published branch `prizecheck/local-infrastructure` at `6bbc89be172de284043e3c5a3eaedb2e3d907f67`, based on unchanged `main` at `af6ddcffff1f575bc644e371593ae19ea7c65489`.
+
+Both [pull-request CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555318159) and [push CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555304132) completed successfully. The PR job logs independently confirmed:
+
+- Linux AMD64 image build, UID 1000 runtime assertion, health, page, bundled JavaScript and packaged card-data smoke checks passed.
+- TypeScript, 40 unit/API tests, card-data checks and the Next.js build passed.
+- 14 Firebase rules tests and 51 desktop/mobile browser tests passed, with five intentional platform skips, against `demo-prizecheck` emulators.
+
+The CI `verify` job tests a source-built app; the `container` job smoke-tests the Docker image. Full browser/account testing of the Docker image and Kubernetes recovery/rollback remain the separately recorded Mac verification below. Kubernetes was not tested on the Windows PC or in GitHub Actions.
+
+Final review found no blocking code issues. The app UI, Firebase client/rules and dependencies match the baseline. The runtime additions are a health endpoint and a container-only standalone build option. The documentation update records existing results and changes no executable code. Floating base-image tags, single-node availability and lack of load testing remain documented limitations.
+
+The PC handoff reported no GitHub deployments for the reviewed commit. `vercel.json` disables automatic Git deployments only for this feature branch; it does not change `main` behavior. The PR stays draft and unmerged. A merge can trigger the existing production hosting integration and requires a separate decision. No production, Firebase or billing action was performed as part of this review.
+
 ## Isolated branch follow-up
 
 Branch `prizecheck/local-infrastructure` starts at `af6ddcffff1f575bc644e371593ae19ea7c65489`, in the separate worktree `/private/tmp/prizecheck-local-infrastructure`. Only infrastructure changes were copied from the original checkout. The app UI, account/sync implementation, Firestore rules, dependency lockfile, and original tests remain identical to production. The original checkout was left unchanged.
@@ -23,7 +39,7 @@ An initial harness run passed unit/rules checks but Playwright inherited source-
 | Image/runtime smoke | Non-root/demo-bundle guard, health, page, static JavaScript and card API passed. |
 | Kubernetes | Clean image passed two-replica rollout, pod replacement, failed rollout retaining availability, rollback and Service HTTP checks. Temporary review namespace cleaned up. |
 | Repository checks | Shell syntax, YAML parsing, diff whitespace and original-checkout content hashes passed. Existing app/client/rules/tests/lockfile unchanged from baseline. |
-| Remote actions | None: no push, PR, workflow dispatch, production deploy or billing change. |
+| Remote actions at local verification time | None. The later branch publication and successful CI are recorded above. |
 
 Session evidence: `/private/tmp/prizecheck-infra-verification.log`, `/private/tmp/prizecheck-infra-k8s-review/result.log`, and the HTML report under `/var/folders/v9/b7ynlw1s5kq7kygk7bkwqmd00000gp/T/prizecheck-account-results.tWemgr/playwright-report/`. These paths are temporary; reproduce the checks with the documented scripts. The original baseline's smaller test count is intentional: unpublished tests remain in the original checkout.
 
@@ -68,7 +84,7 @@ The following first-pass results apply to the original dirty working tree. They 
 ## Limits and follow-up
 
 - No production deployment, live database write, Firebase configuration/rules change, billing action, or image publication occurred. Existing public hosting and approved UI remain as they were.
-- GitHub Actions configuration is implemented but not remotely executed. Local image verification was ARM64; the Linux AMD64 CI path remains to be observed after a separately reviewed push.
+- GitHub Actions passed for reviewed code commit `6bbc89b` on both push and PR events. AMD64 container smoke coverage is remote; full container account and Kubernetes exercises are local. These checks are not production or load-test evidence.
 - The isolated follow-up exercised all account tests present in the production baseline, including simulated OAuth, save/load, owner isolation, account deletion and offline reconnect. Real Google OAuth and live Firebase remain outside this verification. Unpublished tests in the original checkout were not copied into this branch.
 - Requests/limits are lab starting values. A Docker snapshot during browser checks showed about 67 MiB used; this is not peak-load measurement or evidence of capacity. No load testing, metrics server, autoscaling, network policies, node failure, or disaster recovery test was performed.
 - Health probes were exercised during startup/readiness and healthy operation. No separate induced liveness timeout was tested. Pod replacement tests controller recovery, not every failure mode.
@@ -83,9 +99,9 @@ Use wording you can explain and reproduce in an interview:
 - Containerized a Next.js/TypeScript application with a multi-stage Docker build, non-root runtime, explicit public build-time configuration, and Firebase emulator isolation.
 - Deployed PrizeCheck to a local Kubernetes cluster using kind, configuring a two-replica Deployment, ClusterIP Service, ConfigMap, health probes, and CPU/memory requests and limits.
 - Verified pod replacement, rolling updates, failed-rollout behavior, and rollback; documented troubleshooting and repeatable local setup and cleanup procedures.
-- Added a GitHub Actions job to build and smoke-test the container alongside existing unit, Firebase rules, and browser-test automation; validated the container workflow locally.
+- Built and verified GitHub Actions automation for a Linux AMD64 container build and smoke checks alongside TypeScript, unit/API, Firebase rules and desktop/mobile browser tests.
 
-Describe the project as **“PrizeCheck — production web app with a local Kubernetes learning environment.”** The production web app and local Kubernetes experience are separate claims. Until the new Actions job has run on GitHub, say “added/configured,” not “operated a proven CI pipeline.”
+Describe the project as **“PrizeCheck — production web app with a local Kubernetes learning environment.”** The production web app and local Kubernetes experience are separate claims. Successful push and PR runs support the CI claim; avoid implying long-term operational history or production Kubernetes experience.
 
 ## Interview demonstration
 
