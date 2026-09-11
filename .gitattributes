@@ -1,0 +1,2 @@
+# Bash scripts must remain executable by Linux/WSL with Windows Git settings.
+*.sh text eol=lf

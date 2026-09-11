@@ -2,6 +2,8 @@
 
 This environment runs PrizeCheck locally for learning and portfolio demonstrations. It does not move `www.prizecheck.us` to Kubernetes, deploy Firebase rules, or provision cloud infrastructure. Keep Firebase `prizecheck-f33ad` on Spark with no billing. The app's intended audience remains ages 13+.
 
+For Windows, follow the [Windows/WSL guide](LOCAL-KUBERNETES-WINDOWS.md). The commands below describe the Mac/Colima setup.
+
 ## Architecture
 
 ```mermaid
@@ -222,7 +224,7 @@ kubectl --context kind-prizecheck -n prizecheck-local rollout history deployment
 
 The new `container` job in `.github/workflows/ci.yml` builds and loads the image, verifies UID 1000 and the application smoke check, captures failure logs, and removes its container. It never pushes an image or deploys anything. The existing unit/rules/browser job remains intact. Standard runners in public repositories are free; private-repository runs consume plan allowances. The feature branch was published as draft PR #3, and both push and PR runs passed. The container job smoke-tests the image; the separate verification job runs browser tests against a source build. No paid runner, registry publishing, or billing setting was used. See [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
 
-The isolated branch contains infrastructure and its test harness only. The original checkout still contains unrelated app work; do not publish it wholesale. [Draft PR #3](https://github.com/capisz/pokemon-tcg-prize-checker/pull/3) now contains this work, with successful [PR CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555318159) and [push CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555304132) for code commit `6bbc89b`. The branch-specific Vercel rule below disables its automatic Git deployments. Keep production merging/deployment separate.
+The isolated branch contains infrastructure and its test harness only. The original checkout still contains unrelated app work; do not publish it wholesale. [PR #3](https://github.com/capisz/pokemon-tcg-prize-checker/pull/3) merged this work into `main` as `1446828ecbd10431d55170014182442bb584cd5e`, with successful [PR CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555318159) and [push CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555304132) for code commit `6bbc89b`. The branch-specific Vercel rule below disables its automatic Git deployments. Keep production merging/deployment separate.
 
 Helm is deferred: one local Deployment and Service do not yet justify templating. Consider it after there are multiple intentional environments or repeated configuration variants; retain the plain manifests as the learning baseline.
 
@@ -239,4 +241,4 @@ See [verified results and portfolio wording](LOCAL-KUBERNETES-RESULTS.md) for wh
 
 ## Infrastructure branch publication
 
-`vercel.json` disables automatic Git deployments only for `prizecheck/local-infrastructure`, using Vercel's [branch-specific deployment configuration](https://vercel.com/docs/project-configuration/git-configuration#git.deploymentenabled). Unspecified branches retain their default behavior. This allows GitHub CI review without a hosted preview; it does not disable production deployments from `main` or change live project settings. Merging remains a separate production decision.
+`vercel.json` disables automatic Git deployments for `prizecheck/local-infrastructure` and the follow-up documentation branch `prizecheck/windows-wsl-docs`, using Vercel's [branch-specific deployment configuration](https://vercel.com/docs/project-configuration/git-configuration#git.deploymentenabled). Unspecified branches retain their default behavior. This allows GitHub CI review without a hosted preview; it does not disable production deployments from `main` or change live project settings. Merging remains a separate production decision.

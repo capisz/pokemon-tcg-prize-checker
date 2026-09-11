@@ -1,10 +1,10 @@
 # Local infrastructure verification and portfolio notes
 
-Verified September 10, 2026 on an Apple Silicon Mac. See [setup and architecture](LOCAL-KUBERNETES.md).
+Mac verification was recorded September 10, 2026; Windows/WSL results were reported September 11, 2026. See [setup and architecture](LOCAL-KUBERNETES.md).
 
 ## GitHub CI and final review
 
-[Draft PR #3](https://github.com/capisz/pokemon-tcg-prize-checker/pull/3) published branch `prizecheck/local-infrastructure` at `6bbc89be172de284043e3c5a3eaedb2e3d907f67`, based on unchanged `main` at `af6ddcffff1f575bc644e371593ae19ea7c65489`.
+[PR #3](https://github.com/capisz/pokemon-tcg-prize-checker/pull/3) published branch `prizecheck/local-infrastructure` at `6bbc89be172de284043e3c5a3eaedb2e3d907f67`, based on unchanged `main` at `af6ddcffff1f575bc644e371593ae19ea7c65489`.
 
 Both [pull-request CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555318159) and [push CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34555304132) completed successfully. The PR job logs independently confirmed:
 
@@ -12,11 +12,33 @@ Both [pull-request CI](https://github.com/capisz/pokemon-tcg-prize-checker/actio
 - TypeScript, 40 unit/API tests, card-data checks and the Next.js build passed.
 - 14 Firebase rules tests and 51 desktop/mobile browser tests passed, with five intentional platform skips, against `demo-prizecheck` emulators.
 
-The CI `verify` job tests a source-built app; the `container` job smoke-tests the Docker image. Full browser/account testing of the Docker image and Kubernetes recovery/rollback remain the separately recorded Mac verification below. Kubernetes was not tested on the Windows PC or in GitHub Actions.
+The CI `verify` job tests a source-built app; the `container` job smoke-tests the Docker image. Full browser/account testing of the Docker image and Kubernetes recovery/rollback are separately recorded local checks below. The subsequent Windows/WSL session also exercised Kubernetes; GitHub Actions does not run Kubernetes.
 
 Final review found no blocking code issues. The app UI, Firebase client/rules and dependencies match the baseline. The runtime additions are a health endpoint and a container-only standalone build option. The documentation update records existing results and changes no executable code. Floating base-image tags, single-node availability and lack of load testing remain documented limitations.
 
-The PC handoff reported no GitHub deployments for the reviewed commit. `vercel.json` disables automatic Git deployments only for this feature branch; it does not change `main` behavior. The PR stays draft and unmerged. A merge can trigger the existing production hosting integration and requires a separate decision. No production, Firebase or billing action was performed as part of this review.
+The PC handoff reported no GitHub deployments for the reviewed commit. `vercel.json` disables automatic Git deployments only for this feature branch; it does not change `main` behavior. This describes the pre-merge review. PR #3 subsequently merged as `1446828ecbd10431d55170014182442bb584cd5e`. [Post-merge CI](https://github.com/capisz/pokemon-tcg-prize-checker/actions/runs/34556536043) passed, both Vercel integrations reported success, and read-only homepage/health checks passed during the merge session. The Windows checkout was then fast-forwarded to that commit. No Firebase settings or billing changes were made.
+
+## Windows/WSL verification — September 11, 2026
+
+Source: the user's complete cross-computer handoff and terminal excerpts from the PC session. These results were not independently rerun by the documentation editor. The agent could inspect Windows files but WSL execution returned `Wsl/Service/E_ACCESSDENIED`; the user ran Linux commands and confirmed browser behavior. This was an agent access limitation, not a failed WSL installation.
+
+The PC used Windows 10 Home 22H2 (19045.6466), AMD Ryzen 5 2600, 31.9 GiB RAM, WSL 2 Ubuntu 26.04, Docker Engine 29.8.0 (linux/amd64), kind 0.32.0, kubectl 1.36.4 and Kubernetes 1.36.1. See the [Windows setup guide](LOCAL-KUBERNETES-WINDOWS.md).
+
+| Check | Reported evidence |
+| --- | --- |
+| Build/runtime | `prizecheck:local-v1` built in 165.7 seconds; UID/GID 1000 and healthy Docker state confirmed. Health, homepage, JavaScript and packaged card-data smoke checks passed. |
+| Kubernetes access | Two replicas ready and available with zero restarts. Windows browser access through loopback port 3200 and guest practice confirmed by the user. |
+| Recovery/update | Deleted pod replaced successfully; rolling restart completed and working revision 2 recorded. |
+| Failed rollout | Deliberately missing image produced `ErrImageNeverPull`; two old replicas remained ready and available. A request from a working pod through Service DNS returned HTTP 200 and `status: ok`. |
+| Rollback | Undo to recorded revision 2 completed, failed pod disappeared and image returned to `prizecheck:local-v1`. User confirmed full smoke against pod loopback afterward; this was not a full Service-routed smoke check. |
+| Isolated accounts | User excerpt reported 51 passed, 5 skipped in 2.2 minutes, exit code 0 and emulator shutdown. Harness chains TypeScript/unit/data, rules, smoke and browser checks with `&&`; success establishes preceding checks passed, but exact PC unit/rules totals were not included in the excerpt. |
+| Troubleshooting | First account harness failed with invalid `pipefail` because its 42 lines had CRLF endings. Converting that script to LF fixed execution; normalized content matched HEAD. The new `*.sh text eol=lf` attribute prevents recurrence on future Git checkouts. |
+
+Reported build config digest: `sha256:9d10025d71c13315a1f5d41c0dd9c7df0915b80165493c93f8dbd25aa5027f84`; manifest-list digest: `sha256:c167b2851c66ebbc0b8633a4693c5dc625486b8904cfdeb21785602b5df5de3e`. These identify reported build output, not a freshly inspected current tag.
+
+The account harness used private container networking and `demo-prizecheck`, without published emulator ports or mounted credentials. Reports were left at `/tmp/prizecheck-account-results.DfsKzB` on that PC; they are temporary, were not transferred, and are not committed evidence. Preserve relevant reports before removing them. The lab was left running; current state must be checked before reuse. No source commits or pushes were made during PC setup; its only reported file modification was the LF conversion.
+
+No continuous traffic measurement during restart, load/capacity test, node/PC failure, multi-node availability, induced liveness timeout, production OAuth or disaster recovery was tested. Two pods on one node demonstrate controller recovery, not host-level availability. The successful Service request during the failed rollout is a point-in-time availability check, not proof of uninterrupted service.
 
 ## Isolated branch follow-up
 
@@ -83,7 +105,7 @@ The following first-pass results apply to the original dirty working tree. They 
 
 ## Limits and follow-up
 
-- No production deployment, live database write, Firebase configuration/rules change, billing action, or image publication occurred. Existing public hosting and approved UI remain as they were.
+- Local lab verification performed no production deployment or live database write. The later authorized merge triggered existing Vercel hosting as recorded above. No Firebase configuration/rules change, billing action, or image publication occurred; the approved UI was not changed by this infrastructure work.
 - GitHub Actions passed for reviewed code commit `6bbc89b` on both push and PR events. AMD64 container smoke coverage is remote; full container account and Kubernetes exercises are local. These checks are not production or load-test evidence.
 - The isolated follow-up exercised all account tests present in the production baseline, including simulated OAuth, save/load, owner isolation, account deletion and offline reconnect. Real Google OAuth and live Firebase remain outside this verification. Unpublished tests in the original checkout were not copied into this branch.
 - Requests/limits are lab starting values. A Docker snapshot during browser checks showed about 67 MiB used; this is not peak-load measurement or evidence of capacity. No load testing, metrics server, autoscaling, network policies, node failure, or disaster recovery test was performed.
